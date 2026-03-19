@@ -52,7 +52,7 @@
 // }
 
 
-import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import ScrollToTop from "./components/ScrollToTop";
 import PageWrapper from "./components/layout/PageWrapper";
@@ -65,13 +65,11 @@ import LoginPage from "./pages/admin/LoginPage";
 import DashboardPage from "./pages/admin/DashboardPage";
 
 export default function App() {
-  const location = useLocation();
-
   return (
     <>
       <ScrollToTop />
 
-      <Routes location={location}>
+      <Routes>
 
         {/* ADMIN */}
         <Route path="/admin/login" element={<LoginPage />} />
