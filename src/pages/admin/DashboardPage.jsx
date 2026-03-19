@@ -17,10 +17,6 @@ export default function DashboardPage() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
 
-  // ── Auth guard ──────────────────────────────────────────────────────
-  // useEffect(() => {
-  //   if (!isLoggedIn()) navigate("/admin/login", { replace: true });
-  // }, [navigate]);
 
   // ── Fetch helpers ────────────────────────────────────────────────────
   async function fetchProducts() {
