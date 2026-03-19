@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+@layer base {
+  html, body {
+    font-family: "SKODA Next", system-ui, sans-serif;
+    background-color: rgba(0,0,0,0.7);
+  }
+  html {
+    font-size: 20px; /* root size */
+  }
+
+  body {
+    font-family: "SKODA Next", system-ui, sans-serif;
+    line-height: 1.6;
+    font-weight: 300;
+    color: #eee8cd;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "SKODA Next", system-ui, sans-serif;
+    font-weight: 900;
+    line-height: 1.15;
+  }
+
+  p {
+    font-size: 1rem;       /* 16px */
+    line-height: 1.7;
+    color: #eee8cd;
+  }
+
+  span {
+    font-size: inherit;
+    line-height: inherit;
+  }
+}
+
+@layer utilities {
+  .font-skoda {
+    font-family: "SKODA Next", system-ui, sans-serif;
+  }
+
+  .font-skoda-expanded {
+    font-family: "SKODA Next Black Expanded", system-ui, sans-serif;
+  }
+}
+
+
+@font-face {
+    font-family: 'SKODA Next';
+    src: local('SKODA Next Light Italic'), local('SKODANext-LightItalic'),
+        url('./assets/fonts/SKODANext-LightItalic.woff2') format('woff2'),
+        url('./assets/fonts/SKODANext-LightItalic.woff') format('woff'),
+        url('./assets/fonts/SKODANext-LightItalic.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'SKODA Next';
+    src: local('SKODA Next Black'), local('SKODANext-Black'),
+        url('./assets/fonts/SKODANext-Black.woff2') format('woff2'),
+        url('./assets/fonts/SKODANext-Black.woff') format('woff'),
+        url('./assets/fonts/SKODANext-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SKODA Next';
+    src: local('SKODA Next Black Italic'), local('SKODANext-BlackItalic'),
+        url('./assets/fonts/SKODANext-BlackItalic.woff2') format('woff2'),
+        url('./assets/fonts/SKODANext-BlackItalic.woff') format('woff'),
+        url('./assets/fonts/SKODANext-BlackItalic.ttf') format('truetype');
+    font-weight: 900;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'SKODA Next';
+    src: local('SKODA Next Bold'), local('SKODANext-Bold'),
+        url('./assets/fonts/SKODANext-Bold.woff2') format('woff2'),
+        url('./assets/fonts/SKODANext-Bold.woff') format('woff'),
+        url('./assets/fonts/SKODANext-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SKODA Next Black Expanded';
+    src: local('SKODA Next Black Expanded'), local('SKODANext-BlackExpanded'),
+        url('./assets/fonts/SKODANext-BlackExpanded.woff2') format('woff2'),
+        url('./assets/fonts/SKODANext-BlackExpanded.woff') format('woff'),
+        url('./assets/fonts/SKODANext-BlackExpanded.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SKODA Next';
+    src: local('SKODA Next'), local('SKODANext-Regular'),
+        url('./assets/fonts/SKODANext-Regular.woff2') format('woff2'),
+        url('./assets/fonts/SKODANext-Regular.woff') format('woff'),
+        url('./assets/fonts/SKODANext-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SKODA Next';
+    src: local('SKODA Next Italic'), local('SKODANext-Italic'),
+        url('./assets/fonts/SKODANext-Italic.woff2') format('woff2'),
+        url('./assets/fonts/SKODANext-Italic.woff') format('woff'),
+        url('./assets/fonts/SKODANext-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'SKODA Next';
+    src: local('SKODA Next Light'), local('SKODANext-Light'),
+        url('./assets/fonts/SKODANext-Light.woff2') format('woff2'),
+        url('./assets/fonts/SKODANext-Light.woff') format('woff'),
+        url('./assets/fonts/SKODANext-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+.sec-col{
+  color: #eee8cd;
+}
+.bg-sec-col{
+  background-color: #eee8cd;
+}
+.hero-reg{
+  font-size: 24px;
+  top:-1.5em;
+}
+.contact-reg{
+  font-size: 25px;
+  top:-2em;
+}
