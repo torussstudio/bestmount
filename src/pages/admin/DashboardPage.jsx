@@ -6,8 +6,10 @@ import { isLoggedIn } from "../../utils/auth";
 import AdminLayout from "../../components/admin/AdminLayout";
 import ProductSection from "../../components/admin/ProductSection";
 import CategorySection from "../../components/admin/CategorySection";
+import API from "../../api";
 
-const API = "http://localhost:5000/api";
+
+// const API = "http://localhost:5000/api";
 
 export default function DashboardPage() {
   const navigate = useNavigate();

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { isLoggedIn, setAdminSession } from "../../utils/auth";
 import { FiUser, FiLock, FiLogIn, FiAlertCircle } from "react-icons/fi";
 import { MdOutlineTerrain } from "react-icons/md";
+import API from "../../api";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/admin/login", {
+      const res = await fetch(`${API}/admin/login`,  {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
