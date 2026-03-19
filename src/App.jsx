@@ -7,6 +7,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import LoginPage from "./pages/admin/LoginPage";
 import DashboardPage from "./pages/admin/DashboardPage";
+import { Navigate } from "react-router-dom";
 
 export default function App() {
   const location = useLocation();
@@ -42,7 +43,8 @@ export default function App() {
           />
           {/* Admin routes – rendered outside AnimatePresence to use their own layout */}
           <Route path="/admin/login" element={<LoginPage />} />
-          <Route path="/admin" element={<DashboardPage />} />
+         <Route path="/admin/*" element={<DashboardPage />} />
+         <Route path="/admin" element={<Navigate to="/admin/login" />} />
         </Routes>
       </AnimatePresence>
     </>
