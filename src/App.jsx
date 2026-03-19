@@ -68,6 +68,7 @@ import { isLoggedIn } from "./utils/auth";
 
 export default function App() {
   const location = useLocation();
+  console.log("isLoggedIn:", isLoggedIn());
 
   return (
     <>
@@ -117,6 +118,7 @@ export default function App() {
                 <Navigate to="/admin/login" replace />
               )
             }
+            
           />
 
         </Routes>
