@@ -73,8 +73,8 @@ export default function App() {
 
         {/* ADMIN */}
         <Route path="/admin/login" element={<LoginPage />} />
-        <Route path="/admin" element={<Navigate to="/admin/login" />} />
         <Route path="/admin/*" element={<DashboardPage />} />
+        <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
 
         {/* PUBLIC */}
         <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
