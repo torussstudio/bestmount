@@ -52,7 +52,6 @@
 // }
 
 
-import { AnimatePresence } from "framer-motion";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 
 import ScrollToTop from "./components/ScrollToTop";
@@ -72,47 +71,22 @@ export default function App() {
     <>
       <ScrollToTop />
 
-      <AnimatePresence mode="wait" initial={false}>
-        <Routes location={location} key={location.pathname}>
+      <Routes location={location}>
 
-          {/* 🔥 ADMIN ROUTES FIRST */}
-          <Route path="/admin/login" element={<LoginPage />} />
-          <Route path="/admin" element={<Navigate to="/admin/login" />} />
-          <Route path="/admin/*" element={<DashboardPage />} />
+        {/* ADMIN */}
+        <Route path="/admin/login" element={<LoginPage />} />
+        <Route path="/admin" element={<Navigate to="/admin/login" />} />
+        <Route path="/admin/*" element={<DashboardPage />} />
 
-          {/* 🌐 PUBLIC ROUTES */}
-          <Route 
-            path="/" 
-            element={
-              <PageWrapper key="home">
-                <Home />
-              </PageWrapper>
-            } 
-          />
+        {/* PUBLIC */}
+        <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
+        <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
+        <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
 
-          <Route 
-            path="/about" 
-            element={
-              <PageWrapper key="about">
-                <About />
-              </PageWrapper>
-            } 
-          />
+        {/* FALLBACK */}
+        <Route path="*" element={<Navigate to="/" />} />
 
-          <Route 
-            path="/contact" 
-            element={
-              <PageWrapper key="contact">
-                <Contact />
-              </PageWrapper>
-            } 
-          />
-
-          {/* ❗ OPTIONAL: catch-all (good practice) */}
-          <Route path="*" element={<Navigate to="/" />} />
-
-        </Routes>
-      </AnimatePresence>
+      </Routes>
     </>
   );
 }
