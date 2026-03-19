@@ -52,8 +52,8 @@
 // }
 
 
-import { Routes, Route, Navigate } from "react-router-dom";
-
+import { AnimatePresence } from "framer-motion";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
 import PageWrapper from "./components/layout/PageWrapper";
 
@@ -64,27 +64,63 @@ import Contact from "./pages/Contact";
 import LoginPage from "./pages/admin/LoginPage";
 import DashboardPage from "./pages/admin/DashboardPage";
 
+import { isLoggedIn } from "./utils/auth";
+
 export default function App() {
+  const location = useLocation();
+
   return (
     <>
       <ScrollToTop />
 
-      <Routes>
+      <AnimatePresence mode="wait" initial={false}>
+        <Routes location={location} key={location.pathname}>
 
-        {/* ADMIN */}
-        <Route path="/admin/login" element={<LoginPage />} />
-        <Route path="/admin/*" element={<DashboardPage />} />
-        <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
+          {/* Public Routes */}
+          <Route
+            path="/"
+            element={
+              <PageWrapper key="home">
+                <Home />
+              </PageWrapper>
+            }
+          />
 
-        {/* PUBLIC */}
-        <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
-        <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
-        <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
+          <Route
+            path="/about"
+            element={
+              <PageWrapper key="about">
+                <About />
+              </PageWrapper>
+            }
+          />
 
-        {/* FALLBACK */}
-        <Route path="*" element={<Navigate to="/" />} />
+          <Route
+            path="/contact"
+            element={
+              <PageWrapper key="contact">
+                <Contact />
+              </PageWrapper>
+            }
+          />
 
-      </Routes>
+          {/* Admin Login */}
+          <Route path="/admin/login" element={<LoginPage />} />
+
+          {/* ✅ Protected Admin Routes */}
+          <Route
+            path="/admin/*"
+            element={
+              isLoggedIn() ? (
+                <DashboardPage />
+              ) : (
+                <Navigate to="/admin/login" replace />
+              )
+            }
+          />
+
+        </Routes>
+      </AnimatePresence>
     </>
   );
 }

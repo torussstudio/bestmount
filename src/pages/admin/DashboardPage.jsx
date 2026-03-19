@@ -18,9 +18,9 @@ export default function DashboardPage() {
   const [categories, setCategories] = useState([]);
 
   // ── Auth guard ──────────────────────────────────────────────────────
-  useEffect(() => {
-    if (!isLoggedIn()) navigate("/admin/login", { replace: true });
-  }, [navigate]);
+  // useEffect(() => {
+  //   if (!isLoggedIn()) navigate("/admin/login", { replace: true });
+  // }, [navigate]);
 
   // ── Fetch helpers ────────────────────────────────────────────────────
   async function fetchProducts() {

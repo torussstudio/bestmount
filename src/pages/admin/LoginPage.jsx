@@ -21,47 +21,93 @@ export default function LoginPage() {
   }, [navigate]);
 
   // ✅ Clean API-based login
+  // async function handleSubmit(e) {
+  //   e.preventDefault();
+  //   setError("");
+
+  //   if (!username.trim()) {
+  //     setError("Username is required.");
+  //     return;
+  //   }
+  //   if (!password.trim()) {
+  //     setError("Password is required.");
+  //     return;
+  //   }
+
+  //   setLoading(true);
+
+  //   try {
+  //     const res = await fetch(`${API}/admin/login`,  {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         username: username.trim(),
+  //         password,
+  //       }),
+  //     });
+
+  //     const data = await res.json();
+
+  //     if (res.ok) {
+  //       setAdminSession(data.admin);
+  //       navigate("/admin", { replace: true });
+  //     } else {
+  //       setError(data.message || "Login failed");
+  //     }
+  //   } catch (err) {
+  //     setError("Server error");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
+
   async function handleSubmit(e) {
-    e.preventDefault();
-    setError("");
+  e.preventDefault();
+  setError("");
 
-    if (!username.trim()) {
-      setError("Username is required.");
-      return;
-    }
-    if (!password.trim()) {
-      setError("Password is required.");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const res = await fetch(`${API}/admin/login`,  {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: username.trim(),
-          password,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        setAdminSession(data.admin);
-        navigate("/admin", { replace: true });
-      } else {
-        setError(data.message || "Login failed");
-      }
-    } catch (err) {
-      setError("Server error");
-    } finally {
-      setLoading(false);
-    }
+  if (!username.trim()) {
+    setError("Username is required.");
+    return;
   }
+
+  if (!password.trim()) {
+    setError("Password is required.");
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    const res = await fetch(`${API}/admin/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: username.trim(),
+        password,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      // ✅ store login state
+      setAdminSession(data.admin);
+
+      // ✅ force redirect
+      navigate("/admin", { replace: true });
+    } else {
+      setError(data.message || "Login failed");
+    }
+  } catch (err) {
+    setError("Server error");
+  } finally {
+    setLoading(false);
+  }
+}
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 font-sans">
