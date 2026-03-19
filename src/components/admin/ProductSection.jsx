@@ -229,12 +229,11 @@ export default function ProductSection({ products, categories, onAdd, onUpdate, 
           </select>
           <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none" />
         </div> */}
-<div className="relative w-full sm:w-auto shrink-0">
+<div className="relative w-full sm:w-auto min-w-0">
   <select
     value={filterMode}
     onChange={handleFilterModeChange}
-    className="appearance-none w-full sm:min-w-[160px] md:min-w-[180px] pl-3 sm:pl-4 pr-9 py-2.5 sm:py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition cursor-pointer"
-  >
+className="appearance-none w-full min-w-0 sm:min-w-[140px] max-w-full pl-3 sm:pl-4 pr-9 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition cursor-pointer"  >
     <option value="all">All</option>
     <option value="category">Category</option>
   </select>
