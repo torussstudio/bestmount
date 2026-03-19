@@ -63,6 +63,7 @@ import Contact from "./pages/Contact";
 
 import LoginPage from "./pages/admin/LoginPage";
 import DashboardPage from "./pages/admin/DashboardPage";
+import NotFound from "./pages/NotFound";
 
 import { isLoggedIn } from "./utils/auth";
 
@@ -120,6 +121,9 @@ export default function App() {
             }
             
           />
+
+          {/* 404 – catch-all */}
+          <Route path="*" element={<NotFound />} />
 
         </Routes>
       </AnimatePresence>
