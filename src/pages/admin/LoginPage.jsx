@@ -15,9 +15,9 @@ export default function LoginPage() {
 
   // Redirect if already logged in
   useEffect(() => {
-    if (isLoggedIn()) {
-      navigate("/admin", { replace: true });
-    }
+    // if (isLoggedIn()) {
+    //   navigate("/admin", { replace: true });
+    // }
   }, [navigate]);
 
   // ✅ Clean API-based login
