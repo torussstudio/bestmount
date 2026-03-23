@@ -33,7 +33,7 @@ export default function About() {
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-y-10">
                     {/* Row 1: Heading */}
                     <div className="md:col-span-12">
-                        <h1 className="text-5xl md:text-7xl text-yellow-400 uppercase font-skoda-expanded leading-[0.95]">
+                        <h1 className="text-4xl md:text-5xl lg:text-7xl text-yellow-400 uppercase font-skoda-expanded leading-[0.95]">
                         Where purpose
                         <br />
                         takes form.
@@ -103,7 +103,7 @@ export default function About() {
 
                 {/* Big quote */}
                 <div className="md:col-span-12 pt-10">
-                    <p className="text-4xl md:text-6xl font-thin leading-tight">
+                <p className="text-2xl sm:text-4xl md:text-6xl font-thin leading-tight">
                     Rooted in integrity, refined through time, and guided by responsibility.
                     </p>
                 </div>
@@ -211,7 +211,7 @@ export default function About() {
             <Section className="min-h-screen">
                 <Container>
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-y-6 md:gap-x-12">
-                        <div className="md:col-span-8 pt-0 md:pt-35">
+                        <div className="md:col-span-8 pt-0 md:pt-28">
                             <span className="text-xs uppercase tracking-widest">
                                 Our Philosophy
                             </span>

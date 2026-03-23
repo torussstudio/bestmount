@@ -64,6 +64,7 @@ import Contact from "./pages/Contact";
 import LoginPage from "./pages/admin/LoginPage";
 import DashboardPage from "./pages/admin/DashboardPage";
 import NotFound from "./pages/NotFound";
+import ProductDataSheet from "./pages/ProductDataSheet";
 
 import { isLoggedIn } from "./utils/auth";
 
@@ -120,6 +121,16 @@ export default function App() {
               )
             }
             
+          />
+
+          {/* Product data sheet */}
+          <Route
+            path="/product/:id"
+            element={
+              <PageWrapper key="datasheet">
+                <ProductDataSheet />
+              </PageWrapper>
+            }
           />
 
           {/* 404 – catch-all */}

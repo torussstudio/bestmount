@@ -80,7 +80,7 @@ export default function Contact() {
                             </p>
                         </div>
                         <div className="md:col-span-12 pt-10">
-                            <p className="text-4xl md:text-6xl font-thin leading-tight">
+                            <p className="text-2xl sm:text-4xl md:text-6xl font-thin leading-tight">
                             Transparent in process. Genuine in connection. Continuous in purpose.
                             </p>
                         </div>
