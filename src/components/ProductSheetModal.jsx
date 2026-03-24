@@ -146,7 +146,7 @@ export default function ProductSheetModal({ product, onClose }) {
           {/* ── Datasheet card ── */}
           <div
             style={{
-              background: "#1e1a16",
+              background: "#1a1b1e",
               borderRadius: "14px",
               overflow: "hidden",
               fontFamily: "'SKODA Next', system-ui, sans-serif",
@@ -263,7 +263,7 @@ export default function ProductSheetModal({ product, onClose }) {
                 <div style={{ padding: "clamp(14px,3vw,20px) clamp(14px,4vw,28px)" }}>
                   <h2 style={{
                     fontSize: "clamp(0.5rem,1.3vw,0.58rem)", fontWeight: 700, textTransform: "uppercase",
-                    letterSpacing: "0.08em", color: "#f59e0b", lineHeight: 1.5, marginBottom: "10px",
+                    letterSpacing: "0.08em", color: "#fbbf24", lineHeight: 1.5, marginBottom: "10px",
                   }}>
                     Chemical Composition<br />& Physical Analysis
                   </h2>
@@ -317,7 +317,7 @@ export default function ProductSheetModal({ product, onClose }) {
                   ].map(({ label, value }) =>
                     value ? (
                       <div key={label}>
-                        <p style={{ fontSize: "0.52rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#f59e0b", margin: 0 }}>
+                        <p style={{ fontSize: "0.52rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#fbbf24", margin: 0 }}>
                           {label}
                         </p>
                         <Divider />
