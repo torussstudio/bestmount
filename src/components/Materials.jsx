@@ -110,7 +110,6 @@ const cardStyles = `
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 0;
-    border-top: 1px solid rgba(255,255,255,0.10);
     border-left: 1px solid rgba(255,255,255,0.10);
   }
   .product-card-wrap {
@@ -223,17 +222,21 @@ export default function Materials() {
               ) : (
                 <div className="flex flex-col md:flex-row min-h-[420px]">
                   {/* ── Left sidebar ── */}
-                  <div className="sticky top-[80px] z-30 rounded-t-2xl md:rounded-none bg-slate-50/20 backdrop-blur-md md:static md:bg-transparent md:backdrop-blur-none md:w-56 flex-shrink-0 p-4 md:p-6 flex flex-col gap-1 border-b border-white/[0.08] md:border-b-0 md:border-r md:border-white/[0.08]">
+                  <div className="sticky top-[80px] z-30 rounded-t-2xl md:rounded-none bg-slate-50/20 backdrop-blur-md md:relative md:bg-transparent md:backdrop-blur-none md:w-56 flex-shrink-0 p-4 md:p-6 flex flex-col gap-1 border-b-2 border-white/[0.12] md:border-b-0 md:after:content-[''] after:hidden md:after:block after:absolute after:right-0 after:top-[66px] after:bottom-[66px] after:w-[2px] after:bg-white/[0.12]">
 
                     {/* Sidebar header */}
-                    <div className="flex items-center gap-2 mb-3">
-                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-60 flex-shrink-0">
-                        <rect x="1" y="1" width="6" height="6" rx="1" stroke="#eee8cd" strokeWidth="1.5"/>
-                        <rect x="11" y="1" width="6" height="6" rx="1" stroke="#eee8cd" strokeWidth="1.5"/>
-                        <rect x="1" y="11" width="6" height="6" rx="1" stroke="#eee8cd" strokeWidth="1.5"/>
-                        <rect x="11" y="11" width="6" height="6" rx="1" stroke="#eee8cd" strokeWidth="1.5"/>
+                    <div className="flex items-center gap-2.5 mb-5 h-8">
+                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0 opacity-80">
+                        <mask id="cat-icon-mask">
+                          <rect x="0" y="0" width="18" height="18" fill="white" />
+                          <rect x="3.5" y="3.5" width="4.5" height="4.5" rx="0.5" fill="none" stroke="black" strokeWidth="1.25" />
+                          <rect x="10" y="3.5" width="4.5" height="4.5" rx="0.5" fill="none" stroke="black" strokeWidth="1.25" />
+                          <rect x="3.5" y="10" width="4.5" height="4.5" rx="0.5" fill="none" stroke="black" strokeWidth="1.25" />
+                          <circle cx="12.25" cy="12.25" r="2.25" fill="none" stroke="black" strokeWidth="1.25" />
+                        </mask>
+                        <rect x="0" y="0" width="18" height="18" rx="4.5" fill="#eee8cd" mask="url(#cat-icon-mask)" />
                       </svg>
-                      <span className="text-xs uppercase tracking-widest text-white/60 font-semibold">Categories</span>
+                      <span className="text-[13px] font-light text-[#eee8cd] tracking-wide">Categories</span>
                     </div>
 
                     {/* Category list — horizontal scroll on mobile, vertical on md+ */}
@@ -249,7 +252,7 @@ export default function Materials() {
                               onClick={(e) => handleCategoryClick(cat._id, e)}
                               className={`whitespace-nowrap md:w-full text-left px-3 py-1.5 rounded-lg text-sm transition-all duration-150 ${
                                 isActive
-                                  ? "bg-yellow-400/15 text-yellow-400 font-semibold"
+                                  ? "bg-gradient-to-r from-yellow-400/30 to-transparent text-yellow-400 font-semibold"
                                   : "text-white/50 hover:text-white/80 hover:bg-white/5"
                               }`}
                             >
@@ -262,8 +265,12 @@ export default function Materials() {
 
                     {/* Sidebar footer note — hide on mobile to save space */}
                     <div className="hidden md:block mt-auto pt-6">
-                      <p className="text-[11px] text-white/30 leading-snug">
-                        Looking for the complete list? Download the full SRM chart below.
+                      <div className="w-full h-px bg-white/[0.12] mb-4"></div>
+                      <p className="text-[12px] text-white/60 italic font-light mb-1.5">
+                        Looking for the complete list?
+                      </p>
+                      <p className="text-[12px] text-white/90 font-semibold leading-tight">
+                        Get the full Sustainable Raw<br/>Materials chart in one document.
                       </p>
                     </div>
                   </div>
@@ -271,10 +278,10 @@ export default function Materials() {
                   {/* ── Right product grid ── */}
                   <div className="flex-1 p-4 md:p-6 flex flex-col">
                     {/* Grid header */}
-                    <div className="flex items-center gap-2 mb-5">
-                      <span className="text-white/40 text-sm">→</span>
-                      <span className="text-sm uppercase tracking-widest text-white/80 font-semibold">
-                        {selectedCategoryName}
+                    <div className="flex items-center mb-5 h-8">
+                      <span className="text-[11px] uppercase tracking-widest text-[#eee8cd]/80 font-light flex items-center gap-2 mt-[2px]">
+                        <span className="opacity-70">→</span>
+                        <span>{selectedCategoryName}</span>
                       </span>
                     </div>
 
@@ -293,7 +300,6 @@ export default function Materials() {
               {/* Panel footer */}
               <div
                 className="px-6 py-4 flex justify-center"
-                style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
               >
                 <a href="/BM-SRM-Chart-2026.pdf" target="_blank" download>
                   <DownButton>Download Full SRM Chart</DownButton>
