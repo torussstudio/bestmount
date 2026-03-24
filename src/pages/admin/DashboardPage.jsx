@@ -8,15 +8,13 @@ import ProductSection from "../../components/admin/ProductSection";
 import CategorySection from "../../components/admin/CategorySection";
 import API from "../../api";
 
-
-// const API = "http://localhost:5000/api";
-
 export default function DashboardPage() {
   const navigate = useNavigate();
   const [section, setSection] = useState("products");
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-
+  const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState("");
 
   // ── Fetch helpers ────────────────────────────────────────────────────
   async function fetchProducts() {
@@ -27,6 +25,7 @@ export default function DashboardPage() {
       setProducts(data);
     } catch (err) {
       console.error("fetchProducts:", err.message);
+      throw err;
     }
   }
 
@@ -38,13 +37,17 @@ export default function DashboardPage() {
       setCategories(data);
     } catch (err) {
       console.error("fetchCategories:", err.message);
+      throw err;
     }
   }
 
   // ── Load on mount ─────────────────────────────────────────────────────
   useEffect(() => {
-    fetchProducts();
-    fetchCategories();
+    setLoading(true);
+    setFetchError("");
+    Promise.all([fetchProducts(), fetchCategories()])
+      .catch(() => setFetchError("Could not load data. The server may be waking up — please refresh in a moment."))
+      .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -128,13 +131,37 @@ export default function DashboardPage() {
     const res = await fetch(`${API}/categories/${id}`, { method: "DELETE" });
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));
-      // Re-throw so CategorySection can catch and display the message
       throw new Error(body.message || "Failed to delete category");
     }
     await fetchCategories();
   }
 
   if (!isLoggedIn()) return null;
+
+  // ── Loading state ─────────────────────────────────────────────────────
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-900 gap-4">
+        <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+        <p className="text-slate-400 text-sm">Loading dashboard…</p>
+      </div>
+    );
+  }
+
+  // ── Error state ───────────────────────────────────────────────────────
+  if (fetchError) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-900 gap-4 px-4">
+        <p className="text-red-400 text-sm text-center max-w-sm">{fetchError}</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   // ── Render ────────────────────────────────────────────────────────────
   return (

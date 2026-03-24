@@ -68,9 +68,14 @@ import ProductDataSheet from "./pages/ProductDataSheet";
 
 import { isLoggedIn } from "./utils/auth";
 
+/** Reactive wrapper: re-reads localStorage on every render so that
+ *  navigate() after login triggers a re-render with the correct auth state. */
+function ProtectedRoute({ children }) {
+  return isLoggedIn() ? children : <Navigate to="/admin/login" replace />;
+}
+
 export default function App() {
   const location = useLocation();
-  console.log("isLoggedIn:", isLoggedIn());
 
   return (
     <>
@@ -114,13 +119,10 @@ export default function App() {
           <Route
             path="/admin/*"
             element={
-              isLoggedIn() ? (
+              <ProtectedRoute>
                 <DashboardPage />
-              ) : (
-                <Navigate to="/admin/login" replace />
-              )
+              </ProtectedRoute>
             }
-            
           />
 
           {/* Product data sheet */}

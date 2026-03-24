@@ -282,10 +282,7 @@ export default function LoginPage() {
 
       if (res.ok) {
         setAdminSession(data.admin);
-
-        // 🔥 ensure redirect works reliably
         navigate("/admin", { replace: true });
-        window.location.reload();
       } else {
         setError(data.message || "Login failed");
       }

@@ -14,23 +14,64 @@ const cardStyles = `
   .product-card-wrap {
     position: relative;
     background: #2b2c30;
-    transition: background 0.15s;
+    transition: background 0.22s ease;
     cursor: pointer;
     text-align: left;
-    padding: 12px 14px 14px;
+    padding: 16px 18px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: flex-start;
+    justify-content: space-between;
     gap: 0;
     width: 100%;
     border: none;
     outline: none;
-    min-height: 90px;
+    height: 160px;
+  }
+  @media (max-width: 640px) {
+    .product-card-wrap {
+      height: 130px;
+    }
   }
   .product-card-wrap:hover {
-    background: #33343a;
+    background: #3a2d00;
   }
+  /* L-corners turn gold on hover */
+  .product-card-wrap:hover .lc {
+    border-color: rgba(230, 175, 0, 0.55);
+  }
+  /* Card text elements */
+  .card-index {
+    font-size: 0.55rem;
+    color: rgba(238,232,205,0.35);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    transition: color 0.22s ease;
+  }
+  .card-name {
+    font-family: "SKODA Next Black Expanded", "SKODA Next", system-ui, sans-serif;
+    font-weight: 900;
+    font-size: clamp(0.9rem, 1.6vw, 1.15rem);
+    color: #eee8cd;
+    letter-spacing: 0.01em;
+    line-height: 1.05;
+    margin: 0;
+    transition: color 0.22s ease;
+  }
+  .card-subtitle {
+    font-family: "SKODA Next", system-ui, sans-serif;
+    font-weight: 300;
+    font-size: 0.58rem;
+    color: rgba(238,232,205,0.4);
+    margin: 0;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+    transition: color 0.22s ease;
+  }
+  .product-card-wrap:hover .card-index   { color: rgba(240, 185, 0, 0.65); }
+  .product-card-wrap:hover .card-name    { color: #f5c000; }
+  .product-card-wrap:hover .card-subtitle { color: rgba(240, 185, 0, 0.55); }
+
   /* L-corner spans – 14×14px, only two adjacent sides have a border */
   .lc {
     position: absolute;
@@ -40,36 +81,42 @@ const cardStyles = `
     z-index: 2;
   }
   .lc-tl { top: 0; left: 0;
-    border-top: 2.5px solid rgba(255,255,255,0.7);
-    border-left: 2.5px solid rgba(255,255,255,0.7);
+    border-top: 1.5px solid rgba(255,255,255,0.45);
+    border-left: 1.5px solid rgba(255,255,255,0.45);
   }
   .lc-tr { top: 0; right: 0;
-    border-top: 2.5px solid rgba(255,255,255,0.7);
-    border-right: 2.5px solid rgba(255,255,255,0.7);
+    border-top: 1.5px solid rgba(255,255,255,0.45);
+    border-right: 1.5px solid rgba(255,255,255,0.45);
   }
   .lc-bl { bottom: 0; left: 0;
-    border-bottom: 2.5px solid rgba(255,255,255,0.7);
-    border-left: 2.5px solid rgba(255,255,255,0.7);
+    border-bottom: 1.5px solid rgba(255,255,255,0.45);
+    border-left: 1.5px solid rgba(255,255,255,0.45);
   }
   .lc-br { bottom: 0; right: 0;
-    border-bottom: 2.5px solid rgba(255,255,255,0.7);
-    border-right: 2.5px solid rgba(255,255,255,0.7);
+    border-bottom: 1.5px solid rgba(255,255,255,0.45);
+    border-right: 1.5px solid rgba(255,255,255,0.45);
   }
 
-  /* Product grid */
+  /* Product grid — shared-border technique so no line is ever doubled */
   .product-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 0;
+    border-top: 1px solid rgba(255,255,255,0.10);
+    border-left: 1px solid rgba(255,255,255,0.10);
+  }
+  .product-card-wrap {
+    border-right: 1px solid rgba(255,255,255,0.10);
+    border-bottom: 1px solid rgba(255,255,255,0.10);
   }
   @media (max-width: 640px) {
     .product-grid {
-      grid-template-columns: repeat(1, 1fr);
+      grid-template-columns: repeat(2, 1fr);
     }
   }
   @media (min-width: 641px) and (max-width: 900px) {
     .product-grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
     }
   }
 `;
@@ -290,45 +337,16 @@ function Row({ row, rowIdx, colSize, onSelect }) {
             <span className="lc lc-bl" />
             <span className="lc lc-br" />
 
-            {/* Index – top-left, small muted number */}
-            <span style={{
-              fontSize: "0.55rem",
-              color: "rgba(238,232,205,0.35)",
-              fontWeight: 400,
-              letterSpacing: "0.05em",
-              marginBottom: 6,
-            }}>
-              {globalIdx + 1}
-            </span>
+            {/* Index */}
+            <span className="card-index">{globalIdx + 1}</span>
 
-            {/* Short name (large, bold expanded) */}
-            <p
-              style={{
-                fontFamily: '"SKODA Next Black Expanded", "SKODA Next", system-ui, sans-serif',
-                fontWeight: 900,
-                fontSize: "clamp(0.9rem, 1.6vw, 1.15rem)",
-                color: "#eee8cd",
-                letterSpacing: "0.01em",
-                lineHeight: 1.05,
-                margin: 0,
-                marginBottom: 6,
-              }}
-            >
+            {/* Short name */}
+            <p className="card-name">
               {product.shortName || product.name}
             </p>
 
-            {/* Subtitle – light weight, muted */}
-            <p style={{
-              fontFamily: '"SKODA Next", system-ui, sans-serif',
-              fontWeight: 300,
-              fontSize: "0.58rem",
-              color: "rgba(238,232,205,0.4)",
-              margin: 0,
-              lineHeight: 1.4,
-              letterSpacing: "0.02em",
-            }}>
-              {product.name}
-            </p>
+            {/* Subtitle */}
+            <p className="card-subtitle">{product.name}</p>
           </button>
         );
       })}
