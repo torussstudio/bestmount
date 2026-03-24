@@ -3,7 +3,7 @@ import Container from "../components/layout/Container";
 import PrimaryButton from "../components/layout/PrimaryButton";
 import Section from "../components/layout/Section";
 import Seperator from "../components/layout/seperator";
-import arrowRight from "../assets/images/btn-ico.png";
+import { FiArrowUpRight } from "react-icons/fi";
 
 const ContactBackground = ({ children }) => (
     <div className="relative">
@@ -165,8 +165,8 @@ export default function Contact() {
                             type="submit"
                             className="cursor-pointer group inline-flex items-center gap-3 rounded-full border border-white/0 bg-white/10 backdrop-blur-lg px-8 py-3 text-white transition hover:scale-[1.03]"
                             >
-                            <span className="inline-flex transition-transform duration-300 ease-out group-hover:rotate-45">
-                                <img src={arrowRight} alt="" className="w-5 h-5" />
+                            <span className="inline-flex text-white transition-transform duration-300 ease-out group-hover:rotate-45">
+                                <FiArrowUpRight className="w-5 h-5 flex-shrink-0" />
                             </span>
                             <span className="font-normal">Send Message</span>
                             </button>

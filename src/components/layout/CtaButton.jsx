@@ -1,4 +1,4 @@
-import arrowPng from "../../assets/images/btn-ico-b.png"
+import { FiArrowUpRight } from "react-icons/fi";
 
 export default function CtaButton({ children, className = "" }) {
   return (
@@ -83,17 +83,12 @@ export default function CtaButton({ children, className = "" }) {
         {/* Arrow */}
         <span
           className="
-            inline-flex items-center
+            inline-flex items-center text-black
             transition-transform duration-300 ease-out
             group-hover:rotate-45
           "
         >
-          <img
-            src={arrowPng}
-            alt=""
-            className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0"
-            draggable="false"
-          />
+          <FiArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
         </span>
 
         {/* Text */}

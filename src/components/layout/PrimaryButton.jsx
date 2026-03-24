@@ -1,5 +1,5 @@
+import { FiArrowUpRight } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import arrowPng from "../../assets/images/btn-ico.png";
 
 export default function PrimaryButton({
   children,
@@ -86,17 +86,12 @@ export default function PrimaryButton({
         {/* Arrow */}
         <span
           className="
-            inline-flex
+            inline-flex text-white
             transition-transform duration-300 ease-out
             group-hover:rotate-45
           "
         >
-          <img
-            src={arrowPng}
-            alt=""
-            className="w-5 h-5"
-            draggable="false"
-          />
+          <FiArrowUpRight className="w-5 h-5 flex-shrink-0" />
         </span>
 
         {/* Text */}
