@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { isLoggedIn } from "../../utils/auth";
+import { toast } from "react-hot-toast";
 
 import AdminLayout from "../../components/admin/AdminLayout";
 import ProductSection from "../../components/admin/ProductSection";
@@ -61,8 +62,10 @@ export default function DashboardPage() {
       });
       if (!res.ok) throw new Error("Failed to add product");
       await fetchProducts();
+      toast.success("Product added successfully!");
     } catch (err) {
       console.error("addProduct:", err.message);
+      toast.error(err.message || "Failed to add product");
     }
   }
 
@@ -79,8 +82,10 @@ export default function DashboardPage() {
         throw new Error(body.message || `HTTP ${res.status}`);
       }
       await fetchProducts();
+      toast.success("Product updated successfully!");
     } catch (err) {
       console.error("updateProduct:", err.message);
+      toast.error(err.message || "Failed to update product");
     }
   }
 
@@ -89,8 +94,10 @@ export default function DashboardPage() {
       const res = await fetch(`${API}/products/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete product");
       await fetchProducts();
+      toast.success("Product deleted successfully!");
     } catch (err) {
       console.error("deleteProduct:", err.message);
+      toast.error(err.message || "Failed to delete product");
     }
   }
 
@@ -104,8 +111,10 @@ export default function DashboardPage() {
       });
       if (!res.ok) throw new Error("Failed to add category");
       await fetchCategories();
+      toast.success("Category added successfully!");
     } catch (err) {
       console.error("addCategory:", err.message);
+      toast.error(err.message || "Failed to add category");
     }
   }
 
@@ -122,8 +131,10 @@ export default function DashboardPage() {
         throw new Error(body.message || `HTTP ${res.status}`);
       }
       await fetchCategories();
+      toast.success("Category updated successfully!");
     } catch (err) {
       console.error("updateCategory:", err.message);
+      toast.error(err.message || "Failed to update category");
     }
   }
 
@@ -134,6 +145,7 @@ export default function DashboardPage() {
       throw new Error(body.message || "Failed to delete category");
     }
     await fetchCategories();
+    toast.success("Category deleted successfully!");
   }
 
   if (!isLoggedIn()) return null;

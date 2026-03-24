@@ -5,14 +5,22 @@ import Modal from "./Modal";
  * Delete confirmation dialog.
  * Props: isOpen, onClose, onConfirm, message
  */
-export default function ConfirmDialog({ isOpen, onClose, onConfirm, message }) {
+export default function ConfirmDialog({ 
+  isOpen, 
+  onClose, 
+  onConfirm, 
+  message,
+  title = "Confirm Delete",
+  confirmText = "Delete",
+  confirmButtonClass = "bg-red-600 hover:bg-red-500 shadow-red-500/20"
+}) {
   function handleConfirm() {
     // Just call onConfirm — if it's async, it manages its own close via finally
     onConfirm();
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Confirm Delete" size="sm">
+    <Modal isOpen={isOpen} onClose={onClose} title={title} size="sm">
       <p className="text-slate-600 text-sm leading-relaxed mb-6">{message}</p>
       <div className="flex gap-3 justify-end">
         <button
@@ -25,9 +33,9 @@ export default function ConfirmDialog({ isOpen, onClose, onConfirm, message }) {
         <button
           type="button"
           onClick={handleConfirm}
-          className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-sm font-semibold transition cursor-pointer shadow-md shadow-red-500/20"
+          className={`px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition cursor-pointer shadow-md ${confirmButtonClass}`}
         >
-          Delete
+          {confirmText}
         </button>
       </div>
     </Modal>

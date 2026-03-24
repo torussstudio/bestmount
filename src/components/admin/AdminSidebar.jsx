@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../utils/auth";
+import ConfirmDialog from "./ConfirmDialog";
 import {
   MdOutlineTerrain,
   MdOutlineInventory2,
@@ -22,10 +24,11 @@ const MENU_ITEMS = [
  */
 export default function AdminSidebar({ activeSection, onSection, onClose }) {
   const navigate = useNavigate();
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   function handleLogout() {
     logout();
-    navigate("/admin/login", { replace: true });
+    navigate("/", { replace: true });
   }
 
   return (
@@ -82,13 +85,25 @@ export default function AdminSidebar({ activeSection, onSection, onClose }) {
       {/* Logout */}
       <div className="px-3 py-4 border-t border-white/10">
         <button
-          onClick={handleLogout}
+          onClick={() => setShowLogoutConfirm(true)}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-all duration-150 cursor-pointer"
         >
           <MdLogout className="text-lg shrink-0" />
           Logout
         </button>
       </div>
+
+      {showLogoutConfirm && (
+        <ConfirmDialog
+          isOpen={showLogoutConfirm}
+          onClose={() => setShowLogoutConfirm(false)}
+          onConfirm={handleLogout}
+          title="Confirm Logout"
+          message="Are you sure you want to log out of the admin panel?"
+          confirmText="Logout"
+          confirmButtonClass="bg-red-600 hover:bg-red-500 shadow-red-500/20"
+        />
+      )}
     </aside>
   );
 }

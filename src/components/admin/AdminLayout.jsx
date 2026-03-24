@@ -2,6 +2,8 @@ import { useState } from "react";
 import AdminSidebar from "./AdminSidebar";
 import AdminNavbar from "./AdminNavbar";
 
+import { Toaster } from "react-hot-toast";
+
 /**
  * AdminLayout – responsive shell:
  *   ≥ lg  : sidebar always visible alongside content
@@ -12,6 +14,7 @@ export default function AdminLayout({ section, onSection, children }) {
 
   return (
     <div className="flex h-screen bg-slate-100 font-sans overflow-hidden">
+      <Toaster position="top-right" />
       {/* ── Mobile backdrop ─────────────────────────────────────── */}
       {sidebarOpen && (
         <div
