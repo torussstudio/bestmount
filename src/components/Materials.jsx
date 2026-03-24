@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 
 import Container from "./layout/Container";
@@ -136,6 +136,26 @@ export default function Materials() {
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
+  const categoryListRef = useRef(null);
+
+  const handleCategoryClick = (id, event) => {
+    setSelectedCategory(id);
+    if (window.innerWidth < 768 && categoryListRef.current && event?.currentTarget) {
+      const container = categoryListRef.current;
+      const btn = event.currentTarget;
+      
+      const containerRect = container.getBoundingClientRect();
+      const btnRect = btn.getBoundingClientRect();
+      
+      const centerOffset = (btnRect.left + btnRect.width / 2) - (containerRect.left + containerRect.width / 2);
+      
+      container.scrollTo({
+        left: container.scrollLeft + centerOffset,
+        behavior: "smooth",
+      });
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -203,7 +223,8 @@ export default function Materials() {
               ) : (
                 <div className="flex flex-col md:flex-row min-h-[420px]">
                   {/* ── Left sidebar ── */}
-                  <div className="sticky top-[80px] z-30 bg-slate-50/20 backdrop-blur-md md:static md:bg-transparent md:backdrop-blur-none md:w-56 flex-shrink-0 p-4 md:p-6 flex flex-col gap-1 border-b border-white/[0.08] md:border-b-0 md:border-r md:border-white/[0.08]">
+                  <div className="sticky top-[80px] z-30 rounded-t-2xl md:rounded-none bg-slate-50/20 backdrop-blur-md md:static md:bg-transparent md:backdrop-blur-none md:w-56 flex-shrink-0 p-4 md:p-6 flex flex-col gap-1 border-b border-white/[0.08] md:border-b-0 md:border-r md:border-white/[0.08]">
+
                     {/* Sidebar header */}
                     <div className="flex items-center gap-2 mb-3">
                       <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-60 flex-shrink-0">
@@ -216,13 +237,16 @@ export default function Materials() {
                     </div>
 
                     {/* Category list — horizontal scroll on mobile, vertical on md+ */}
-                    <ul className="flex flex-row md:flex-col gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-hide">
+                    <ul 
+                      ref={categoryListRef}
+                      className="flex flex-row md:flex-col gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-hide"
+                    >
                       {categories.map((cat) => {
                         const isActive = cat._id === selectedCategory;
                         return (
                           <li key={cat._id}>
                             <button
-                              onClick={() => setSelectedCategory(cat._id)}
+                              onClick={(e) => handleCategoryClick(cat._id, e)}
                               className={`whitespace-nowrap md:w-full text-left px-3 py-1.5 rounded-lg text-sm transition-all duration-150 ${
                                 isActive
                                   ? "bg-yellow-400/15 text-yellow-400 font-semibold"
