@@ -7,6 +7,73 @@ import Seperator from "./layout/seperator";
 import API from "../api";
 import ProductSheetModal from "./ProductSheetModal";
 
+/* ─────────────────────────────────────────────
+   Styles for the L-corner card design
+───────────────────────────────────────────── */
+const cardStyles = `
+  .product-card-wrap {
+    position: relative;
+    background: #2b2c30;
+    transition: background 0.15s;
+    cursor: pointer;
+    text-align: left;
+    padding: 12px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0;
+    width: 100%;
+    border: none;
+    outline: none;
+    min-height: 90px;
+  }
+  .product-card-wrap:hover {
+    background: #33343a;
+  }
+  /* L-corner spans – 14×14px, only two adjacent sides have a border */
+  .lc {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .lc-tl { top: 0; left: 0;
+    border-top: 2.5px solid rgba(255,255,255,0.7);
+    border-left: 2.5px solid rgba(255,255,255,0.7);
+  }
+  .lc-tr { top: 0; right: 0;
+    border-top: 2.5px solid rgba(255,255,255,0.7);
+    border-right: 2.5px solid rgba(255,255,255,0.7);
+  }
+  .lc-bl { bottom: 0; left: 0;
+    border-bottom: 2.5px solid rgba(255,255,255,0.7);
+    border-left: 2.5px solid rgba(255,255,255,0.7);
+  }
+  .lc-br { bottom: 0; right: 0;
+    border-bottom: 2.5px solid rgba(255,255,255,0.7);
+    border-right: 2.5px solid rgba(255,255,255,0.7);
+  }
+
+  /* Product grid */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+  @media (max-width: 640px) {
+    .product-grid {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+  @media (min-width: 641px) and (max-width: 900px) {
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+`;
+
 export default function Materials() {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
@@ -44,6 +111,8 @@ export default function Materials() {
 
   return (
     <>
+      <style>{cardStyles}</style>
+
       <div id="materials">
         <Section className="min-h-[70vh]">
           <Container>
@@ -136,51 +205,7 @@ export default function Materials() {
                         <p className="text-white/30 text-sm">No products found for this category.</p>
                       </div>
                     ) : (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3" style={{ gap: 0 }}>
-                        {filteredProducts.map((product, i) => (
-                          <button
-                            key={product._id}
-                            onClick={() => setSelectedProduct(product)}
-                            className="group cursor-pointer text-left w-full transition-all duration-150"
-                            style={{
-                              background: "rgba(30,28,26,0.85)",
-                              border: "1px solid rgba(255,255,255,0.1)",
-                              margin: "-0.5px",
-                              padding: "18px 16px 16px",
-                              display: "flex",
-                              flexDirection: "column",
-                              gap: "6px",
-                            }}
-                            onMouseEnter={e => {
-                              e.currentTarget.style.background = "rgba(50,46,40,0.95)";
-                            }}
-                            onMouseLeave={e => {
-                              e.currentTarget.style.background = "rgba(30,28,26,0.85)";
-                            }}
-                          >
-                            {/* Index */}
-                            <span style={{ fontSize: "0.58rem", color: "rgba(238,232,205,0.3)", fontWeight: 500, letterSpacing: "0.04em" }}>
-                              {i + 1}
-                            </span>
-                            {/* Short name (large, bold) */}
-                            <p
-                              className="font-bold leading-none"
-                              style={{
-                                fontSize: "clamp(1.15rem, 2.2vw, 1.5rem)",
-                                color: "#eee8cd",
-                                letterSpacing: "-0.01em",
-                                margin: 0,
-                              }}
-                            >
-                              {product.shortName || product.name}
-                            </p>
-                            {/* Full name (subtitle) */}
-                            <p style={{ fontSize: "0.68rem", color: "rgba(238,232,205,0.45)", margin: 0, lineHeight: 1.4 }}>
-                              {product.name}
-                            </p>
-                          </button>
-                        ))}
-                      </div>
+                      <ProductGrid products={filteredProducts} onSelect={setSelectedProduct} />
                     )}
                   </div>
                 </div>
@@ -211,6 +236,102 @@ export default function Materials() {
           onClose={() => setSelectedProduct(null)}
         />
       )}
+    </>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   ProductGrid
+   Renders cards in rows with L-shaped corner
+   decorations and a thick horizontal divider
+   between every row.
+───────────────────────────────────────────── */
+function ProductGrid({ products, onSelect }) {
+  const COLS = 3;
+
+  // Split flat product list into rows of COLS
+  const rows = [];
+  for (let i = 0; i < products.length; i += COLS) {
+    rows.push(products.slice(i, i + COLS));
+  }
+
+  return (
+    <div className="product-grid">
+      {rows.map((row, rowIdx) => (
+        <Row
+          key={rowIdx}
+          row={row}
+          rowIdx={rowIdx}
+          colSize={COLS}
+          onSelect={onSelect}
+
+        />
+      ))}
+    </div>
+  );
+}
+
+function Row({ row, rowIdx, colSize, onSelect }) {
+  return (
+    <>
+
+      {row.map((product, colIdx) => {
+        const globalIdx = rowIdx * colSize + colIdx;
+        return (
+          <button
+            key={product._id}
+            className="product-card-wrap"
+            onClick={() => onSelect(product)}
+            aria-label={`View details for ${product.name}`}
+          >
+            {/* L-shaped corner borders */}
+            <span className="lc lc-tl" />
+            <span className="lc lc-tr" />
+            <span className="lc lc-bl" />
+            <span className="lc lc-br" />
+
+            {/* Index – top-left, small muted number */}
+            <span style={{
+              fontSize: "0.55rem",
+              color: "rgba(238,232,205,0.35)",
+              fontWeight: 400,
+              letterSpacing: "0.05em",
+              marginBottom: 6,
+            }}>
+              {globalIdx + 1}
+            </span>
+
+            {/* Short name (large, bold expanded) */}
+            <p
+              style={{
+                fontFamily: '"SKODA Next Black Expanded", "SKODA Next", system-ui, sans-serif',
+                fontWeight: 900,
+                fontSize: "clamp(0.9rem, 1.6vw, 1.15rem)",
+                color: "#eee8cd",
+                letterSpacing: "0.01em",
+                lineHeight: 1.05,
+                margin: 0,
+                marginBottom: 6,
+              }}
+            >
+              {product.shortName || product.name}
+            </p>
+
+            {/* Subtitle – light weight, muted */}
+            <p style={{
+              fontFamily: '"SKODA Next", system-ui, sans-serif',
+              fontWeight: 300,
+              fontSize: "0.58rem",
+              color: "rgba(238,232,205,0.4)",
+              margin: 0,
+              lineHeight: 1.4,
+              letterSpacing: "0.02em",
+            }}>
+              {product.name}
+            </p>
+          </button>
+        );
+      })}
     </>
   );
 }
