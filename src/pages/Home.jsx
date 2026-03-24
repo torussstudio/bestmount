@@ -31,8 +31,8 @@ export default function Home() {
         {/* Hero section */}
         <Section className="min-h-[100svh] md:min-h-screen flex items-center pt-20 pb-10 md:py-0">
           <Container>
-            <div className="flex flex-col items-start justify-center">
-              <h1 className="text-[28px] leading-[1.15] min-[400px]:text-4xl sm:text-5xl md:text-6xl md:leading-[1.15] font-skoda-expanded text-yellow-400 max-w-[100%] break-words">
+            <div className="flex flex-col items-start justify-center w-full">
+              <h1 className="text-[clamp(1.25rem,8.5vw,3.75rem)] leading-[1.15] font-skoda-expanded text-yellow-400 w-full break-normal">
                 Sustainable Raw Materials, Perfectly Streamlined<sup className="hero-reg">&trade;</sup>.
               </h1>
 
