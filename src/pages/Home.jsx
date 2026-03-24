@@ -14,7 +14,7 @@ const HomeBackground = ({ children }) => (
       className="
         absolute inset-0
         bg-[url('/home-bg.webp')]
-        bg-cover bg-center bg-no-repeat
+        bg-cover bg-[position:45%_10%] md:bg-center bg-no-repeat
       "
     />
     <div className="absolute inset-0 bg-black/0" /> 
@@ -29,10 +29,10 @@ export default function Home() {
         <Header />
         
         {/* Hero section */}
-        <Section className="min-h-[100svh] md:min-h-screen flex items-center pt-20 pb-10 md:py-0">
+        <Section className="min-h-[85svh] md:min-h-screen flex items-center pt-24 pb-16 md:py-0 relative overflow-hidden">
           <Container>
-            <div className="flex flex-col items-start justify-center w-full">
-              <h1 className="text-[clamp(1.25rem,8.5vw,3.75rem)] leading-[1.15] font-skoda-expanded text-yellow-400 w-full break-normal">
+            <div className="flex flex-col items-start justify-center w-full max-w-full">
+              <h1 className="text-[22px] min-[360px]:text-[26px] min-[400px]:text-3xl sm:text-4xl md:text-6xl leading-[1.1] md:leading-[1.15] font-skoda-expanded text-yellow-400 w-full whitespace-normal break-words pr-2">
                 Sustainable Raw Materials, Perfectly Streamlined<sup className="hero-reg">&trade;</sup>.
               </h1>
 
