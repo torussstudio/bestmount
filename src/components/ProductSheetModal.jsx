@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import ReactDOM from "react-dom";
 import { pdf } from "@react-pdf/renderer";
+import { motion } from "framer-motion";
 import logoSrc from "../assets/images/bm-logo-tm-w.png";
 import ProductPDF from "./ProductPDF";
 
@@ -47,12 +48,18 @@ export default function ProductSheetModal({ product, onClose }) {
   };
 
   return ReactDOM.createPortal(
-    <div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      style={{ position: "fixed", inset: 0, zIndex: 9998 }}
+    >
       {/* ── Backdrop ── */}
       <div
         onClick={onClose}
         style={{
-          position: "fixed", inset: 0, zIndex: 9998,
+          position: "absolute", inset: 0,
           background: "rgba(8, 6, 4, 0.7)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
@@ -61,8 +68,9 @@ export default function ProductSheetModal({ product, onClose }) {
 
       {/* ── Scroll + centering container ── */}
       <div
+        onClick={onClose}
         style={{
-          position: "fixed", inset: 0, zIndex: 9999,
+          position: "absolute", inset: 0, zIndex: 1,
           overflowY: "auto",
           overflowX: "hidden",
           display: "flex",
@@ -72,15 +80,19 @@ export default function ProductSheetModal({ product, onClose }) {
           boxSizing: "border-box",
         }}
       >
-        <div
+        <motion.div
+          initial={{ scale: 0.95, y: 10 }}
+          animate={{ scale: 1, y: 0 }}
+          exit={{ scale: 0.95, y: 10 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
           onClick={(e) => e.stopPropagation()}
           style={{
+            position: "relative", zIndex: 2,
             width: "100%",
             maxWidth: "640px",
             display: "flex",
             flexDirection: "column",
             gap: "8px",
-            animation: "bmModalIn 0.2s ease",
           }}
         >
           {/* ── Action bar ── */}
@@ -329,16 +341,9 @@ export default function ProductSheetModal({ product, onClose }) {
               </p>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
-
-      <style>{`
-        @keyframes bmModalIn {
-          from { opacity: 0; transform: translateY(16px) scale(0.98); }
-          to   { opacity: 1; transform: translateY(0)   scale(1); }
-        }
-      `}</style>
-    </div>,
+    </motion.div>,
     document.body
   );
 }

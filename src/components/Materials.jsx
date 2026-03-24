@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
 
 import Container from "./layout/Container";
 import Section from "./layout/Section";
@@ -284,12 +285,14 @@ export default function Materials() {
       </Container>
 
       {/* Product Datasheet Modal */}
-      {selectedProduct && (
-        <ProductSheetModal
-          product={selectedProduct}
-          onClose={() => setSelectedProduct(null)}
-        />
-      )}
+      <AnimatePresence>
+        {selectedProduct && (
+          <ProductSheetModal
+            product={selectedProduct}
+            onClose={() => setSelectedProduct(null)}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }
