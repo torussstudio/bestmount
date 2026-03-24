@@ -73,11 +73,11 @@ export default function CtaButton({ children, className = "" }) {
       {/* Button body */}
       <span
         className="
-          relative z-10 flex items-center gap-3
+          relative z-10 flex items-center gap-2 sm:gap-3
           rounded-full
           bg-white/10 backdrop-blur-md
           border border-white/10
-          px-8 py-4
+          px-5 sm:px-8 py-3 sm:py-4
         "
       >
         {/* Arrow */}
@@ -91,13 +91,13 @@ export default function CtaButton({ children, className = "" }) {
           <img
             src={arrowPng}
             alt=""
-            className="w-5 h-5 flex-shrink-0"
+            className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0"
             draggable="false"
           />
         </span>
 
         {/* Text */}
-        <span className="font-normal whitespace-nowrap">
+        <span className="font-normal whitespace-nowrap text-sm sm:text-base">
           {children}
         </span>
       </span>

@@ -13,8 +13,9 @@ import ProductSheetModal from "./ProductSheetModal";
 const cardStyles = `
   .product-card-wrap {
     position: relative;
-    background: #2b2c30;
-    transition: background 0.22s ease;
+    background-color: #1a1b1e;
+    background-image: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
+    transition: background-color 0.22s ease, border-color 0.22s ease;
     cursor: pointer;
     text-align: left;
     padding: 16px 18px;
@@ -30,11 +31,17 @@ const cardStyles = `
   }
   @media (max-width: 640px) {
     .product-card-wrap {
-      height: 130px;
+      height: auto;
+      min-height: 140px;
+      padding: 16px 12px;
+      align-items: center;
+      text-align: center;
+      justify-content: center;
+      gap: 8px;
     }
   }
   .product-card-wrap:hover {
-    background: #3a2d00;
+    background-color: #3a2d00;
   }
   /* L-corners turn gold on hover */
   .product-card-wrap:hover .lc {
@@ -185,8 +192,8 @@ export default function Materials() {
 
             {/* Main panel */}
             <div
-              className="rounded-2xl overflow-hidden"
-              style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}
+              className="rounded-2xl bg-slate-50/20"
+              style={{ border: "1px solid rgba(255,255,255,0.08)", overflow: "clip" }}
             >
               {loading ? (
                 <div className="flex items-center justify-center py-24">
@@ -195,7 +202,7 @@ export default function Materials() {
               ) : (
                 <div className="flex flex-col md:flex-row min-h-[420px]">
                   {/* ── Left sidebar ── */}
-                  <div className="md:w-56 flex-shrink-0 p-4 md:p-6 flex flex-col gap-1 border-b border-white/[0.08] md:border-b-0 md:border-r md:border-white/[0.08]">
+                  <div className="sticky top-[80px] z-30 bg-slate-50/20 backdrop-blur-md md:static md:bg-transparent md:backdrop-blur-none md:w-56 flex-shrink-0 p-4 md:p-6 flex flex-col gap-1 border-b border-white/[0.08] md:border-b-0 md:border-r md:border-white/[0.08]">
                     {/* Sidebar header */}
                     <div className="flex items-center gap-2 mb-3">
                       <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-60 flex-shrink-0">
@@ -237,7 +244,7 @@ export default function Materials() {
                   </div>
 
                   {/* ── Right product grid ── */}
-                  <div className="flex-1 p-6 flex flex-col">
+                  <div className="flex-1 p-4 md:p-6 flex flex-col">
                     {/* Grid header */}
                     <div className="flex items-center gap-2 mb-5">
                       <span className="text-white/40 text-sm">→</span>

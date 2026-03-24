@@ -29,19 +29,19 @@ export default function Home() {
         <Header />
         
         {/* Hero section */}
-        <Section className="min-h-screen flex items-center">
+        <Section className="min-h-[100svh] md:min-h-screen flex items-center pt-20 pb-10 md:py-0">
           <Container>
-            <div className="">
-              <h1 className="text-3xl md:text-6xl font-skoda-expanded text-yellow-400">
+            <div className="flex flex-col items-start justify-center">
+              <h1 className="text-[28px] leading-[1.15] min-[400px]:text-4xl sm:text-5xl md:text-6xl md:leading-[1.15] font-skoda-expanded text-yellow-400 max-w-[100%] break-words">
                 Sustainable Raw Materials, Perfectly Streamlined<sup className="hero-reg">&trade;</sup>.
               </h1>
 
-              <p className="mt-6 max-w-2xl">
+              <p className="mt-5 md:mt-6 text-[15px] sm:text-base md:text-lg max-w-2xl leading-relaxed">
                 Discover sustainable raw materials that integrate functionality,
                 value, and responsibility—shaping the present and advancing the future.
               </p>
 
-              <HashLink to="/#materials" offset={100} className="mt-10 inline-block">
+              <HashLink to="/#materials" offset={100} className="mt-8 md:mt-10 inline-block">
                 <PrimaryButton>Explore Our Materials</PrimaryButton>
               </HashLink>
             </div>
