@@ -66,7 +66,7 @@ export default function Home() {
               </div>
 
               {/* Right content */}
-              <div className="md:col-span-9 justify-self-end max-w-[560px]">
+              <div className="md:col-span-9 md:justify-self-end max-w-[560px]">
                 <h2 className="text-3xl md:text-4xl font-skoda font-semibold text-yellow-400">
                   From Glass to Growth
                 </h2>

@@ -4,6 +4,7 @@
   html, body {
     font-family: "SKODA Next", system-ui, sans-serif;
     background-color: rgba(0,0,0,0.7);
+    overflow-x: hidden;
   }
   html {
     font-size: 20px; /* root size */

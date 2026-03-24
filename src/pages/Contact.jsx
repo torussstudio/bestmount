@@ -68,7 +68,7 @@ export default function Contact() {
                         </div>
 
                         {/* Right content */}
-                        <div className="md:col-span-9 justify-self-end max-w-[560px]">
+                        <div className="md:col-span-9 md:justify-self-end max-w-[560px]">
                             <h2 className="text-3xl md:text-4xl font-skoda font-normal text-yellow-400">
                             Let’s Work Together to Drive Positive Change
                             </h2>
@@ -103,7 +103,7 @@ export default function Contact() {
                         </div>
 
                         {/* Right content */}
-                        <div className="md:col-span-9 justify-self-end max-w-[560px]">
+                        <div className="md:col-span-9 md:justify-self-end max-w-[560px]">
                             <h2 className="text-3xl md:text-4xl font-skoda font-normal text-yellow-400">
                             Let’s Start a Conversation
                             </h2>
