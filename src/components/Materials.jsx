@@ -194,7 +194,7 @@ export default function Materials() {
             {/* Main panel */}
             <div
               className="rounded-2xl bg-slate-50/20"
-              style={{ border: "1px solid rgba(255,255,255,0.08)", overflow: "clip" }}
+              style={{ border: "1px solid rgba(255,255,255,0.08)" }}
             >
               {loading ? (
                 <div className="flex items-center justify-center py-24">
