@@ -10,6 +10,24 @@
     font-size: 20px; /* root size */
   }
 
+  @media (max-width: 1024px) {
+    html {
+      font-size: 18px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    html {
+      font-size: 16px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    html {
+      font-size: 14px;
+    }
+  }
+
   body {
     font-family: "SKODA Next", system-ui, sans-serif;
     line-height: 1.6;

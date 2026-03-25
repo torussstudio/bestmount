@@ -141,7 +141,7 @@ export default function About() {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-0 w-full mt-15 md:mt-20 mx-auto">
                         {/* Row 1 */}
                         {/* Position 1: Top-left - Reliability */}
-                        <div className="relative bg-white/10 backdrop-blur-md flex flex-col items-center justify-center p-8 gap-4 aspect-square group">
+                        <div className="relative bg-white/10 backdrop-blur-md flex flex-col items-center justify-center p-8 max-md:p-4 gap-4 aspect-square group">
                             {/* Edge glow - rim light effect */}
                             <div className="absolute inset-0 ring-1 ring-white/30 blur-[0.5px] opacity-60"></div>
                             
@@ -161,7 +161,7 @@ export default function About() {
                         <div className="aspect-square hidden md:block"></div>
                         
                         {/* Position 3: Top - Value */}
-                        <div className="relative bg-white/10 backdrop-blur-md flex flex-col items-center justify-center p-8 gap-4 aspect-square group">
+                        <div className="relative bg-white/10 backdrop-blur-md flex flex-col items-center justify-center p-8 max-md:p-4 gap-4 aspect-square group">
                             <div className="absolute inset-0 ring-1 ring-white/30 blur-[0.5px] opacity-60"></div>
                             <div className="absolute inset-0 bg-white/5 blur-xl opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
                             <div className="relative z-10 flex flex-col items-center gap-4">
@@ -180,7 +180,7 @@ export default function About() {
                         <div className="aspect-square hidden md:block"></div>
                         
                         {/* Position 2: Bottom - Sustainability */}
-                        <div className="relative bg-white/10 backdrop-blur-md flex flex-col items-center justify-center p-8 gap-4 aspect-square group">
+                        <div className="relative bg-white/10 backdrop-blur-md flex flex-col items-center justify-center p-8 max-md:p-4 gap-4 aspect-square group">
                             <div className="absolute inset-0 ring-1 ring-white/30 blur-[0.5px] opacity-60"></div>
                             <div className="absolute inset-0 bg-white/5 blur-xl opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
                             <div className="relative z-10 flex flex-col items-center gap-4">
@@ -195,7 +195,7 @@ export default function About() {
                         <div className="aspect-square hidden md:block"></div>
                         
                         {/* Position 4: Bottom-right - Continuity */}
-                        <div className="relative bg-white/10 backdrop-blur-md flex flex-col items-center justify-center p-8 gap-4 aspect-square group">
+                        <div className="relative bg-white/10 backdrop-blur-md flex flex-col items-center justify-center p-8 max-md:p-4 gap-4 aspect-square group">
                             <div className="absolute inset-0 ring-1 ring-white/30 blur-[0.5px] opacity-60"></div>
                             <div className="absolute inset-0 bg-white/5 blur-xl opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
                             <div className="relative z-10 flex flex-col items-center gap-4">

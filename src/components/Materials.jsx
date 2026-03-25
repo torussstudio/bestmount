@@ -11,6 +11,147 @@ import ProductSheetModal from "./ProductSheetModal";
 /* ─────────────────────────────────────────────
    Styles for the L-corner card design
 ───────────────────────────────────────────── */
+// const cardStyles = `
+//   .product-card-wrap {
+//     position: relative;
+//     background-color: #1a1b1e;
+//     background-image: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
+//     transition: background-color 0.22s ease, border-color 0.22s ease;
+//     cursor: pointer;
+//     text-align: left;
+//     padding: 26px 24px;
+//     display: flex;
+//     flex-direction: column;
+//     align-items: flex-start;
+//     justify-content: flex-start;
+//     gap: 6px;
+//     width: 100%;
+//     border: none;
+//     outline: none;
+//     aspect-ratio: 1 / 1;
+//     min-height: 0;
+//     min-width: 0;
+//     overflow: hidden;
+//   }
+//   @media (max-width: 640px) {
+//     .product-card-wrap {
+//       padding: 16px 12px;
+//       align-items: center;
+//       text-align: center;
+//       justify-content: center;
+//       gap: 8px;
+//     }
+//   }
+//   .product-card-wrap:hover {
+//     background-color: #3a2d00;
+//   }
+//   /* L-corners turn gold on hover */
+//   .product-card-wrap:hover .lc {
+//     border-color: rgba(230, 175, 0, 0.55);
+//   }
+//   /* Card text elements */
+//   .card-index {
+//     font-size: 0.55rem;
+//     color: rgba(238,232,205,0.35);
+//     font-weight: 400;
+//     letter-spacing: 0.05em;
+//     transition: color 0.22s ease;
+//     margin-bottom:6px;
+//   }
+//   .card-name {
+//     font-family: "SKODA Next Black Expanded", "SKODA Next", system-ui, sans-serif;
+//     font-weight: 900;
+//     font-size: clamp(0.9rem, 1.6vw, 1.15rem);
+//     color: #eee8cd;
+//     margin-bottom: 4px;
+//   line-height: 1.05;
+//     letter-spacing: 0.01em;
+//     line-height: 1.05;
+//     margin: 0;
+//     transition: color 0.22s ease;
+//   }
+//   .card-subtitle {
+//     font-family: "SKODA Next", system-ui, sans-serif;
+//     font-weight: 300;
+//     font-size: 0.58rem;
+//     color: rgba(238,232,205,0.4);
+//     margin: 0;  
+//     opacity:.7;
+//   line-height: 1.2; 
+//     letter-spacing: 0.02em;
+//     transition: color 0.22s ease;
+//   }
+//   .product-card-wrap:hover .card-index   { color: rgba(240, 185, 0, 0.65); }
+//   .product-card-wrap:hover .card-name    { color: #f5c000; }
+//   .product-card-wrap:hover .card-subtitle { color: rgba(240, 185, 0, 0.55); }
+
+//   /* L-corner spans – 14×14px, only two adjacent sides have a border */
+//   .lc {
+//     position: absolute;
+//     width: 14px;
+//     height: 14px;
+//     pointer-events: none;
+//     z-index: 2;
+//   }
+//   .lc-tl { top: 0; left: 0;
+//     border-top: 1.5px solid rgba(255,255,255,0.45);
+//     border-left: 1.5px solid rgba(255,255,255,0.45);
+//   }
+//   .lc-tr { top: 0; right: 0;
+//     border-top: 1.5px solid rgba(255,255,255,0.45);
+//     border-right: 1.5px solid rgba(255,255,255,0.45);
+//   }
+//   .lc-bl { bottom: 0; left: 0;
+//     border-bottom: 1.5px solid rgba(255,255,255,0.45);
+//     border-left: 1.5px solid rgba(255,255,255,0.45);
+//   }
+//   .lc-br { bottom: 0; right: 0;
+//     border-bottom: 1.5px solid rgba(255,255,255,0.45);
+//     border-right: 1.5px solid rgba(255,255,255,0.45);
+//   }
+
+//   /* Product grid — shared-border technique so no line is ever doubled */
+//   .product-grid {
+//     display: grid;
+//     grid-template-columns: repeat(3, minmax(0, 1fr));
+//     gap: 0;
+//     margin-left: 60px;
+//     max-width: 780px;
+//   }
+  
+//   .product-card-wrap {
+//     border-right: 1px solid rgba(255,255,255,0.10);
+//     border-bottom: 1px solid rgba(255,255,255,0.10);
+//   }
+
+//   /* Tablets */
+//   @media (min-width: 641px) and (max-width: 1024px) {
+//     .product-grid {
+//       grid-template-columns: repeat(2, minmax(0, 1fr));
+//       margin-left: 0;
+//       max-width: 540px;
+//     }
+//   }
+
+//   /* Mobile */
+//   @media (max-width: 640px) {
+//     .product-grid {
+//       grid-template-columns: 1fr;
+//       margin-left: auto;
+//       margin-right: auto;
+//       justify-items: center;
+//       justify-content: center;
+//       max-width: 280px;
+//     }
+//   }
+//     @media (max-width: 640px) {
+//   .product-card-wrap {
+//     justify-content: center;
+//     gap: 4px;   /* reduce */
+//   }
+// }
+// `;
+
 const cardStyles = `
   .product-card-wrap {
     position: relative;
@@ -19,70 +160,83 @@ const cardStyles = `
     transition: background-color 0.22s ease, border-color 0.22s ease;
     cursor: pointer;
     text-align: left;
-    padding: 16px 18px;
+
+    /* key spacing fix */
+    padding: 36px 28px 28px 28px;
+
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: space-between;
-    gap: 0;
+    justify-content: flex-start;
+
+    gap: 40px;
+
     width: 100%;
     border: none;
     outline: none;
-    height: 160px;
-    max-width:250px;
+    aspect-ratio: 1 / 1;
+    min-height: 0;
+    min-width: 0;
+    overflow: hidden;
   }
+
   @media (max-width: 640px) {
     .product-card-wrap {
-      height: auto;
-      min-height: 140px;
-      padding: 16px 12px;
+      padding: 20px 18px;
       align-items: center;
       text-align: center;
       justify-content: center;
-      gap: 8px;
-      max-width: 100%;
+      gap: 6px;
     }
   }
+
   .product-card-wrap:hover {
     background-color: #3a2d00;
   }
-  /* L-corners turn gold on hover */
+
   .product-card-wrap:hover .lc {
     border-color: rgba(230, 175, 0, 0.55);
   }
-  /* Card text elements */
+
+  /* text layout */
   .card-index {
-    font-size: 0.55rem;
-    color: rgba(238,232,205,0.35);
-    font-weight: 400;
-    letter-spacing: 0.05em;
-    transition: color 0.22s ease;
-  }
-  .card-name {
-    font-family: "SKODA Next Black Expanded", "SKODA Next", system-ui, sans-serif;
-    font-weight: 900;
-    font-size: clamp(0.9rem, 1.6vw, 1.15rem);
-    color: #eee8cd;
-    letter-spacing: 0.01em;
-    line-height: 1.05;
-    margin: 0;
-    transition: color 0.22s ease;
-  }
-  .card-subtitle {
-    font-family: "SKODA Next", system-ui, sans-serif;
-    font-weight: 300;
-    font-size: 0.58rem;
-    color: rgba(238,232,205,0.4);
-    margin: 0;
-    line-height: 1.4;
-    letter-spacing: 0.02em;
-    transition: color 0.22s ease;
-  }
+  font-size: 0.60rem;
+  color: rgba(238,232,205,0.35);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  margin:0;  
+   opacity:.75;            /* changed */
+}
+
+.card-name {
+  font-family: "SKODA Next Black Expanded", "SKODA Next", system-ui, sans-serif;
+  font-weight: 900;
+  font-size: clamp(1rem, 1.9vw, 1.28rem);
+  color: #eee8cd;
+
+  margin:0;              /* changed */
+
+  line-height:1.15;
+  letter-spacing:0.01em;
+}
+
+.card-subtitle {
+  font-family:"SKODA Next",system-ui,sans-serif;
+  font-weight:300;
+  font-size:0.62rem;
+  color:rgba(238,232,205,0.45);
+
+  margin:0;
+opacity:.85;
+  line-height:1.15;
+  letter-spacing:0.02em;
+}
+
   .product-card-wrap:hover .card-index   { color: rgba(240, 185, 0, 0.65); }
   .product-card-wrap:hover .card-name    { color: #f5c000; }
   .product-card-wrap:hover .card-subtitle { color: rgba(240, 185, 0, 0.55); }
 
-  /* L-corner spans – 14×14px, only two adjacent sides have a border */
+  /* L corners */
   .lc {
     position: absolute;
     width: 14px;
@@ -90,56 +244,82 @@ const cardStyles = `
     pointer-events: none;
     z-index: 2;
   }
-  .lc-tl { top: 0; left: 0;
+
+  .lc-tl {
+    top: 0;
+    left: 0;
     border-top: 1.5px solid rgba(255,255,255,0.45);
     border-left: 1.5px solid rgba(255,255,255,0.45);
   }
-  .lc-tr { top: 0; right: 0;
+
+  .lc-tr {
+    top: 0;
+    right: 0;
     border-top: 1.5px solid rgba(255,255,255,0.45);
     border-right: 1.5px solid rgba(255,255,255,0.45);
   }
-  .lc-bl { bottom: 0; left: 0;
+
+  .lc-bl {
+    bottom: 0;
+    left: 0;
     border-bottom: 1.5px solid rgba(255,255,255,0.45);
     border-left: 1.5px solid rgba(255,255,255,0.45);
   }
-  .lc-br { bottom: 0; right: 0;
+
+  .lc-br {
+    bottom: 0;
+    right: 0;
     border-bottom: 1.5px solid rgba(255,255,255,0.45);
     border-right: 1.5px solid rgba(255,255,255,0.45);
   }
 
-  /* Product grid — shared-border technique so no line is ever doubled */
+  /* grid untouched */
   .product-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0;
     margin-left: 60px;
+    max-width: 780px;
   }
-  
+
   .product-card-wrap {
     border-right: 1px solid rgba(255,255,255,0.10);
     border-bottom: 1px solid rgba(255,255,255,0.10);
   }
 
-  /* Tablets */
   @media (min-width: 641px) and (max-width: 1024px) {
     .product-grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       margin-left: 0;
-    }
-    .product-card-wrap {
-      max-width: 100%;
+      max-width: 540px;
     }
   }
 
-  /* Mobile */
   @media (max-width: 640px) {
-    .product-grid {
-      grid-template-columns: 1fr;
-      margin-left: 0;
-      justify-items: center;
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 cards */
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 100%;
+  }
+}
+
+  @media (max-width: 640px) {
+    .product-card-wrap {
       justify-content: center;
+      gap: 4px;
     }
   }
+
+  /* hide horizontal scrollbar (mobile) */
+.scrollbar-hide{
+  -ms-overflow-style: none;  /* IE, Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar{
+  display:none;              /* Chrome, Safari */
+}
 `;
 
 export default function Materials() {
@@ -147,6 +327,7 @@ export default function Materials() {
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   const categoryListRef = useRef(null);
@@ -176,6 +357,9 @@ export default function Materials() {
           fetch(`${API}/categories`),
           fetch(`${API}/products`),
         ]);
+        if (!catRes.ok || !prodRes.ok) {
+          throw new Error("API request failed");
+        }
         const cats = await catRes.json();
         const prods = await prodRes.json();
         setCategories(cats);
@@ -183,6 +367,7 @@ export default function Materials() {
         if (cats.length > 0) setSelectedCategory(cats[0]._id);
       } catch (err) {
         console.error("Failed to load materials data", err);
+        setError("Unable to load materials data from the server.");
       } finally {
         setLoading(false);
       }
@@ -205,7 +390,7 @@ export default function Materials() {
         <Section className="min-h-[70vh]">
           <Container>
             {/* Header row */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-y-6 md:gap-x-12 mb-10">
+           <div className="grid grid-cols-1 md:grid-cols-12 gap-y-2 md:gap-x-12 mb-6">
               <div className="md:col-span-3">
                 <span className="text-sm uppercase tracking-wider">
                   Our Materials
@@ -233,12 +418,17 @@ export default function Materials() {
                 <div className="flex items-center justify-center py-24">
                   <span className="text-sm text-white/40 uppercase tracking-widest">Loading…</span>
                 </div>
+              ) : error ? (
+                <div className="flex flex-col items-center justify-center py-24 min-h-[420px]">
+                  <span className="text-sm text-red-500/80 uppercase tracking-widest mb-4">Error</span>
+                  <p className="text-white/60">{error}</p>
+                </div>
               ) : (
                 <div className="flex flex-col md:flex-row min-h-[420px]">
                   {/* ── Left sidebar ── */}
-<div className="sticky top-[30px] z-30 rounded-t-2xl md:rounded-none bg-slate-50/20 backdrop-blur-md md:relative md:bg-transparent md:backdrop-blur-none md:w-65 flex-shrink-0 pt-0 pb-6 px-6 flex flex-col gap-1 border-b-2 border-white/[0.12] md:border-b-0 md:after:content-[''] after:hidden md:after:block after:absolute after:right-[-10px] after:top-[20px] after:bottom-[20px] after:w-[2px] after:bg-white/[0.12]">
+<div className="sticky top-[100px] z-30 rounded-t-2xl md:rounded-none bg-slate-50/20 backdrop-blur-md md:relative md:bg-transparent md:backdrop-blur-none md:w-65 flex-shrink-0 pt-0 pb-6 px-6 flex flex-col gap-1 border-b-2 border-white/[0.12] md:border-b-0 md:after:content-[''] after:hidden md:after:block after:absolute after:right-[-10px] after:top-[20px] after:bottom-[20px] after:w-[2px] after:bg-white/[0.12]">
                     {/* Sidebar header */}
-                    <div className="flex items-center justify-center md:justify-start w-full gap-2.5 mb-5 mt-3 md:mt-0">
+                   <div className="flex items-center justify-between md:justify-start w-full gap-2.5 mb-2 -mt-[70px]">
   <svg
   viewBox="0 0 18 18"
   fill="none"
@@ -314,7 +504,7 @@ export default function Materials() {
                   {/* ── Right product grid ── */}
                  <div className="flex-1 p-4 md:p-6 md:pl-14 flex flex-col">
                     {/* Grid header */}
-            <div className="flex items-center mb-5 mt-[6px] pl-0 md:pl-6">
+          <div className="hidden md:flex items-center justify-between mb-3 mt-0 pl-0 md:pl-6">
   <span className="text-[30px] font-light tracking-wide text-[#eee8cd] flex items-center gap-2">
     <span className="opacity-70">→</span>
     {selectedCategoryName}
@@ -340,11 +530,21 @@ export default function Materials() {
               )}
 
               {/* Panel footer */}
-              <div className="px-4 md:px-6 pt-4 pb-8 md:pt-4 md:pb-10 flex justify-center mt-2 md:-mt-18 relative z-10">
-                <a href="/BM-SRM-Chart-2026.pdf" target="_blank" download className="max-w-[95%] text-center">
-                  <DownButton>Download Full SRM Chart</DownButton>
-                </a>
-              </div>
+        <div className="px-4 md:px-6 pt-6 pb-10 flex items-end justify-center -mt-4 relative z-10">
+
+  <a
+    href="/BM-SRM-Chart-2026.pdf"
+    target="_blank"
+    download
+    className="ml-50 max-md:ml-0"
+  >
+    <DownButton>
+      Download Full SRM Chart
+    </DownButton>
+
+  </a>
+
+</div>
             </div>
           </Container>
         </Section>
