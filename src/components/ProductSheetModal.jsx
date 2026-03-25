@@ -53,7 +53,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal({ product, onClo
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.25, ease: "easeOut" }}
+      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
       style={{ position: "fixed", inset: 0, zIndex: 9998 }}
     >
       {/* ── Backdrop ── */}
@@ -82,10 +82,10 @@ const ProductSheetModal = forwardRef(function ProductSheetModal({ product, onClo
         }}
       >
         <motion.div
-          initial={{ opacity: 0, scale: 0.96, y: 8 }}
+          initial={{ opacity: 0, scale: 0.97, y: 6 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.96, y: 8 }}
-          transition={{ duration: 0.25, ease: "easeOut" }}
+          exit={{ opacity: 0, scale: 0.97, y: 6 }}
+          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
           onClick={(e) => e.stopPropagation()}
           style={{
             position: "relative", zIndex: 2,
