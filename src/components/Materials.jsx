@@ -387,7 +387,7 @@ export default function Materials() {
       <style>{cardStyles}</style>
 
       <div id="materials">
-        <Section className="min-h-[70vh]">
+       <Section className="min-h-[70vh] pt-16 md:pt-0">
           <Container>
             {/* Header row */}
            <div className="grid grid-cols-1 md:grid-cols-12 gap-y-2 md:gap-x-12 mb-6">
@@ -426,9 +426,9 @@ export default function Materials() {
               ) : (
                 <div className="flex flex-col md:flex-row min-h-[420px]">
                   {/* ── Left sidebar ── */}
-<div className="sticky top-[100px] z-30 rounded-t-2xl md:rounded-none bg-slate-50/20 backdrop-blur-md md:relative md:bg-transparent md:backdrop-blur-none md:w-65 flex-shrink-0 pt-0 pb-6 px-6 flex flex-col gap-1 border-b-2 border-white/[0.12] md:border-b-0 md:after:content-[''] after:hidden md:after:block after:absolute after:right-[-10px] after:top-[20px] after:bottom-[20px] after:w-[2px] after:bg-white/[0.12]">
+<div className="sticky top-[80px] md:top-[30px] z-30 rounded-t-2xl md:rounded-none bg-slate-50/20 backdrop-blur-md md:relative md:bg-transparent md:backdrop-blur-none md:w-65 flex-shrink-0 pt-0 pb-6 px-6 flex flex-col gap-1 border-b-2 border-white/[0.12] md:border-b-0 md:after:content-[''] after:hidden md:after:block after:absolute after:right-[-10px] after:top-[20px] after:bottom-[20px] after:w-[2px] after:bg-white/[0.12]">
                     {/* Sidebar header */}
-                   <div className="flex items-center justify-between md:justify-start w-full gap-2.5 mb-2 -mt-[70px]">
+                  <div className="flex items-center justify-center md:justify-start w-full gap-1.5 mb-3 ">
   <svg
   viewBox="0 0 18 18"
   fill="none"
@@ -530,7 +530,7 @@ export default function Materials() {
               )}
 
               {/* Panel footer */}
-        <div className="px-4 md:px-6 pt-6 pb-10 flex items-end justify-center -mt-4 relative z-10">
+        <div className="px-4 md:px-6 pt-6 pb-10 flex items-end justify-center -mt-6 relative z-10">
 
   <a
     href="/BM-SRM-Chart-2026.pdf"
