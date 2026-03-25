@@ -7,7 +7,7 @@ export default function CTA() {
     <>
     <Section className="bg-[url('/cta-bg.webp')] bg-cover bg-center bg-no-repeat relative pb-0">
       <Container className="pb-20">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-y-6 md:gap-x-12">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-y-10 md:gap-y-6 md:gap-x-12">
           {/* Left label */}
           <div className="md:col-span-3 flex flex-col justify-between items-start h-full">
             <span className="text-sm uppercase tracking-wider text-black">
@@ -23,15 +23,15 @@ export default function CTA() {
           </div>
 
           {/* Right content */}
-          <div className="md:col-span-9 md:justify-self-end max-w-[560px]">
-            <h2 className="text-3xl lg:text-4xl font-skoda font-semibold text-black leading-tight">
+          <div className="md:col-span-9 md:justify-self-end max-w-[560px] px-2 md:px-0">
+            <h2 className="text-[30px] sm:text-3xl lg:text-4xl font-skoda font-semibold text-black leading-[1.15] md:leading-tight text-balance md:text-wrap pr-4 md:pr-0">
               Let's Build the Better future together
             </h2>
-            <p className="mt-4 text-sm sm:text-base text-black leading-relaxed">
+            <p className="mt-6 md:mt-4 text-[15px] sm:text-base text-black leading-relaxed max-w-[95%] md:max-w-none">
             Looking for sustainable raw materials for your industry? Get in touch with us to discuss your requirements or request a custom quote.
             </p>
-            <div className="block lg:hidden mt-8 text-left">
-            <a href="/BM-SRM-Chart-2026.pdf" target="_blank" download>
+            <div className="block lg:hidden mt-10 md:mt-8 text-left">
+            <a href="/BM-SRM-Chart-2026.pdf" target="_blank" download className="inline-block">
               <CtaButton>
                 Download Full SRM Chart
               </CtaButton>

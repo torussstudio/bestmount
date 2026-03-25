@@ -54,30 +54,30 @@ export default function DownButton({ children, className ="" }) {
       {/* Button body */}
       <span
         className="
-          relative z-10 flex items-center gap-3
+          relative z-10 flex items-center gap-2 md:gap-3
           rounded-full
           bg-white/10 backdrop-blur-md
           border border-white/10
-          px-8 py-4
+          px-5 py-3 md:px-8 md:py-4
         "
       >
         {/* Arrow */}
         <span
           className="
-            inline-flex
+            inline-flex shrink-0
             transition-transform duration-300 ease-out
           "
         >
           <img
             src={downloadPng}
             alt=""
-            className="w-5 h-5"
+            className="w-4 h-4 md:w-5 md:h-5"
             draggable="false"
           />
         </span>
 
         {/* Text */}
-        <span className="whitespace-nowrap">
+        <span className="whitespace-normal md:whitespace-nowrap text-sm md:text-base leading-snug text-center">
           {children}
         </span>
       </span>

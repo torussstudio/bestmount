@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 import Container from "./layout/Container";
 import Section from "./layout/Section";
@@ -29,7 +29,7 @@ const cardStyles = `
     border: none;
     outline: none;
     height: 160px;
-    max-width:250px
+    max-width:250px;
   }
   @media (max-width: 640px) {
     .product-card-wrap {
@@ -40,6 +40,7 @@ const cardStyles = `
       text-align: center;
       justify-content: center;
       gap: 8px;
+      max-width: 100%;
     }
   }
   .product-card-wrap:hover {
@@ -108,23 +109,35 @@ const cardStyles = `
 
   /* Product grid — shared-border technique so no line is ever doubled */
   .product-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0;
-  margin-left: 60px;
-}
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-left: 60px;
+  }
+  
   .product-card-wrap {
     border-right: 1px solid rgba(255,255,255,0.10);
     border-bottom: 1px solid rgba(255,255,255,0.10);
   }
-  @media (max-width: 640px) {
+
+  /* Tablets */
+  @media (min-width: 641px) and (max-width: 1024px) {
     .product-grid {
       grid-template-columns: repeat(2, 1fr);
+      margin-left: 0;
+    }
+    .product-card-wrap {
+      max-width: 100%;
     }
   }
-  @media (min-width: 641px) and (max-width: 900px) {
+
+  /* Mobile */
+  @media (max-width: 640px) {
     .product-grid {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: 1fr;
+      margin-left: 0;
+      justify-items: center;
+      justify-content: center;
     }
   }
 `;
@@ -225,7 +238,7 @@ export default function Materials() {
                   {/* ── Left sidebar ── */}
 <div className="sticky top-[30px] z-30 rounded-t-2xl md:rounded-none bg-slate-50/20 backdrop-blur-md md:relative md:bg-transparent md:backdrop-blur-none md:w-65 flex-shrink-0 pt-0 pb-6 px-6 flex flex-col gap-1 border-b-2 border-white/[0.12] md:border-b-0 md:after:content-[''] after:hidden md:after:block after:absolute after:right-[-10px] after:top-[20px] after:bottom-[20px] after:w-[2px] after:bg-white/[0.12]">
                     {/* Sidebar header */}
-                    <div className="flex items-center gap-2.5 mb-5">
+                    <div className="flex items-center justify-center md:justify-start w-full gap-2.5 mb-5 mt-3 md:mt-0">
   <svg
   viewBox="0 0 18 18"
   fill="none"
@@ -299,9 +312,9 @@ export default function Materials() {
                   </div>
 
                   {/* ── Right product grid ── */}
-                 <div className="flex-1 p-4 md:p-6 pl-14 flex flex-col">
+                 <div className="flex-1 p-4 md:p-6 md:pl-14 flex flex-col">
                     {/* Grid header */}
-            <div className="flex items-center mb-5 mt-[6px] pl-6">
+            <div className="flex items-center mb-5 mt-[6px] pl-0 md:pl-6">
   <span className="text-[30px] font-light tracking-wide text-[#eee8cd] flex items-center gap-2">
     <span className="opacity-70">→</span>
     {selectedCategoryName}
@@ -313,15 +326,22 @@ export default function Materials() {
                         <p className="text-white/30 text-sm">No products found for this category.</p>
                       </div>
                     ) : (
-                      <ProductGrid products={filteredProducts} onSelect={setSelectedProduct} />
+                      <motion.div
+                        key={selectedCategory}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, ease: "easeOut" }}
+                      >
+                        <ProductGrid products={filteredProducts} onSelect={setSelectedProduct} />
+                      </motion.div>
                     )}
                   </div>
                 </div>
               )}
 
               {/* Panel footer */}
-              <div className="px-6 py-4 flex justify-center -mt-18">
-                <a href="/BM-SRM-Chart-2026.pdf" target="_blank" download>
+              <div className="px-4 md:px-6 pt-4 pb-8 md:pt-4 md:pb-10 flex justify-center mt-2 md:-mt-18 relative z-10">
+                <a href="/BM-SRM-Chart-2026.pdf" target="_blank" download className="max-w-[95%] text-center">
                   <DownButton>Download Full SRM Chart</DownButton>
                 </a>
               </div>
@@ -338,6 +358,7 @@ export default function Materials() {
       <AnimatePresence>
         {selectedProduct && (
           <ProductSheetModal
+            key="product-modal"
             product={selectedProduct}
             onClose={() => setSelectedProduct(null)}
           />

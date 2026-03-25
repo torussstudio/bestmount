@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, forwardRef } from "react";
 import ReactDOM from "react-dom";
 import { pdf } from "@react-pdf/renderer";
 import { motion } from "framer-motion";
@@ -15,7 +15,7 @@ const Divider = () => (
   <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", margin: "5px 0 8px" }} />
 );
 
-export default function ProductSheetModal({ product, onClose }) {
+const ProductSheetModal = forwardRef(function ProductSheetModal({ product, onClose }, ref) {
   const categoryName = product?.category?.name ?? "";
 
   /* Lock body scroll while open */
@@ -49,10 +49,11 @@ export default function ProductSheetModal({ product, onClose }) {
 
   return ReactDOM.createPortal(
     <motion.div
+      ref={ref}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
       style={{ position: "fixed", inset: 0, zIndex: 9998 }}
     >
       {/* ── Backdrop ── */}
@@ -81,10 +82,10 @@ export default function ProductSheetModal({ product, onClose }) {
         }}
       >
         <motion.div
-          initial={{ scale: 0.95, y: 10 }}
-          animate={{ scale: 1, y: 0 }}
-          exit={{ scale: 0.95, y: 10 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
+          initial={{ opacity: 0, scale: 0.96, y: 8 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.96, y: 8 }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
           onClick={(e) => e.stopPropagation()}
           style={{
             position: "relative", zIndex: 2,
@@ -346,4 +347,6 @@ export default function ProductSheetModal({ product, onClose }) {
     </motion.div>,
     document.body
   );
-}
+});
+
+export default ProductSheetModal;
