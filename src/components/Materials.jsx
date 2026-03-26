@@ -305,9 +305,25 @@ opacity:.85;
   @media (max-width: 640px) {
     .product-card-wrap {
       justify-content: center;
-      gap: 4px;
+      gap: 13px;
     }
   }
+
+  @media (max-width: 640px){
+
+  .card-name{
+    font-size: 1.40rem;   /* increase title */
+  }
+
+  .card-subtitle{
+    font-size: 0.80rem;   /* increase subtitle */
+  }
+
+  .card-index{
+    font-size: 0.80rem;   /* optional */
+  }
+
+}
 
   /* hide horizontal scrollbar (mobile) */
 .scrollbar-hide{
