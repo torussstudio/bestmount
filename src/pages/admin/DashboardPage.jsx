@@ -53,41 +53,74 @@ export default function DashboardPage() {
   }, []);
 
   // ── Product CRUD ──────────────────────────────────────────────────────
-  async function addProduct(data) {
-    try {
-      const res = await fetch(`${API}/products`, {
+async function addProduct(formData) {
+
+  try {
+
+    const res = await fetch(
+
+      `${API}/products`,
+
+      {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) throw new Error("Failed to add product");
-      await fetchProducts();
-      toast.success("Product added successfully!");
-    } catch (err) {
-      console.error("addProduct:", err.message);
-      toast.error(err.message || "Failed to add product");
-    }
+
+        body: formData   // important
+      }
+
+    );
+
+    if (!res.ok) throw new Error("Failed to add product");
+
+    await fetchProducts();
+
+    toast.success("Product added successfully!");
+
+  } catch (err) {
+
+    console.error("addProduct:", err.message);
+
+    toast.error(err.message || "Failed to add product");
+
   }
 
-  async function updateProduct(id, data) {
-    try {
-      console.log("[updateProduct] id:", id, "data:", data);
-      const res = await fetch(`${API}/products/${id}`, {
+}
+
+async function updateProduct(id, formData) {
+
+  try {
+
+    const res = await fetch(
+
+      `${API}/products/${id}`,
+
+      {
+
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body.message || `HTTP ${res.status}`);
+
+        body: formData
+
       }
-      await fetchProducts();
-      toast.success("Product updated successfully!");
-    } catch (err) {
-      console.error("updateProduct:", err.message);
-      toast.error(err.message || "Failed to update product");
-    }
+
+    );
+
+    if (!res.ok)
+      throw new Error("Failed to update product");
+
+    await fetchProducts();
+
+    toast.success("Product updated");
+
   }
+
+  catch (err) {
+
+    console.error(err);
+
+    toast.error("Update failed");
+
+  }
+
+}
 
   async function deleteProduct(id) {
     try {

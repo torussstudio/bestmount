@@ -1,66 +1,502 @@
+// const express = require("express");
+// const router = express.Router();
+// const upload = require("../multer");
+// const fs = require("fs");
+// const path = require("path");
+
+// const Product = require("../models/Product");
+
+// // ✅ GET all products
+// router.get("/", async (req, res) => {
+//   try {
+//     const products = await Product.find().populate("category");
+//     res.json(products);
+//   } catch (err) {
+//     res.status(500).json({ message: "Failed to fetch products" });
+//   }
+// });
+
+// // ✅ ADD product
+// router.post(
+//   "/",
+//   upload.single("image"),
+//   async (req, res) => {
+//     try {
+
+//       let colorTones = [];
+//       let chemicalComposition = [];
+
+//       try {
+//         colorTones = req.body.colorTones
+//           ? JSON.parse(req.body.colorTones)
+//           : [];
+//       } catch {
+//         colorTones = [];
+//       }
+
+//       try {
+//         chemicalComposition = req.body.chemicalComposition
+//           ? JSON.parse(req.body.chemicalComposition)
+//           : [];
+//       } catch {
+//         chemicalComposition = [];
+//       }
+
+//       const product = await Product.create({
+
+//         ...req.body,
+
+//         colorTones,
+//         chemicalComposition,
+
+//         image: req.file
+//           ? req.file.filename
+//           : null,
+
+//       });
+
+//       res.json(product);
+
+//     } catch (err) {
+
+//       console.log("PRODUCT CREATE ERROR 👉", err);
+
+//       res.status(500).json({
+//         message: err.message
+//       });
+
+//     }
+//   }
+// );
+// // ✅ GET single product by ID
+// router.get("/:id", async (req, res) => {
+//   try {
+//     const product = await Product.findById(req.params.id).populate("category");
+//     if (!product) {
+//       return res.status(404).json({ message: "Product not found" });
+//     }
+//     res.json(product);
+//   } catch (err) {
+//     res.status(500).json({ message: "Failed to fetch product" });
+//   }
+// });
+
+// // ✅ UPDATE product
+// router.put(
+//   "/:id",
+//   upload.single("image"),
+//   async (req, res) => {
+//     try {
+
+//       const existing = await Product.findById(req.params.id);
+
+//       let imageName = existing.image;
+
+
+//       // if new image uploaded
+//       if (req.file) {
+
+//         imageName = req.file.filename;
+
+
+//         // delete old image
+//         if (existing.image) {
+
+//           const oldPath = path.join(
+//             __dirname,
+//             "../uploads",
+//             existing.image
+//           );
+
+//           if (fs.existsSync(oldPath)) {
+
+//             fs.unlinkSync(oldPath);
+
+//           }
+
+//         }
+
+//       }
+
+
+//       const updated = await Product.findByIdAndUpdate(
+
+//         req.params.id,
+
+//         {
+
+//           ...req.body,
+
+//           colorTones: req.body.colorTones
+//             ? JSON.parse(req.body.colorTones)
+//             : [],
+
+//           chemicalComposition: req.body.chemicalComposition
+//             ? JSON.parse(req.body.chemicalComposition)
+//             : [],
+
+//           image: imageName,
+
+//         },
+
+//         { new: true }
+
+//       );
+
+//       res.json(updated);
+
+//     } catch (err) {
+
+//       console.log(err);
+
+//       res.status(500).json({
+
+//         message: "Failed to update product"
+
+//       });
+
+//     }
+//   }
+// );
+
+// // ✅ DELETE product
+// router.delete("/:id", async (req, res) => {
+
+//   try {
+
+//     const product = await Product.findById(req.params.id);
+
+
+//     // remove image file
+//     if (product?.image) {
+
+//       const filePath = path.join(
+//         __dirname,
+//         "../uploads",
+//         product.image
+//       );
+
+
+//       if (fs.existsSync(filePath)) {
+
+//         fs.unlinkSync(filePath);
+
+//       }
+
+//     }
+
+
+//     await Product.findByIdAndDelete(req.params.id);
+
+
+//     res.json({
+//       message: "Product deleted"
+//     });
+
+//   } catch (err) {
+
+//     res.status(500).json({
+
+//       message: "Failed to delete product"
+
+//     });
+
+//   }
+
+// });
+
+// module.exports = router;
+
 const express = require("express");
 const router = express.Router();
+const upload = require("../multer");
+const fs = require("fs");
+const path = require("path");
 
 const Product = require("../models/Product");
+
 
 // ✅ GET all products
 router.get("/", async (req, res) => {
   try {
-    const products = await Product.find().populate("category");
+
+    const products = await Product
+      .find()
+      .populate("category");
+
     res.json(products);
+
   } catch (err) {
-    res.status(500).json({ message: "Failed to fetch products" });
+
+    res.status(500).json({
+      message: "Failed to fetch products"
+    });
+
   }
 });
+
 
 // ✅ ADD product
-router.post("/", async (req, res) => {
-  try {
-    const product = await Product.create(req.body);
-    res.json(product);
-  } catch (err) {
-    res.status(500).json({ message: "Failed to add product" });
-  }
-});
+router.post(
+  "/",
+  upload.single("image"),
+  async (req, res) => {
 
-// ✅ GET single product by ID
+    try {
+
+      let colorTones = [];
+      let chemicalComposition = [];
+
+      try {
+
+        colorTones = req.body.colorTones
+          ? JSON.parse(req.body.colorTones)
+          : [];
+
+      } catch {}
+
+      try {
+
+        chemicalComposition = req.body.chemicalComposition
+          ? JSON.parse(req.body.chemicalComposition)
+          : [];
+
+      } catch {}
+
+
+      const product = await Product.create({
+
+        ...req.body,
+
+        colorTones,
+        chemicalComposition,
+
+        image: req.file
+          ? req.file.filename
+          : null,
+
+      });
+
+
+      res.json(product);
+
+    } catch (err) {
+
+      console.log("PRODUCT CREATE ERROR 👉", err);
+
+      res.status(500).json({
+        message: err.message
+      });
+
+    }
+
+  }
+);
+
+
+// ✅ GET single product
 router.get("/:id", async (req, res) => {
+
   try {
-    const product = await Product.findById(req.params.id).populate("category");
+
+    const product = await Product
+      .findById(req.params.id)
+      .populate("category");
+
     if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+
+      return res.status(404).json({
+        message: "Product not found"
+      });
+
     }
+
     res.json(product);
-  } catch (err) {
-    res.status(500).json({ message: "Failed to fetch product" });
+
+  } catch {
+
+    res.status(500).json({
+      message: "Failed to fetch product"
+    });
+
   }
+
 });
 
-// ✅ UPDATE product
-router.put("/:id", async (req, res) => {
-  try {
-    const updated = await Product.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    if (!updated) {
-      return res.status(404).json({ message: "Product not found" });
+
+// ✅ UPDATE product (replace OR remove image)
+router.put(
+  "/:id",
+  upload.single("image"),
+  async (req, res) => {
+
+    try {
+
+      const existing =
+        await Product.findById(req.params.id);
+
+      let imageName = existing.image;
+
+
+      // CASE 1 — new image uploaded
+      if (req.file) {
+
+        imageName = req.file.filename;
+
+
+        // delete old image
+        if (existing.image) {
+
+          const oldPath = path.join(
+            __dirname,
+            "../uploads",
+            existing.image
+          );
+
+          if (fs.existsSync(oldPath)) {
+
+            fs.unlinkSync(oldPath);
+
+          }
+
+        }
+
+      }
+
+
+      // CASE 2 — remove image clicked
+      else if (req.body.removeImage === "true") {
+
+        if (existing.image) {
+
+          const oldPath = path.join(
+            __dirname,
+            "../uploads",
+            existing.image
+          );
+
+          if (fs.existsSync(oldPath)) {
+
+            fs.unlinkSync(oldPath);
+
+          }
+
+        }
+
+        imageName = null;
+
+      }
+
+
+      let colorTones = [];
+      let chemicalComposition = [];
+
+      try {
+
+        colorTones = req.body.colorTones
+          ? JSON.parse(req.body.colorTones)
+          : [];
+
+      } catch {}
+
+      try {
+
+        chemicalComposition = req.body.chemicalComposition
+          ? JSON.parse(req.body.chemicalComposition)
+          : [];
+
+      } catch {}
+
+
+      const updated =
+        await Product.findByIdAndUpdate(
+
+          req.params.id,
+
+          {
+
+            ...req.body,
+
+            colorTones,
+            chemicalComposition,
+
+            image: imageName,
+
+          },
+
+          { new: true }
+
+        );
+
+
+      res.json(updated);
+
+    } catch (err) {
+
+      console.log(err);
+
+      res.status(500).json({
+
+        message:
+          "Failed to update product"
+
+      });
+
     }
-    res.json(updated);
-  } catch (err) {
-    res.status(500).json({ message: "Failed to update product" });
+
   }
-});
+);
+
 
 // ✅ DELETE product
 router.delete("/:id", async (req, res) => {
+
   try {
-    await Product.findByIdAndDelete(req.params.id);
-    res.json({ message: "Product deleted" });
-  } catch (err) {
-    res.status(500).json({ message: "Failed to delete product" });
+
+    const product =
+      await Product.findById(req.params.id);
+
+
+    // delete image file
+    if (product?.image) {
+
+      const filePath = path.join(
+        __dirname,
+        "../uploads",
+        product.image
+      );
+
+      if (fs.existsSync(filePath)) {
+
+        fs.unlinkSync(filePath);
+
+      }
+
+    }
+
+
+    await Product
+      .findByIdAndDelete(req.params.id);
+
+
+    res.json({
+
+      message: "Product deleted"
+
+    });
+
+  } catch {
+
+    res.status(500).json({
+
+      message:
+        "Failed to delete product"
+
+    });
+
   }
+
 });
+
 
 module.exports = router;

@@ -36,14 +36,32 @@ function makeEmpty() {
 }
 
 function deepClone(p) {
-  // The API populates `category` as an object; extract its _id for the form dropdown
-  const catId = p.category?._id || p.category || p.categoryId || "";
+
+  const catId =
+    p.category?._id ||
+    p.category ||
+    p.categoryId ||
+    "";
+
   return {
+
     ...p,
+
     categoryId: String(catId),
+
     colorTones: (p.colorTones || []).map((t) => ({ ...t })),
+
     chemicalComposition: (p.chemicalComposition || []).map((r) => ({ ...r })),
+
+    // important part
+    imagePreview: p.image
+      ? `http://localhost:5000/uploads/${p.image}`
+      : "",
+
+    image: null, // new file select cheyyumbo replace aavum
+
   };
+
 }
 
 // ── Component ──────────────────────────────────────────────────────────
@@ -143,14 +161,52 @@ function handleSubmit(e) {
     return;
   }
 
-  const finalData = {
-    ...form,
-    category: form.categoryId,   // Mongoose schema uses `category` as the field name
-    image: form.imagePreview,
-    bulkDensity: form.bulkDensity === "" ? "" : Number(form.bulkDensity),
-  };
+const formData = new FormData();
 
-  onSubmit(finalData);
+formData.append("name", form.name);
+formData.append("shortName", form.shortName);
+formData.append("category", form.categoryId);
+
+formData.append(
+  "bulkDensity",
+  form.bulkDensity === "" ? "" : Number(form.bulkDensity)
+);
+
+formData.append("fusedProcess", form.fusedProcess);
+formData.append("remarks", form.remarks);
+formData.append("sizing", form.sizing);
+formData.append("industrialApplication", form.industrialApplication);
+
+
+// arrays stringify cheyyanam
+formData.append(
+  "colorTones",
+  JSON.stringify(form.colorTones)
+);
+
+formData.append(
+  "chemicalComposition",
+  JSON.stringify(form.chemicalComposition)
+);
+
+
+// image file
+// new image selected
+if (form.image) {
+
+  formData.append("image", form.image);
+
+}
+
+// image manually removed
+if (!form.imagePreview) {
+
+  formData.append("removeImage", "true");
+
+}
+
+
+onSubmit(formData);
 }
 
   // ── Render ─────────────────────────────────────────────────────────────
@@ -272,41 +328,86 @@ function handleSubmit(e) {
         </div>
       </section>
 
-      {/* ── Product Image ───────────────────────── */}
+   {/* ── Product Image ───────────────────────── */}
 <section>
+
   <p className={SEC_CLS}>Product Image</p>
 
   <div className="flex flex-col sm:flex-row items-start gap-4">
 
     {/* Preview */}
     <div className="w-32 h-32 rounded-xl border border-slate-200 overflow-hidden bg-slate-50 flex items-center justify-center">
+
       {form.imagePreview ? (
+
         <img
           src={form.imagePreview}
           alt="Preview"
           className="w-full h-full object-cover"
         />
+
       ) : (
-        <span className="text-xs text-slate-400">No Image</span>
+
+        <span className="text-xs text-slate-400">
+          No Image
+        </span>
+
       )}
+
     </div>
 
-    {/* Upload */}
-    <div className="flex-1">
-      <label className={LABEL_CLS}>Upload Image</label>
+
+    <div className="flex flex-col gap-2">
+
+      {/* upload */}
       <input
+
         type="file"
+
         accept="image/*"
+
         onChange={handleImageChange}
-        className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4
-        file:rounded-lg file:border-0 file:text-sm file:font-semibold
-        file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100 cursor-pointer"
+
+        className="text-sm"
+
       />
-      <p className="text-xs text-slate-400 mt-1">
-        PNG, JPG, WEBP recommended
-      </p>
+
+
+      {/* delete */}
+      {form.imagePreview && (
+
+        <button
+
+          type="button"
+
+          onClick={() =>
+
+            setForm(prev => ({
+
+              ...prev,
+
+              image: null,
+
+              imagePreview: ""
+
+            }))
+
+          }
+
+          className="text-xs text-red-500 hover:underline"
+
+        >
+
+          Remove image
+
+        </button>
+
+      )}
+
     </div>
+
   </div>
+
 </section>
 
       {/* 4 ── Chemical Composition & Physical Analysis */}

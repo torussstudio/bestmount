@@ -11,12 +11,16 @@ const Label = ({ children }) => (
   </p>
 );
 
+
 const Divider = () => (
   <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", margin: "5px 0 8px" }} />
 );
 
 const ProductSheetModal = forwardRef(function ProductSheetModal({ product, onClose }, ref) {
   const categoryName = product?.category?.name ?? "";
+  const imageUrl = product?.image
+    ? `http://localhost:5000/uploads/${product.image}`
+    : null;
 
   /* Lock body scroll while open */
   useEffect(() => {
@@ -176,11 +180,66 @@ const ProductSheetModal = forwardRef(function ProductSheetModal({ product, onClo
             </div>
 
             {/* Hero */}
-            <div style={{
-              padding: "clamp(14px,3vw,22px) clamp(14px,4vw,28px)",
-              borderBottom: "1px solid rgba(255,255,255,0.07)",
-            }}>
-              <h1 style={{
+          
+<div
+  style={{
+    padding: "clamp(14px,3vw,22px) clamp(14px,4vw,28px)",
+    borderBottom: "1px solid rgba(255,255,255,0.07)",
+    display: "flex",
+    alignItems: "center",
+    gap: "16px"
+  }}
+>
+
+  {imageUrl && (
+
+    <img
+      src={imageUrl}
+      alt={product.name}
+      style={{
+        width: "120px",
+        height: "120px",
+        borderRadius: "10px",
+        objectFit: "cover",
+        border: "1px solid rgba(255,255,255,0.12)"
+      }}
+    />
+
+  )}
+
+  <div>
+
+    <h1
+      style={{
+        fontSize: "clamp(1.6rem,6vw,2.6rem)",
+        fontWeight: 900,
+        color: "#eee8cd",
+        letterSpacing: "-0.02em",
+        lineHeight: 1,
+        margin: 0
+      }}
+    >
+      {product.shortName || product.name}
+    </h1>
+
+    <p
+      style={{
+        marginTop: "5px",
+        fontSize: "clamp(0.5rem,1.3vw,0.58rem)",
+        fontWeight: 600,
+        letterSpacing: "0.16em",
+        textTransform: "uppercase",
+        color: "rgba(238,232,205,0.4)",
+        lineHeight: 1
+      }}
+    >
+      Technical Data Sheet
+    </p>
+
+  </div>
+
+</div>
+              {/* <h1 style={{
                 fontSize: "clamp(1.6rem,6vw,2.6rem)", fontWeight: 900,
                 color: "#eee8cd", letterSpacing: "-0.02em",
                 lineHeight: 1, margin: 0,
@@ -194,7 +253,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal({ product, onClo
               }}>
                 Technical Data Sheet
               </p>
-            </div>
+            </div> */}
 
             {/* Stats row — 3 cols on sm+, 2 cols stacked on mobile */}
             <div style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
