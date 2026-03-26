@@ -401,10 +401,10 @@ export default function Materials() {
       <style>{cardStyles}</style>
 
       <div id="materials">
-       <Section className="min-h-[70vh] pt-16 md:pt-0">
+       <Section className="min-h-[70vh] pt-6 md:pt-0">
           <Container>
             {/* Header row */}
-           <div className="grid grid-cols-1 md:grid-cols-12 gap-y-2 md:gap-x-12 mb-6">
+           <div className="grid grid-cols-1 md:grid-cols-12 gap-y-1 md:gap-x-12 mb-6">
               <div className="md:col-span-3">
                 <span className="text-sm uppercase tracking-wider">
                   Our Materials
