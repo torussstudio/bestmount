@@ -204,7 +204,7 @@ const imageUrl = product?.image
         width: "120px",
         height: "120px",
         borderRadius: "10px",
-        objectFit: "cover",
+        objectFit: "contain",
         border: "1px solid rgba(255,255,255,0.12)"
       }}
     />

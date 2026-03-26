@@ -343,7 +343,7 @@ onSubmit(formData);
         <img
           src={form.imagePreview}
           alt="Preview"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain p-2"
         />
 
       ) : (

@@ -433,6 +433,15 @@ import ProductForm from "./ProductForm";
 
 // ── ProductImageThumb ──────────────────────────────────────────────────
 function ProductImageThumb({ image, name }) {
+
+  const BASE_URL =
+    import.meta.env.VITE_API_URL?.replace("/api","") ||
+    "http://localhost:5000";
+
+  const imageUrl = image
+    ? `${BASE_URL}/uploads/${image}`
+    : null;
+
   if (!image) {
     return (
       <div className="w-8 h-8 rounded-md bg-slate-100 border border-slate-200 shrink-0 flex items-center justify-center">
@@ -442,9 +451,9 @@ function ProductImageThumb({ image, name }) {
   }
   return (
     <img
-      src={`http://localhost:5000/uploads/${image}`}
+      src={imageUrl}
       alt={name || "Product image"}
-      className="w-15 h-15 rounded-md object-cover border border-slate-200 shrink-0"
+      className="w-15 h-15 rounded-md object-contain border border-slate-200 shrink-0"
       onError={function (e) {
         e.currentTarget.style.display = "none";
         e.currentTarget.nextSibling && (e.currentTarget.nextSibling.style.display = "flex");

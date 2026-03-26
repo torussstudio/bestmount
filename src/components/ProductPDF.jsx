@@ -568,7 +568,7 @@ const s = StyleSheet.create({
     backgroundColor: C.border04,
     borderWidth: 0.5,
     borderColor: C.border08,
-    objectFit: "cover",
+    objectFit: "contain",
   },
 
   heroName: {
