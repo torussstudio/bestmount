@@ -1,9 +1,12 @@
-import { useEffect, forwardRef } from "react";
+
 import ReactDOM from "react-dom";
 import { pdf } from "@react-pdf/renderer";
 import { motion } from "framer-motion";
 import logoSrc from "../assets/images/bm-logo-tm-w.png";
 import ProductPDF from "./ProductPDF";
+import { useEffect, useState, forwardRef } from "react";
+
+
 
 const Label = ({ children }) => (
   <p style={{ fontSize: "0.58rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "#fbbf24", margin: 0 }}>
@@ -17,6 +20,7 @@ const Divider = () => (
 );
 
 const ProductSheetModal = forwardRef(function ProductSheetModal({ product, onClose }, ref) {
+  const [previewOpen, setPreviewOpen] = useState(false);
   const categoryName = product?.category?.name ?? "";
   const BASE_URL =
   import.meta.env.VITE_API_URL?.replace("/api", "") ||
@@ -195,21 +199,52 @@ const imageUrl = product?.image
   }}
 >
 
-  {imageUrl && (
+ 
+{imageUrl && (
+  <img
+    src={imageUrl}
+    alt={product.name}
+    onClick={() => setPreviewOpen(true)}
+    style={{
+      width: "120px",
+      height: "120px",
+      borderRadius: "10px",
+      objectFit: "contain",
+      border: "1px solid rgba(255,255,255,0.12)",
+      cursor: "zoom-in"
+    }}
+  />
+)}
 
+
+{previewOpen && (
+  <div
+    onClick={() => setPreviewOpen(false)}
+    style={{
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,0.85)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: 9999,
+      padding: "20px"
+    }}
+  >
     <img
       src={imageUrl}
-      alt={product.name}
+      alt="preview"
+      onClick={(e) => e.stopPropagation()}
       style={{
-        width: "120px",
-        height: "120px",
-        borderRadius: "10px",
+        maxWidth: "100%",
+        maxHeight: "100%",
         objectFit: "contain",
-        border: "1px solid rgba(255,255,255,0.12)"
+        borderRadius: "12px",
+        boxShadow: "0 10px 40px rgba(0,0,0,0.6)"
       }}
     />
-
-  )}
+  </div>
+)}
 
   <div>
 
