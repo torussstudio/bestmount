@@ -200,8 +200,8 @@ const cardStyles = `
 
   /* text layout */
   .card-index {
-  font-size: 0.60rem;
-  color: rgba(238,232,205,0.35);
+  font-size: 0.70rem;
+  color: #eee8cd;
   font-weight: 400;
   letter-spacing: 0.05em;
   margin:0;  
@@ -211,7 +211,7 @@ const cardStyles = `
 .card-name {
   font-family: "Barlow Condensed", "SKODA Next Black Expanded", "SKODA Next", system-ui, sans-serif;
   font-weight: 800;
-  font-size: clamp(1rem, 1.9vw, 1.28rem);
+  font-size: clamp(1.15rem, 2.2vw, 1.55rem);
   color: #eee8cd;
   margin: 0;
   line-height: 1.15;
@@ -221,8 +221,8 @@ const cardStyles = `
 .card-subtitle {
   font-family:"SKODA Next",system-ui,sans-serif;
   font-weight:300;
-  font-size:0.62rem;
-  color:rgba(238,232,205,0.45);
+  font-size:0.72rem;
+  color:#eee8cd;
 
   margin:0;
 opacity:.85;
