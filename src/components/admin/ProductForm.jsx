@@ -37,6 +37,10 @@ function makeEmpty() {
 
 function deepClone(p) {
 
+  const BASE_URL =
+    import.meta.env.VITE_API_URL?.replace("/api","") ||
+    "http://localhost:5000";
+
   const catId =
     p.category?._id ||
     p.category ||
@@ -53,12 +57,11 @@ function deepClone(p) {
 
     chemicalComposition: (p.chemicalComposition || []).map((r) => ({ ...r })),
 
-    // important part
     imagePreview: p.image
-      ? `http://localhost:5000/uploads/${p.image}`
+      ? `${BASE_URL}/uploads/${p.image}`
       : "",
 
-    image: null, // new file select cheyyumbo replace aavum
+    image: null,
 
   };
 
