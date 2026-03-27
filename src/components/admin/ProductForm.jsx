@@ -1,6 +1,7 @@
 'use no memo';
 import { useState, useEffect } from "react";
-import { FiPlus, FiTrash2 } from "react-icons/fi";
+import { FiPlus, FiTrash2, FiUploadCloud } from "react-icons/fi";
+
 
 // ── Module-level constants ──────────────────────────────────────────────
 const DEFAULT_TONES = [
@@ -332,84 +333,133 @@ onSubmit(formData);
       </section>
 
    {/* ── Product Image ───────────────────────── */}
+
+
 <section>
 
-  <p className={SEC_CLS}>Product Image</p>
+<p className={SEC_CLS}>Product Image</p>
 
-  <div className="flex flex-col sm:flex-row items-start gap-4">
+<div className="flex flex-col sm:flex-row gap-5">
 
-    {/* Preview */}
-    <div className="w-32 h-32 rounded-xl border border-slate-200 overflow-hidden bg-slate-50 flex items-center justify-center">
+{/* preview */}
+<div
+className="
+w-36 h-36
+rounded-2xl
+border border-slate-200
+bg-slate-50
+flex items-center justify-center
+overflow-hidden
+relative
+group
+"
+>
 
-      {form.imagePreview ? (
+{form.imagePreview ? (
 
-        <img
-          src={form.imagePreview}
-          alt="Preview"
-          className="w-full h-full object-contain p-2"
-        />
+<img
+src={form.imagePreview}
+alt="Preview"
+className="w-full h-full object-contain p-2"
+/>
 
-      ) : (
+) : (
 
-        <span className="text-xs text-slate-400">
-          No Image
-        </span>
+<div className="flex flex-col items-center gap-1 text-slate-400">
 
-      )}
+<FiUploadCloud className="text-2xl"/>
 
-    </div>
+<span className="text-xs">
+No image
+</span>
 
+</div>
 
-    <div className="flex flex-col gap-2">
+)}
 
-      {/* upload */}
-      <input
-
-        type="file"
-
-        accept="image/*"
-
-        onChange={handleImageChange}
-
-        className="text-sm"
-
-      />
+</div>
 
 
-      {/* delete */}
-      {form.imagePreview && (
+{/* upload area */}
+<div className="flex flex-col gap-3">
 
-        <button
+<label
+className="
+flex items-center gap-3
+px-4 py-3
+border border-slate-200
+rounded-xl
+cursor-pointer
+hover:border-indigo-400
+hover:bg-indigo-50/40
+transition
+group
+"
+>
 
-          type="button"
+<FiUploadCloud
+className="
+text-slate-400
+text-lg
+group-hover:text-indigo-600
+transition
+"
+/>
 
-          onClick={() =>
+<span className="text-sm text-slate-600 truncate">
+{form.image ? form.image.name : "Upload product image"}
+</span>
 
-            setForm(prev => ({
+<input
+type="file"
+accept="image/*"
+onChange={handleImageChange}
+className="hidden"
+/>
 
-              ...prev,
+</label>
 
-              image: null,
 
-              imagePreview: ""
+{/* remove button */}
+{form.imagePreview && (
 
-            }))
+<button
+type="button"
+onClick={()=>
+setForm(prev=>({
 
-          }
+...prev,
 
-          className="text-xs text-red-500 hover:underline"
+image:null,
 
-        >
+imagePreview:""
 
-          Remove image
+}))
+}
+className="
+flex items-center gap-2
+text-sm
+text-red-500
+hover:text-red-600
+transition
+"
+>
 
-        </button>
+<FiTrash2 className="text-sm"/>
 
-      )}
+Remove image
 
-    </div>
+</button>
 
-  </div>
+)}
+
+<p className="text-xs text-slate-400">
+PNG, JPG, WEBP • recommended 500x500px
+</p>
+
+</div>
+
+</div>
 
 </section>
 

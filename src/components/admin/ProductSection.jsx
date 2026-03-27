@@ -465,25 +465,87 @@ className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-
 Upload MSDS PDF
 </h3>
 
+<div className="flex flex-col gap-2">
+
+<label
+className="
+flex items-center justify-between
+px-4 py-3
+border border-gray-300
+rounded-xl
+cursor-pointer
+hover:border-emerald-500
+hover:bg-emerald-50
+transition
+"
+>
+
+<div className="flex items-center gap-3">
+
+<span className="text-lg">📄</span>
+
+<span className="text-sm text-gray-700 truncate">
+{pdfFile ? pdfFile.name : "Click to upload MSDS PDF"}
+</span>
+
+</div>
+
 <input
 type="file"
 accept="application/pdf"
 onChange={(e)=>setPdfFile(e.target.files[0])}
-className="text-black file:text-black"
+className="hidden"
 />
+
+</label>
+
+{pdfFile && (
+
+<button
+type="button"
+onClick={()=>setPdfFile(null)}
+className="
+self-end
+flex items-center gap-1
+text-sm
+text-red-600
+hover:text-red-700
+transition
+"
+>
+
+🗑 Remove file
+
+</button>
+
+)}
+
+</div>
 
 <div className="flex gap-2 mt-4">
 
 <button
 onClick={handleUploadMSDS}
-className="px-4 py-2 bg-emerald-600 text-white rounded-lg"
+className="
+px-5 py-2.5
+bg-emerald-600
+text-white
+font-medium
+rounded-lg
+shadow-sm
+hover:bg-emerald-700
+active:bg-emerald-800
+transition
+duration-200
+cursor-pointer
+"
 >
 Upload
 </button>
 
 <button
 onClick={()=>setMsdsOpen(false)}
-className="px-4 py-2 bg-gray-200 rounded-lg"
+className="px-4 py-2 bg-gray-200 text-black font-medium rounded-lg hover:bg-gray-300 transition cursor-pointer"
 >
 Cancel
 </button>
