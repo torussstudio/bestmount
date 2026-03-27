@@ -21,9 +21,16 @@ app.use(express.json());
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+const msdsRoutes = require("./routes/msds");
+
+app.use("/api/msds", msdsRoutes);
+
+
+
 app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/msds", msdsRoutes);
 
 app.get("/", (req, res) => {
   res.send("API is running...");
