@@ -25,7 +25,7 @@ export default function Modal({ isOpen, onClose, title, size = "md", children })
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-10 sm:items-center sm:pt-4">
+   <div className="fixed inset-0 z-50 flex items-start justify-center p-4 py-10 sm:items-center sm:py-6">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
@@ -36,7 +36,7 @@ export default function Modal({ isOpen, onClose, title, size = "md", children })
       {/* Panel */}
       <div
         className={`relative w-full ${SIZES[size]} bg-white rounded-2xl shadow-2xl flex flex-col`}
-        style={{ maxHeight: "calc(100vh - 2rem)" }}
+        style={{ maxHeight: "calc(100vh - 5rem)" }}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 shrink-0">

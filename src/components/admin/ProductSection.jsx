@@ -231,7 +231,7 @@ alert("upload failed")
 
 <button
 onClick={()=>setMsdsOpen(true)}
-className="px-4 py-2.5 bg-emerald-600 text-white rounded-xl"
+className="px-4 py-2.5 bg-emerald-600 text-white rounded-xl cursor-pointer"
 >
 Upload MSDS
 </button>
@@ -239,7 +239,7 @@ Upload MSDS
 <button
 type="button"
 onClick={openAdd}
-className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-xl"
+className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-xl cursor-pointer"
 >
 <FiPlus/> Add Product
 </button>
