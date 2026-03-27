@@ -23,9 +23,6 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const msdsRoutes = require("./routes/msds");
 
-app.use("/api/msds", msdsRoutes);
-
-
 
 app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);

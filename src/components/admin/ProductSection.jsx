@@ -10,9 +10,10 @@ import ProductForm from "./ProductForm";
 // ── ProductImageThumb ──────────────────────────────────────────────────
 function ProductImageThumb({ image, name }) {
 
-  const BASE_URL =
-    import.meta.env.VITE_API_URL?.replace("/api","") ||
-    "http://localhost:5000";
+ const BASE_URL =
+  import.meta.env.DEV
+    ? "http://localhost:5000"
+    : import.meta.env.VITE_API_URL.replace("/api","");
 
   const imageUrl = image
     ? `${BASE_URL}/uploads/${image}`
