@@ -461,7 +461,7 @@ className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-
 
 <div className="bg-white p-5 rounded-xl w-[320px]">
 
-<h3 className="font-semibold mb-3">
+<h3 className="font-semibold mb-3 text-black">
 Upload MSDS PDF
 </h3>
 
@@ -469,6 +469,7 @@ Upload MSDS PDF
 type="file"
 accept="application/pdf"
 onChange={(e)=>setPdfFile(e.target.files[0])}
+className="text-black file:text-black"
 />
 
 <div className="flex gap-2 mt-4">

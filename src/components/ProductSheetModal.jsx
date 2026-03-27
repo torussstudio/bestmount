@@ -278,21 +278,7 @@ const imageUrl = product?.image
   </div>
 
 </div>
-              {/* <h1 style={{
-                fontSize: "clamp(1.6rem,6vw,2.6rem)", fontWeight: 900,
-                color: "#eee8cd", letterSpacing: "-0.02em",
-                lineHeight: 1, margin: 0,
-              }}>
-                {product.shortName || product.name}
-              </h1>
-              <p style={{
-                marginTop: "5px", fontSize: "clamp(0.5rem,1.3vw,0.58rem)", fontWeight: 600,
-                letterSpacing: "0.16em", textTransform: "uppercase",
-                color: "rgba(238,232,205,0.4)", lineHeight: 1,
-              }}>
-                Technical Data Sheet
-              </p>
-            </div> */}
+             
 
             {/* Stats row — 3 cols on sm+, 2 cols stacked on mobile */}
             <div style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
