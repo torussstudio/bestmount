@@ -328,10 +328,10 @@ function deepClone(p) {
     ...p, categoryId: String(catId),
     colorTones: (p.colorTones || []).map(t => ({ ...t })),
     chemicalComposition: (p.chemicalComposition || []).map(r => ({ ...r })),
-   imagePreview:
- p?.image
-   ? `${BASE_URL}/uploads/${p.image}`
-   : p?.imageUrl || "",
+ imagePreview:
+ p?.image && p.image.startsWith("http")
+   ? p.image
+   : "",
     image: null,
   };
 }
@@ -394,9 +394,10 @@ export default function ProductForm({ initial, categories, onSubmit, onCancel })
  setForm({
    ...initial,
 
-   imagePreview: initial.image
-     ? `${BASE_URL}/uploads/${initial.image}`
-     : "",
+  imagePreview:
+ initial.image && initial.image.startsWith("http")
+   ? initial.image
+   : "",
 
    image: null,
 

@@ -10,14 +10,7 @@ import ProductForm from "./ProductForm";
 // ── ProductImageThumb ──────────────────────────────────────────────────
 function ProductImageThumb({ image, name }) {
 
- const BASE_URL =
-  import.meta.env.DEV
-    ? "http://localhost:5000"
-    : import.meta.env.VITE_API_URL.replace("/api","");
-
-  const imageUrl = image
-    ? `${BASE_URL}/uploads/${image}`
-    : null;
+const imageUrl = image || null;
 
   if (!image) {
     return (
@@ -31,10 +24,10 @@ function ProductImageThumb({ image, name }) {
       src={imageUrl}
       alt={name || "Product image"}
       className="w-15 h-15 rounded-md object-contain border border-slate-200 shrink-0"
-      onError={function (e) {
-        e.currentTarget.style.display = "none";
-        e.currentTarget.nextSibling && (e.currentTarget.nextSibling.style.display = "flex");
-      }}
+      // onError={function (e) {
+      //   e.currentTarget.style.display = "none";
+      //   e.currentTarget.nextSibling && (e.currentTarget.nextSibling.style.display = "flex");
+      // }}
     />
   );
 }

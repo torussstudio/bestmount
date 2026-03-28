@@ -22,14 +22,7 @@ const Divider = () => (
 const ProductSheetModal = forwardRef(function ProductSheetModal({ product, onClose }, ref) {
   const [previewOpen, setPreviewOpen] = useState(false);
   const categoryName = product?.category?.name ?? "";
- const BASE_URL =
-  import.meta.env.DEV
-    ? "http://localhost:5000"
-    : import.meta.env.VITE_API_URL.replace("/api", "");
-
-const imageUrl = product?.image
-  ? `${BASE_URL}/uploads/${product.image}`
-  : null;
+const imageUrl = product?.image || null;
 
   /* Lock body scroll while open */
   useEffect(() => {
