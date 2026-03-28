@@ -65,9 +65,8 @@ router.post(
         chemicalComposition,
 
         image: req.file
-          ? req.file.filename
-          : null,
-
+ ? req.file.path
+ : null,
       });
 
 
@@ -134,7 +133,7 @@ router.put(
       // CASE 1 — new image uploaded
       if (req.file) {
 
-        imageName = req.file.filename;
+        imageName = req.file.path;
 
 
         // delete old image

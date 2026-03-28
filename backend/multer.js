@@ -1,10 +1,9 @@
-
-
 // const multer = require("multer");
 // const path = require("path");
 // const fs = require("fs");
 
 // const uploadPath = path.join(__dirname, "uploads");
+// console.log("UPLOAD PATH =", uploadPath);
 
 // if (!fs.existsSync(uploadPath)) {
 //   fs.mkdirSync(uploadPath, { recursive: true });
@@ -12,97 +11,88 @@
 
 // const storage = multer.diskStorage({
 
-// destination:(req,file,cb)=>{
+//   destination: (req, file, cb) => {
+//     cb(null, uploadPath);
+//   },
 
-// cb(null, uploadPath);
+//   filename: (req, file, cb) => {
+//     const uniqueName =
+//       Date.now() + path.extname(file.originalname);
 
-// },
-
-// filename:(req,file,cb)=>{
-
-// const uniqueName =
-// Date.now() + path.extname(file.originalname);
-
-// cb(null, uniqueName);
-
-// }
+//     cb(null, uniqueName);
+//   }
 
 // });
 
-// const fileFilter = (req,file,cb)=>{
+// const fileFilter = (req, file, cb) => {
 
-// const allowedTypes = [
+//   const allowedTypes = [
+//     "image/png",
+//     "image/jpg",
+//     "image/jpeg",
+//     "image/webp",
+//     "application/pdf"
+//   ];
 
-// "image/png",
-// "image/jpg",
-// "image/jpeg",
-// "image/webp",
-// "application/pdf"
-
-// ];
-
-// if(allowedTypes.includes(file.mimetype)){
-
-// cb(null,true);
-
-// }else{
-
-// cb(new Error("Only image or pdf allowed"),false);
-
-// }
+//   if (allowedTypes.includes(file.mimetype)) {
+//     cb(null, true);
+//   } else {
+//     cb(new Error("Only image or pdf allowed"), false);
+//   }
 
 // };
 
 // module.exports = multer({
-// storage,
-// fileFilter
+//   storage,
+//   fileFilter
 // });
 
 const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("./config/cloudinary");
 
-const uploadPath = path.join(__dirname, "uploads");
-console.log("UPLOAD PATH =", uploadPath);
+const storage = new CloudinaryStorage({
 
-if (!fs.existsSync(uploadPath)) {
-  fs.mkdirSync(uploadPath, { recursive: true });
-}
+ cloudinary,
 
-const storage = multer.diskStorage({
+ params: {
 
-  destination: (req, file, cb) => {
-    cb(null, uploadPath);
-  },
+  folder: "bestmount_products",
 
-  filename: (req, file, cb) => {
-    const uniqueName =
-      Date.now() + path.extname(file.originalname);
+  allowed_formats: ["jpg", "png", "jpeg", "webp", "pdf"],
 
-    cb(null, uniqueName);
-  }
+ },
 
 });
 
 const fileFilter = (req, file, cb) => {
 
-  const allowedTypes = [
-    "image/png",
-    "image/jpg",
-    "image/jpeg",
-    "image/webp",
-    "application/pdf"
-  ];
+ const allowedTypes = [
 
-  if (allowedTypes.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    cb(new Error("Only image or pdf allowed"), false);
-  }
+  "image/png",
+  "image/jpg",
+  "image/jpeg",
+  "image/webp",
+  "application/pdf"
+
+ ];
+
+ if (allowedTypes.includes(file.mimetype)) {
+
+  cb(null, true);
+
+ } else {
+
+  cb(new Error("Only image or pdf allowed"), false);
+
+ }
 
 };
 
 module.exports = multer({
-  storage,
-  fileFilter
+
+ storage,
+
+ fileFilter
+
 });
