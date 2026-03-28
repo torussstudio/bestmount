@@ -1,50 +1,53 @@
+
+
 // const multer = require("multer");
-// const path = require("path");
-// const fs = require("fs");
+// const { CloudinaryStorage } = require("multer-storage-cloudinary");
+// const cloudinary = require("./config/cloudinary");
 
-// const uploadPath = path.join(__dirname, "uploads");
-// console.log("UPLOAD PATH =", uploadPath);
+// const storage = new CloudinaryStorage({
 
-// if (!fs.existsSync(uploadPath)) {
-//   fs.mkdirSync(uploadPath, { recursive: true });
-// }
+//  cloudinary,
 
-// const storage = multer.diskStorage({
+//  params: {
 
-//   destination: (req, file, cb) => {
-//     cb(null, uploadPath);
-//   },
+//   folder: "bestmount_products",
 
-//   filename: (req, file, cb) => {
-//     const uniqueName =
-//       Date.now() + path.extname(file.originalname);
+//   allowed_formats: ["jpg", "png", "jpeg", "webp", "pdf"],
 
-//     cb(null, uniqueName);
-//   }
+//  },
 
 // });
 
 // const fileFilter = (req, file, cb) => {
 
-//   const allowedTypes = [
-//     "image/png",
-//     "image/jpg",
-//     "image/jpeg",
-//     "image/webp",
-//     "application/pdf"
-//   ];
+//  const allowedTypes = [
 
-//   if (allowedTypes.includes(file.mimetype)) {
-//     cb(null, true);
-//   } else {
-//     cb(new Error("Only image or pdf allowed"), false);
-//   }
+//   "image/png",
+//   "image/jpg",
+//   "image/jpeg",
+//   "image/webp",
+//   "application/pdf"
+
+//  ];
+
+//  if (allowedTypes.includes(file.mimetype)) {
+
+//   cb(null, true);
+
+//  } else {
+
+//   cb(new Error("Only image or pdf allowed"), false);
+
+//  }
 
 // };
 
 // module.exports = multer({
-//   storage,
-//   fileFilter
+
+//  storage,
+
+//  fileFilter
+
 // });
 
 const multer = require("multer");
@@ -55,13 +58,39 @@ const storage = new CloudinaryStorage({
 
  cloudinary,
 
- params: {
+ params: (req, file) => {
 
-  folder: "bestmount_products",
+  // PDF file
+ if (file.mimetype === "application/pdf") {
 
-  allowed_formats: ["jpg", "png", "jpeg", "webp", "pdf"],
+ const cleanName = file.originalname
+  .replace(/\.[^/.]+$/, "")   // remove extension
+  .replace(/[^a-zA-Z0-9-_]/g,"_"); // remove special characters
 
- },
+ return {
+
+  folder: "bestmount_msds",
+
+  resource_type: "raw",
+
+  public_id: cleanName,
+
+  format: "pdf"
+
+ };
+
+}
+
+  // Image file
+  return {
+
+   folder: "bestmount_products",
+
+   allowed_formats: ["jpg", "png", "jpeg", "webp"]
+
+  };
+
+ }
 
 });
 

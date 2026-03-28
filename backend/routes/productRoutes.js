@@ -32,7 +32,10 @@ router.get("/", async (req, res) => {
 // ✅ ADD product
 router.post(
   "/",
-  upload.single("image"),
+  upload.fields([
+ { name: "image", maxCount: 1 },
+ { name: "msds", maxCount: 1 }
+]),
   async (req, res) => {
 
     try {
@@ -64,8 +67,12 @@ router.post(
         colorTones,
         chemicalComposition,
 
-        image: req.file
- ? req.file.path
+        image: req.files?.image
+ ? req.files.image[0].path
+ : null,
+
+msds: req.files?.msds
+ ? req.files.msds[0].path
  : null,
       });
 
@@ -119,7 +126,10 @@ router.get("/:id", async (req, res) => {
 // ✅ UPDATE product (replace OR remove image)
 router.put(
   "/:id",
-  upload.single("image"),
+  upload.fields([
+ { name: "image", maxCount: 1 },
+ { name: "msds", maxCount: 1 }
+]),
   async (req, res) => {
 
     try {
@@ -127,58 +137,31 @@ router.put(
       const existing =
         await Product.findById(req.params.id);
 
-      let imageName = existing.image;
+     let imageName = existing.image;
+let msdsFile = existing.msds;
+
+// update image
+if (req.files?.image) {
+
+ imageName = req.files.image[0].path;
+
+}
 
 
-      // CASE 1 — new image uploaded
-      if (req.file) {
+// remove image
+if (req.body.removeImage === "true") {
 
-        imageName = req.file.path;
+ imageName = null;
 
-
-        // delete old image
-        if (existing.image) {
-
-          const oldPath = path.join(
-            __dirname,
-            "../uploads",
-            existing.image
-          );
-
-          if (fs.existsSync(oldPath)) {
-
-            fs.unlinkSync(oldPath);
-
-          }
-
-        }
-
-      }
+}
 
 
-      // CASE 2 — remove image clicked
-      else if (req.body.removeImage === "true") {
+// update msds pdf
+if (req.files?.msds) {
 
-        if (existing.image) {
+ msdsFile = req.files.msds[0].path;
 
-          const oldPath = path.join(
-            __dirname,
-            "../uploads",
-            existing.image
-          );
-
-          if (fs.existsSync(oldPath)) {
-
-            fs.unlinkSync(oldPath);
-
-          }
-
-        }
-
-        imageName = null;
-
-      }
-
+}
 
       let colorTones = [];
       let chemicalComposition = [];
@@ -213,6 +196,7 @@ router.put(
             chemicalComposition,
 
             image: imageName,
+            msds: msdsFile,
 
           },
 
@@ -249,23 +233,7 @@ router.delete("/:id", async (req, res) => {
       await Product.findById(req.params.id);
 
 
-    // delete image file
-    if (product?.image) {
-
-      const filePath = path.join(
-        __dirname,
-        "../uploads",
-        product.image
-      );
-
-      if (fs.existsSync(filePath)) {
-
-        fs.unlinkSync(filePath);
-
-      }
-
-    }
-
+    
 
     await Product
       .findByIdAndDelete(req.params.id);

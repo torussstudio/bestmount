@@ -228,3 +228,5 @@ export default function CategorySection({ categories, onAdd, onUpdate, onDelete 
     </div>
   );
 }
+
+

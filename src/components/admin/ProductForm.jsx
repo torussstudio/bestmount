@@ -366,6 +366,8 @@ function Field({ label, required, error, children }) {
 export default function ProductForm({ initial, categories, onSubmit, onCancel }) {
   const [form, setForm] = useState(() => initial ? deepClone(initial) : makeEmpty());
   const [errors, setErrors] = useState({});
+  const [msdsOpen, setMsdsOpen] = useState(false);
+const [pdfFile, setPdfFile] = useState(null);
   const styleRef = useRef(null);
 
   // Inject global CSS once
@@ -378,10 +380,7 @@ export default function ProductForm({ initial, categories, onSubmit, onCancel })
     }
   }, []);
 
-  // useEffect(() => {
-  //   setForm(initial ? deepClone(initial) : makeEmpty());
-  //   setErrors({});
-  // }, [initial]);
+  
 
   useEffect(() => {
 
@@ -441,6 +440,32 @@ export default function ProductForm({ initial, categories, onSubmit, onCancel })
     setForm(p => ({ ...p, image: null, imagePreview: "" }));
   }
 
+//   function handleUploadMSDS() {
+//   if (!pdfFile) {
+//     alert("Please select PDF");
+//     return;
+//   }
+
+//   const fd = new FormData();
+//   fd.append("msds", pdfFile);
+
+//   onSubmit(fd); // same API use cheyyam
+//   setMsdsOpen(false);
+//   setPdfFile(null);
+// }
+function handleUploadMSDS() {
+
+ if (!pdfFile) {
+
+  alert("Please select PDF");
+  return;
+
+ }
+
+ setMsdsOpen(false);
+
+}
+
   function handleSubmit(e) {
     e.preventDefault();
     const errs = {};
@@ -463,6 +488,13 @@ export default function ProductForm({ initial, categories, onSubmit, onCancel })
    if (form.image) {
   fd.append("image", form.image);
 }
+
+if (pdfFile) {
+
+ fd.append("msds", pdfFile);
+
+}
+
 if (form.imagePreview === "" && initial?.image) {
   fd.append("removeImage", "true");
 }
@@ -612,6 +644,7 @@ if (form.imagePreview === "" && initial?.image) {
                   <span style={{ fontSize:"11px" }}>No image</span>
                 </div>
               )}
+             
             </div>
 
             {/* Controls */}
@@ -634,9 +667,39 @@ if (form.imagePreview === "" && initial?.image) {
                 PNG, JPG, WEBP · recommended 500 × 500 px
               </p>
             </div>
+          
 
           </div>
         </div>
+          {/* ── 5. MSDS File ───────────────────────── */}
+<div className="pf-card pf-section">
+  <SectionTitle>MSDS File</SectionTitle>
+
+  <button
+    type="button"
+    onClick={() => setMsdsOpen(true)}
+    className="pf-btn-accent"
+  >
+    Upload MSDS
+  </button>
+
+  {pdfFile && (
+
+    <p style={{
+      marginTop:"8px",
+      fontSize:"12px",
+      color:"#6b6860"
+    }}>
+
+      Selected:
+      {" "}
+      {pdfFile.name}
+
+    </p>
+
+  )}
+
+</div>
 
         {/* ── 5. Chemical Composition ─────────────────────────── */}
         <div className="pf-card pf-section">
@@ -748,6 +811,110 @@ if (form.imagePreview === "" && initial?.image) {
             {initial ? "Update Product" : "Add Product"}
           </button>
         </div>
+        {msdsOpen && (
+
+<div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+
+<div className="bg-white p-5 rounded-xl w-[320px]">
+
+<h3 className="font-semibold mb-3 text-black">
+Upload MSDS PDF
+</h3>
+
+<div className="flex flex-col gap-2">
+
+<label
+className="
+flex items-center justify-between
+px-4 py-3
+border border-gray-300
+rounded-xl
+cursor-pointer
+hover:border-emerald-500
+hover:bg-emerald-50
+transition
+"
+>
+
+<div className="flex items-center gap-3">
+
+<span className="text-lg">📄</span>
+
+<span className="text-sm text-gray-700 truncate">
+{pdfFile ? pdfFile.name : "Click to upload MSDS PDF"}
+</span>
+
+</div>
+
+<input
+type="file"
+accept="application/pdf"
+onChange={(e)=>setPdfFile(e.target.files[0])}
+className="hidden"
+/>
+
+</label>
+
+{pdfFile && (
+
+<button
+type="button"
+onClick={()=>setPdfFile(null)}
+className="
+self-end
+flex items-center gap-1
+text-sm
+text-red-600
+hover:text-red-700
+transition
+"
+>
+
+🗑 Remove file
+
+</button>
+
+)}
+
+</div>
+
+<div className="flex gap-2 mt-4">
+
+<button
+type="button"
+onClick={handleUploadMSDS}
+className="
+px-5 py-2.5
+bg-emerald-600
+text-white
+font-medium
+rounded-lg
+shadow-sm
+hover:bg-emerald-700
+active:bg-emerald-800
+transition
+duration-200
+cursor-pointer
+"
+>
+Upload
+</button>
+
+<button
+type="button"
+onClick={()=>setMsdsOpen(false)}
+className="px-4 py-2 bg-gray-200 text-black font-medium rounded-lg hover:bg-gray-300 transition cursor-pointer"
+>
+Cancel
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+)}
 
       </form>
     </div>

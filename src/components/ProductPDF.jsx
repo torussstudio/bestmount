@@ -235,16 +235,13 @@ const s = StyleSheet.create({
 
 export default function ProductPDF({ product }) {
 
-  const categoryName = product?.category?.name ?? "";
-
-  const BASE_URL =
-  import.meta.env.VITE_API_URL?.replace("/api", "") ||
-  "http://localhost:5000";
+const categoryName = product?.category?.name ?? "";
 
 const imageUrl = product?.image
-  ? `${BASE_URL}/uploads/${product.image}`
-  : null;
-  return (
+ ? product.image.replace("/upload/", "/upload/f_png/")
+ : null;
+
+return (
 
 <Document>
 

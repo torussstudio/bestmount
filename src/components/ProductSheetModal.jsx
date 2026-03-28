@@ -22,7 +22,9 @@ const Divider = () => (
 const ProductSheetModal = forwardRef(function ProductSheetModal({ product, onClose }, ref) {
   const [previewOpen, setPreviewOpen] = useState(false);
   const categoryName = product?.category?.name ?? "";
+
 const imageUrl = product?.image || null;
+const msdsUrl = product?.msds || null;
 
   /* Lock body scroll while open */
   useEffect(() => {
@@ -37,21 +39,91 @@ const imageUrl = product?.image || null;
     return () => window.removeEventListener("keydown", handler);
   }, [onClose]);
 
-  const handleDownload = async () => {
-    try {
-      const blob = await pdf(<ProductPDF product={product} />).toBlob();
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${product.shortName || product.name || "datasheet"}-TDS.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error("PDF generation failed:", err);
-    }
-  };
+ const handleDownload = async () => {
+
+ try {
+
+  if (!product) {
+
+   console.error("Product missing");
+
+   return;
+
+  }
+
+  const blob = await pdf(
+
+   <ProductPDF product={product} />
+
+  ).toBlob();
+
+  if (!blob) {
+
+   console.error("PDF blob empty");
+
+   return;
+
+  }
+
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+
+  link.href = url;
+
+  link.download =
+   `${product.shortName || product.name || "datasheet"}-TDS.pdf`;
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(url);
+
+ }
+
+ catch (err) {
+
+  console.error("PDF generation error:", err);
+
+  alert("PDF generation failed");
+
+ }
+
+};
+ const handleMSDSDownload = async () => {
+
+ try {
+
+  const response = await fetch(msdsUrl);
+
+  const blob = await response.blob();
+
+  const url = window.URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+
+  link.href = url;
+
+  link.download = `${product.shortName}-MSDS.pdf`;
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  document.body.removeChild(link);
+
+  window.URL.revokeObjectURL(url);
+
+ } catch (err) {
+
+  console.error(err);
+
+ }
+
+};
 
   return ReactDOM.createPortal(
     <motion.div
@@ -103,52 +175,113 @@ const imageUrl = product?.image || null;
           }}
         >
           {/* ── Action bar ── */}
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <button
-              onClick={onClose}
-              style={{
-                display: "flex", alignItems: "center", gap: "6px",
-                background: "none", border: "none", cursor: "pointer",
-                color: "rgba(255,255,255,0.45)", fontSize: "0.75rem", padding: "4px 0",
-                fontFamily: "inherit",
-              }}
-            >
-              ← Back
-            </button>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <button
-                onClick={handleDownload}
-                style={{
-                  display: "flex", alignItems: "center", gap: "6px",
-                  padding: "6px 12px", borderRadius: "999px",
-                  background: "rgba(255,193,7,0.15)",
-                  border: "1px solid rgba(255,193,7,0.35)",
-                  color: "#fbbf24", fontSize: "0.72rem", fontWeight: 600,
-                  cursor: "pointer", fontFamily: "inherit",
-                }}
-              >
-                <svg width="11" height="11" viewBox="0 0 14 14" fill="none">
-                  <path d="M7 1v8m0 0L4 6m3 3l3-3M1 11h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                Download PDF
-              </button>
-              <button
-                onClick={onClose}
-                aria-label="Close"
-                style={{
-                  background: "rgba(255,255,255,0.08)",
-                  border: "1px solid rgba(255,255,255,0.14)",
-                  borderRadius: "50%", width: "28px", height: "28px",
-                  color: "rgba(255,255,255,0.6)", fontSize: "1rem",
-                  cursor: "pointer", display: "flex", alignItems: "center",
-                  justifyContent: "center", lineHeight: 1, flexShrink: 0,
-                  fontFamily: "inherit",
-                }}
-              >
-                ×
-              </button>
-            </div>
-          </div>
+          <div
+  style={{
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center"
+  }}
+>
+
+  <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
+
+    <button
+      onClick={onClose}
+      style={{
+        display:"flex",
+        alignItems:"center",
+        gap:"6px",
+        background:"none",
+        border:"none",
+        cursor:"pointer",
+        color:"rgba(255,255,255,0.45)",
+        fontSize:"0.75rem"
+      }}
+    >
+      ← Back
+    </button>
+
+
+    {msdsUrl && (
+
+      <button
+ onClick={handleMSDSDownload}
+ style={{
+  display:"flex",
+  alignItems:"center",
+  gap:"6px",
+  padding:"6px 12px",
+  borderRadius:"999px",
+  background:"rgba(34,197,94,0.15)",
+  border:"1px solid rgba(34,197,94,0.35)",
+  color:"#22c55e",
+  fontSize:"0.72rem",
+  fontWeight:600,
+  cursor:"pointer"
+ }}
+>
+
+ <svg width="11" height="11" viewBox="0 0 14 14">
+
+  <path
+   d="M7 1v8m0 0L4 6m3 3l3-3M1 11h12"
+   stroke="currentColor"
+   strokeWidth="1.5"
+   strokeLinecap="round"
+   strokeLinejoin="round"
+  />
+
+ </svg>
+
+ Download MSDS
+
+</button>
+
+    )}
+
+  </div>
+
+
+  <div style={{ display:"flex", alignItems:"center", gap:"8px" }}>
+
+    <button
+      onClick={handleDownload}
+      style={{
+        display:"flex",
+        alignItems:"center",
+        gap:"6px",
+        padding:"6px 12px",
+        borderRadius:"999px",
+        background:"rgba(255,193,7,0.15)",
+        border:"1px solid rgba(255,193,7,0.35)",
+        color:"#fbbf24",
+        fontSize:"0.72rem",
+        fontWeight:600,
+        cursor:"pointer"
+      }}
+    >
+      Download PDF
+    </button>
+
+
+    <button
+      onClick={onClose}
+      style={{
+        background:"rgba(255,255,255,0.08)",
+        border:"1px solid rgba(255,255,255,0.14)",
+        borderRadius:"50%",
+        width:"28px",
+        height:"28px",
+        color:"rgba(255,255,255,0.6)",
+        cursor:"pointer"
+      }}
+    >
+      ×
+    </button>
+
+  </div>
+
+</div>
 
           {/* ── Datasheet card ── */}
           <div

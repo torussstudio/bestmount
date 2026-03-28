@@ -222,12 +222,12 @@ alert("upload failed")
         </div>
         <div className="flex gap-2">
 
-<button
+{/* <button
 onClick={()=>setMsdsOpen(true)}
 className="px-4 py-2.5 bg-emerald-600 text-white rounded-xl cursor-pointer"
 >
 Upload MSDS
-</button>
+</button> */}
 
 <button
 type="button"
@@ -447,8 +447,8 @@ className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-
         />
       </Modal>
 
-      {/* ── Delete Confirmation ───────────────────────────────────────── */}
-      {msdsOpen && (
+     
+      {/* {msdsOpen && (
 
 <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
 
@@ -549,7 +549,7 @@ Cancel
 
 </div>
 
-)}
+)} */}
       <ConfirmDialog
         isOpen={!!deleteTarget}
         onClose={function () { setDeleteTarget(null); }}
