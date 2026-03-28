@@ -62,7 +62,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-const uploadPath = path.join(process.cwd(), "uploads");
+const uploadPath = path.join(__dirname, "uploads");
 console.log("UPLOAD PATH =", uploadPath);
 
 if (!fs.existsSync(uploadPath)) {
