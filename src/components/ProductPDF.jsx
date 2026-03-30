@@ -1,4 +1,3 @@
-
 import {
   Document,
   Page,
@@ -49,7 +48,6 @@ const C = {
 };
 
 const s = StyleSheet.create({
-
   page: {
     backgroundColor: C.bg,
     fontFamily: "SKODANext",
@@ -230,205 +228,121 @@ const s = StyleSheet.create({
     color: C.text20,
     marginTop: 3,
   },
-
 });
 
 export default function ProductPDF({ product }) {
-
-const categoryName = product?.category?.name ?? "";
-
-const imageUrl = product?.image
- ? product.image.replace("/upload/", "/upload/f_png/")
- : null;
-
-return (
-
-<Document>
-
-<Page
-  size={{ width: 595, height: 780 }}
-  style={s.page}
->
-
-<View style={s.contentWrapper}>
-
-<View style={s.header}>
-
-<Image src={logoSrc} style={s.logo} />
-
-{categoryName && (
-<Text style={s.catBadge}>
-{categoryName}
-</Text>
-)}
-
-</View>
-
-
-<View style={s.hero}>
-
-{imageUrl ? (
-
-<Image
-src={imageUrl}
-style={s.heroImageBox}
-/>
-
-) : (
-
-<View style={s.heroImageBox} />
-
-)}
-
-<View>
-
-<Text style={s.heroName}>
-{product.shortName || product.name}
-</Text>
-
-<Text style={s.heroSub}>
-TECHNICAL DATA SHEET
-</Text>
-
-</View>
-
-</View>
-
-
-<View style={s.statsRow}>
-
-<View style={s.statCol}>
-<Text style={s.statLabel}>FUSED PROCESS</Text>
-<Text style={s.statValue}>
-{product.fusedProcess || "—"}
-</Text>
-</View>
-
-
-<View style={s.statCol}>
-<Text style={s.statLabel}>BULK DENSITY</Text>
-<Text style={s.statValue}>
-{product.bulkDensity ?? "—"}
-</Text>
-</View>
-
-
-<View style={s.statColWide}>
-
-<Text style={s.statLabel}>COLOR TONE</Text>
-
-<View style={s.swatchRow}>
-
-{product.colorTones?.map((tone, i) => (
-
-<View
-key={i}
-style={[
-s.swatch,
-{ backgroundColor: tone.color }
-]}
-/>
-
-))}
-
-</View>
-
-</View>
-
-</View>
-
-
-
-<View style={s.body}>
-
-<View style={s.bodyLeft}>
-
-<Text style={s.sectionLabel}>
-CHEMICAL COMPOSITION & PHYSICAL ANALYSIS
-</Text>
-
-
-<View style={s.tableHead}>
-
-<Text style={s.tableCell0}>NAME</Text>
-<Text style={s.tableCell}>TYPICAL</Text>
-<Text style={s.tableCell}>MIN %</Text>
-<Text style={s.tableCell}>MAX %</Text>
-
-</View>
-
-
-{product.chemicalComposition?.map((row, i) => (
-
-<View key={i} style={s.tableRow}>
-
-<Text style={s.tableCell0}>{row.name}</Text>
-<Text style={s.tableCell}>{row.typical}</Text>
-<Text style={s.tableCell}>{row.min}</Text>
-<Text style={s.tableCell}>{row.max}</Text>
-
-</View>
-
-))}
-
-</View>
-
-
-
-<View style={s.bodyRight}>
-
-{[
-["REMARKS", product.remarks],
-["SIZING", product.sizing],
-["INDUSTRIAL APPLICATION", product.industrialApplication],
-].map(([title, val]) => (
-
-val && (
-
-<View key={title} style={s.rightSection}>
-
-<Text style={s.sectionLabel}>
-{title}
-</Text>
-
-<View style={s.divider} />
-
-<Text style={s.bodyText}>
-{val}
-</Text>
-
-</View>
-
-)
-
-))}
-
-</View>
-
-
-</View>
-
-</View>
-
-
-
-<View style={s.footer}>
-
-<Text style={s.footerText1}>
-© Room 1112, 11/F Hollywood Plaza, Nathan road 610 Mongkok, Hong Kong
-</Text>
-
-<Text style={s.footerText2}>
-COPYRIGHT © 2017-2026 BEST MOUNTAIN LIMITED
-</Text>
-
-</View>
-
-
-</Page>
-
-</Document>
-
-);
-
+  const categoryName = product?.category?.name ?? "";
+
+  const imageUrl = product?.image
+    ? product.image.replace("/upload/", "/upload/f_png/")
+    : null;
+
+  return (
+    <Document>
+      <Page size={{ width: 595, height: 780 }} style={s.page}>
+        <View style={s.contentWrapper}>
+          <View style={s.header}>
+            <Image src={logoSrc} style={s.logo} />
+
+            {categoryName && <Text style={s.catBadge}>{categoryName}</Text>}
+          </View>
+
+          <View style={s.hero}>
+            {imageUrl ? (
+              <Image src={imageUrl} style={s.heroImageBox} />
+            ) : (
+              <View style={s.heroImageBox} />
+            )}
+
+            <View>
+              <Text style={s.heroName}>
+                {product.shortName || product.name}
+              </Text>
+
+              <Text style={s.heroSub}>TECHNICAL DATA SHEET</Text>
+            </View>
+          </View>
+
+          <View style={s.statsRow}>
+            <View style={s.statCol}>
+              <Text style={s.statLabel}>FUSED PROCESS</Text>
+              <Text style={s.statValue}>{product.fusedProcess || "—"}</Text>
+            </View>
+
+            <View style={s.statCol}>
+              <Text style={s.statLabel}>BULK DENSITY</Text>
+              <Text style={s.statValue}>{product.bulkDensity ?? "—"}</Text>
+            </View>
+
+            <View style={s.statColWide}>
+              <Text style={s.statLabel}>COLOR TONE</Text>
+
+              <View style={s.swatchRow}>
+                {product.colorTones?.map((tone, i) => (
+                  <View
+                    key={i}
+                    style={[s.swatch, { backgroundColor: tone.color }]}
+                  />
+                ))}
+              </View>
+            </View>
+          </View>
+
+          <View style={s.body}>
+            <View style={s.bodyLeft}>
+              <Text style={s.sectionLabel}>
+                CHEMICAL COMPOSITION & PHYSICAL ANALYSIS
+              </Text>
+
+              <View style={s.tableHead}>
+                <Text style={s.tableCell0}>NAME</Text>
+                <Text style={s.tableCell}>TYPICAL</Text>
+                <Text style={s.tableCell}>MIN %</Text>
+                <Text style={s.tableCell}>MAX %</Text>
+              </View>
+
+              {product.chemicalComposition?.map((row, i) => (
+                <View key={i} style={s.tableRow}>
+                  <Text style={s.tableCell0}>{row.name}</Text>
+                  <Text style={s.tableCell}>{row.typical}</Text>
+                  <Text style={s.tableCell}>{row.min}</Text>
+                  <Text style={s.tableCell}>{row.max}</Text>
+                </View>
+              ))}
+            </View>
+
+            <View style={s.bodyRight}>
+              {[
+                ["REMARKS", product.remarks],
+                ["SIZING", product.sizing],
+                ["INDUSTRIAL APPLICATION", product.industrialApplication],
+              ].map(
+                ([title, val]) =>
+                  val && (
+                    <View key={title} style={s.rightSection}>
+                      <Text style={s.sectionLabel}>{title}</Text>
+
+                      <View style={s.divider} />
+
+                      <Text style={s.bodyText}>{val}</Text>
+                    </View>
+                  ),
+              )}
+            </View>
+          </View>
+        </View>
+
+        <View style={s.footer}>
+          <Text style={s.footerText1}>
+            © Room 1112, 11/F Hollywood Plaza, Nathan road 610 Mongkok, Hong
+            Kong
+          </Text>
+
+          <Text style={s.footerText2}>
+            COPYRIGHT © 2017-2026 BEST MOUNTAIN LIMITED
+          </Text>
+        </View>
+      </Page>
+    </Document>
+  );
 }

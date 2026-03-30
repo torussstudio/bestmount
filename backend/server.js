@@ -10,8 +10,6 @@ const categoryRoutes = require("./routes/categoryRoutes");
 
 const app = express();
 
-
-
 connectDB();
 
 // ✅ SIMPLE & SAFE
@@ -20,7 +18,6 @@ app.use(cors());
 app.use(express.json());
 
 const msdsRoutes = require("./routes/msds");
-
 
 app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);

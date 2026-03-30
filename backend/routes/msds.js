@@ -4,43 +4,27 @@ const upload = require("../multer");
 const path = require("path");
 const fs = require("fs");
 
-
 // upload pdf
-router.post(
-"/upload",
-upload.single("msds"),
-(req,res)=>{
+router.post("/upload", upload.single("msds"), (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        message: "No pdf uploaded",
+      });
+    }
 
-try{
+    res.json({
+      message: "MSDS uploaded successfully",
 
-if(!req.file){
-return res.status(400).json({
-message:"No pdf uploaded"
+      file: req.file.filename,
+    });
+  } catch (err) {
+    console.log(err);
 
-})
-}
-
-res.json({
-
-message:"MSDS uploaded successfully",
-
-file:req.file.filename
-
-})
-
-}catch(err){
-
-console.log(err)
-
-res.status(500).json({
-
-message:"upload error"
-
-})
-
-
-}
-
-})
+    res.status(500).json({
+      message: "upload error",
+    });
+  }
+});
 
 module.exports = router;

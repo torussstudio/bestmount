@@ -35,7 +35,7 @@ router.put("/:id", async (req, res) => {
     const updated = await Category.findByIdAndUpdate(
       req.params.id,
       { name },
-      { new: true }
+      { new: true },
     );
 
     if (!updated) {
@@ -52,7 +52,9 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     // Check if any products reference this category
-    const linkedCount = await Product.countDocuments({ category: req.params.id });
+    const linkedCount = await Product.countDocuments({
+      category: req.params.id,
+    });
     if (linkedCount > 0) {
       return res.status(400).json({
         message: `Cannot delete this category because it is used by ${linkedCount} existing product${linkedCount === 1 ? "" : "s"}.`,

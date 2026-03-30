@@ -1,4 +1,3 @@
-
 import ReactDOM from "react-dom";
 import { pdf } from "@react-pdf/renderer";
 import { motion } from "framer-motion";
@@ -6,124 +5,119 @@ import logoSrc from "../assets/images/bm-logo-tm-w.png";
 import ProductPDF from "./ProductPDF";
 import { useEffect, useState, forwardRef } from "react";
 
-
-
 const Label = ({ children }) => (
-  <p style={{ fontSize: "0.58rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "#fbbf24", margin: 0 }}>
+  <p
+    style={{
+      fontSize: "0.58rem",
+      fontWeight: 700,
+      textTransform: "uppercase",
+      letterSpacing: "0.12em",
+      color: "#fbbf24",
+      margin: 0,
+    }}
+  >
     {children}
   </p>
 );
 
-
 const Divider = () => (
-  <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", margin: "5px 0 8px" }} />
+  <div
+    style={{
+      borderTop: "1px solid rgba(255,255,255,0.08)",
+      margin: "5px 0 8px",
+    }}
+  />
 );
 
-const ProductSheetModal = forwardRef(function ProductSheetModal({ product, onClose }, ref) {
+const ProductSheetModal = forwardRef(function ProductSheetModal(
+  { product, onClose },
+  ref,
+) {
   const [previewOpen, setPreviewOpen] = useState(false);
   const categoryName = product?.category?.name ?? "";
 
-const imageUrl = product?.image || null;
-const msdsUrl = product?.msds || null;
+  const imageUrl = product?.image || null;
+  const msdsUrl = product?.msds || null;
 
   /* Lock body scroll while open */
   useEffect(() => {
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, []);
 
   /* Close on Escape */
   useEffect(() => {
-    const handler = (e) => { if (e.key === "Escape") onClose(); };
+    const handler = (e) => {
+      if (e.key === "Escape") onClose();
+    };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [onClose]);
 
- const handleDownload = async () => {
+  const handleDownload = async () => {
+    try {
+      if (!product) {
+        console.error("Product missing");
 
- try {
+        return;
+      }
 
-  if (!product) {
+      const blob = await pdf(<ProductPDF product={product} />).toBlob();
 
-   console.error("Product missing");
+      if (!blob) {
+        console.error("PDF blob empty");
 
-   return;
+        return;
+      }
 
-  }
+      const url = URL.createObjectURL(blob);
 
-  const blob = await pdf(
+      const link = document.createElement("a");
 
-   <ProductPDF product={product} />
+      link.href = url;
 
-  ).toBlob();
+      link.download = `${product.shortName || product.name || "datasheet"}-TDS.pdf`;
 
-  if (!blob) {
+      document.body.appendChild(link);
 
-   console.error("PDF blob empty");
+      link.click();
 
-   return;
+      document.body.removeChild(link);
 
-  }
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("PDF generation error:", err);
 
-  const url = URL.createObjectURL(blob);
+      alert("PDF generation failed");
+    }
+  };
+  const handleMSDSDownload = async () => {
+    try {
+      const response = await fetch(msdsUrl);
 
-  const link = document.createElement("a");
+      const blob = await response.blob();
 
-  link.href = url;
+      const url = window.URL.createObjectURL(blob);
 
-  link.download =
-   `${product.shortName || product.name || "datasheet"}-TDS.pdf`;
+      const link = document.createElement("a");
 
-  document.body.appendChild(link);
+      link.href = url;
 
-  link.click();
+      link.download = `${product.shortName}-MSDS.pdf`;
 
-  document.body.removeChild(link);
+      document.body.appendChild(link);
 
-  URL.revokeObjectURL(url);
+      link.click();
 
- }
+      document.body.removeChild(link);
 
- catch (err) {
-
-  console.error("PDF generation error:", err);
-
-  alert("PDF generation failed");
-
- }
-
-};
- const handleMSDSDownload = async () => {
-
- try {
-
-  const response = await fetch(msdsUrl);
-
-  const blob = await response.blob();
-
-  const url = window.URL.createObjectURL(blob);
-
-  const link = document.createElement("a");
-
-  link.href = url;
-
-  link.download = `${product.shortName}-MSDS.pdf`;
-
-  document.body.appendChild(link);
-
-  link.click();
-
-  document.body.removeChild(link);
-
-  window.URL.revokeObjectURL(url);
-
- } catch (err) {
-
-  console.error(err);
-
- }
-
-};
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return ReactDOM.createPortal(
     <motion.div
@@ -138,7 +132,8 @@ const msdsUrl = product?.msds || null;
       <div
         onClick={onClose}
         style={{
-          position: "absolute", inset: 0,
+          position: "absolute",
+          inset: 0,
           background: "rgba(8, 6, 4, 0.7)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
@@ -149,7 +144,9 @@ const msdsUrl = product?.msds || null;
       <div
         onClick={onClose}
         style={{
-          position: "absolute", inset: 0, zIndex: 1,
+          position: "absolute",
+          inset: 0,
+          zIndex: 1,
           overflowY: "auto",
           overflowX: "hidden",
           display: "flex",
@@ -166,7 +163,8 @@ const msdsUrl = product?.msds || null;
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
           onClick={(e) => e.stopPropagation()}
           style={{
-            position: "relative", zIndex: 2,
+            position: "relative",
+            zIndex: 2,
             width: "100%",
             maxWidth: "640px",
             display: "flex",
@@ -176,112 +174,96 @@ const msdsUrl = product?.msds || null;
         >
           {/* ── Action bar ── */}
           <div
-  style={{
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center"
-  }}
->
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <button
+                onClick={onClose}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  color: "rgba(255,255,255,0.45)",
+                  fontSize: "0.75rem",
+                }}
+              >
+                ← Back
+              </button>
 
-  <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
+              {msdsUrl && (
+                <button
+                  onClick={handleMSDSDownload}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    padding: "6px 12px",
+                    borderRadius: "999px",
+                    background: "rgba(34,197,94,0.15)",
+                    border: "1px solid rgba(34,197,94,0.35)",
+                    color: "#22c55e",
+                    fontSize: "0.72rem",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}
+                >
+                  <svg width="11" height="11" viewBox="0 0 14 14">
+                    <path
+                      d="M7 1v8m0 0L4 6m3 3l3-3M1 11h12"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  Download MSDS
+                </button>
+              )}
+            </div>
 
-    <button
-      onClick={onClose}
-      style={{
-        display:"flex",
-        alignItems:"center",
-        gap:"6px",
-        background:"none",
-        border:"none",
-        cursor:"pointer",
-        color:"rgba(255,255,255,0.45)",
-        fontSize:"0.75rem"
-      }}
-    >
-      ← Back
-    </button>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <button
+                onClick={handleDownload}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  padding: "6px 12px",
+                  borderRadius: "999px",
+                  background: "rgba(255,193,7,0.15)",
+                  border: "1px solid rgba(255,193,7,0.35)",
+                  color: "#fbbf24",
+                  fontSize: "0.72rem",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                }}
+              >
+                Download PDF
+              </button>
 
-
-    {msdsUrl && (
-
-      <button
- onClick={handleMSDSDownload}
- style={{
-  display:"flex",
-  alignItems:"center",
-  gap:"6px",
-  padding:"6px 12px",
-  borderRadius:"999px",
-  background:"rgba(34,197,94,0.15)",
-  border:"1px solid rgba(34,197,94,0.35)",
-  color:"#22c55e",
-  fontSize:"0.72rem",
-  fontWeight:600,
-  cursor:"pointer"
- }}
->
-
- <svg width="11" height="11" viewBox="0 0 14 14">
-
-  <path
-   d="M7 1v8m0 0L4 6m3 3l3-3M1 11h12"
-   stroke="currentColor"
-   strokeWidth="1.5"
-   strokeLinecap="round"
-   strokeLinejoin="round"
-  />
-
- </svg>
-
- Download MSDS
-
-</button>
-
-    )}
-
-  </div>
-
-
-  <div style={{ display:"flex", alignItems:"center", gap:"8px" }}>
-
-    <button
-      onClick={handleDownload}
-      style={{
-        display:"flex",
-        alignItems:"center",
-        gap:"6px",
-        padding:"6px 12px",
-        borderRadius:"999px",
-        background:"rgba(255,193,7,0.15)",
-        border:"1px solid rgba(255,193,7,0.35)",
-        color:"#fbbf24",
-        fontSize:"0.72rem",
-        fontWeight:600,
-        cursor:"pointer"
-      }}
-    >
-      Download PDF
-    </button>
-
-
-    <button
-      onClick={onClose}
-      style={{
-        background:"rgba(255,255,255,0.08)",
-        border:"1px solid rgba(255,255,255,0.14)",
-        borderRadius:"50%",
-        width:"28px",
-        height:"28px",
-        color:"rgba(255,255,255,0.6)",
-        cursor:"pointer"
-      }}
-    >
-      ×
-    </button>
-
-  </div>
-
-</div>
+              <button
+                onClick={onClose}
+                style={{
+                  background: "rgba(255,255,255,0.08)",
+                  border: "1px solid rgba(255,255,255,0.14)",
+                  borderRadius: "50%",
+                  width: "28px",
+                  height: "28px",
+                  color: "rgba(255,255,255,0.6)",
+                  cursor: "pointer",
+                }}
+              >
+                ×
+              </button>
+            </div>
+          </div>
 
           {/* ── Datasheet card ── */}
           <div
@@ -296,116 +278,124 @@ const msdsUrl = product?.msds || null;
             }}
           >
             {/* Header */}
-            <div style={{
-              display: "flex", alignItems: "center", justifyContent: "space-between",
-              padding: "clamp(12px,3vw,20px) clamp(14px,4vw,28px)",
-              borderBottom: "1px solid rgba(255,255,255,0.07)",
-            }}>
-              <img src={logoSrc} alt="Best Mountain" style={{ height: "clamp(24px,5vw,36px)", width: "auto" }} />
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "clamp(12px,3vw,20px) clamp(14px,4vw,28px)",
+                borderBottom: "1px solid rgba(255,255,255,0.07)",
+              }}
+            >
+              <img
+                src={logoSrc}
+                alt="Best Mountain"
+                style={{ height: "clamp(24px,5vw,36px)", width: "auto" }}
+              />
               {categoryName && (
-                <span style={{
-                  fontSize: "clamp(0.5rem,1.5vw,0.62rem)", fontWeight: 700, textTransform: "uppercase",
-                  letterSpacing: "0.1em", padding: "4px 10px", borderRadius: "999px",
-                  background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.13)",
-                  color: "rgba(238,232,205,0.8)",
-                }}>
+                <span
+                  style={{
+                    fontSize: "clamp(0.5rem,1.5vw,0.62rem)",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.1em",
+                    padding: "4px 10px",
+                    borderRadius: "999px",
+                    background: "rgba(255,255,255,0.07)",
+                    border: "1px solid rgba(255,255,255,0.13)",
+                    color: "rgba(238,232,205,0.8)",
+                  }}
+                >
                   {categoryName}
                 </span>
               )}
             </div>
 
             {/* Hero */}
-          
-<div
-  style={{
-    padding: "clamp(14px,3vw,22px) clamp(14px,4vw,28px)",
-    borderBottom: "1px solid rgba(255,255,255,0.07)",
-    display: "flex",
-    alignItems: "center",
-    gap: "16px"
-  }}
->
 
- 
-{imageUrl && (
-  <img
-    src={imageUrl}
-    alt={product.name}
-    onClick={() => setPreviewOpen(true)}
-    style={{
-      width: "120px",
-      height: "120px",
-      borderRadius: "10px",
-      objectFit: "contain",
-      border: "1px solid rgba(255,255,255,0.12)",
-      cursor: "zoom-in"
-    }}
-  />
-)}
+            <div
+              style={{
+                padding: "clamp(14px,3vw,22px) clamp(14px,4vw,28px)",
+                borderBottom: "1px solid rgba(255,255,255,0.07)",
+                display: "flex",
+                alignItems: "center",
+                gap: "16px",
+              }}
+            >
+              {imageUrl && (
+                <img
+                  src={imageUrl}
+                  alt={product.name}
+                  onClick={() => setPreviewOpen(true)}
+                  style={{
+                    width: "120px",
+                    height: "120px",
+                    borderRadius: "10px",
+                    objectFit: "contain",
+                    border: "1px solid rgba(255,255,255,0.12)",
+                    cursor: "zoom-in",
+                  }}
+                />
+              )}
 
+              {previewOpen && (
+                <div
+                  onClick={() => setPreviewOpen(false)}
+                  style={{
+                    position: "fixed",
+                    inset: 0,
+                    background: "rgba(0,0,0,0.85)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    zIndex: 9999,
+                    padding: "20px",
+                  }}
+                >
+                  <img
+                    src={imageUrl}
+                    alt="preview"
+                    onClick={(e) => e.stopPropagation()}
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "100%",
+                      objectFit: "contain",
+                      borderRadius: "12px",
+                      boxShadow: "0 10px 40px rgba(0,0,0,0.6)",
+                    }}
+                  />
+                </div>
+              )}
 
-{previewOpen && (
-  <div
-    onClick={() => setPreviewOpen(false)}
-    style={{
-      position: "fixed",
-      inset: 0,
-      background: "rgba(0,0,0,0.85)",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      zIndex: 9999,
-      padding: "20px"
-    }}
-  >
-    <img
-      src={imageUrl}
-      alt="preview"
-      onClick={(e) => e.stopPropagation()}
-      style={{
-        maxWidth: "100%",
-        maxHeight: "100%",
-        objectFit: "contain",
-        borderRadius: "12px",
-        boxShadow: "0 10px 40px rgba(0,0,0,0.6)"
-      }}
-    />
-  </div>
-)}
+              <div>
+                <h1
+                  style={{
+                    fontSize: "clamp(1.6rem,6vw,2.6rem)",
+                    fontWeight: 900,
+                    color: "#eee8cd",
+                    letterSpacing: "-0.02em",
+                    lineHeight: 1,
+                    margin: 0,
+                  }}
+                >
+                  {product.shortName || product.name}
+                </h1>
 
-  <div>
-
-    <h1
-      style={{
-        fontSize: "clamp(1.6rem,6vw,2.6rem)",
-        fontWeight: 900,
-        color: "#eee8cd",
-        letterSpacing: "-0.02em",
-        lineHeight: 1,
-        margin: 0
-      }}
-    >
-      {product.shortName || product.name}
-    </h1>
-
-    <p
-      style={{
-        marginTop: "5px",
-        fontSize: "clamp(0.5rem,1.3vw,0.58rem)",
-        fontWeight: 600,
-        letterSpacing: "0.16em",
-        textTransform: "uppercase",
-        color: "rgba(238,232,205,0.4)",
-        lineHeight: 1
-      }}
-    >
-      Technical Data Sheet
-    </p>
-
-  </div>
-
-</div>
-             
+                <p
+                  style={{
+                    marginTop: "5px",
+                    fontSize: "clamp(0.5rem,1.3vw,0.58rem)",
+                    fontWeight: 600,
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "rgba(238,232,205,0.4)",
+                    lineHeight: 1,
+                  }}
+                >
+                  Technical Data Sheet
+                </p>
+              </div>
+            </div>
 
             {/* Stats row — 3 cols on sm+, 2 cols stacked on mobile */}
             <div style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
@@ -419,34 +409,97 @@ const msdsUrl = product?.msds || null;
                 }
               `}</style>
               <div className="bm-stats">
-                <div style={{ padding: "clamp(12px,2.5vw,18px) clamp(14px,4vw,28px)", borderRight: "1px solid rgba(255,255,255,0.07)" }}>
+                <div
+                  style={{
+                    padding: "clamp(12px,2.5vw,18px) clamp(14px,4vw,28px)",
+                    borderRight: "1px solid rgba(255,255,255,0.07)",
+                  }}
+                >
                   <Label>Fused Process</Label>
-                  <p style={{ fontSize: "clamp(1rem,3vw,1.35rem)", fontWeight: 700, color: "#eee8cd", margin: "5px 0 0" }}>
+                  <p
+                    style={{
+                      fontSize: "clamp(1rem,3vw,1.35rem)",
+                      fontWeight: 700,
+                      color: "#eee8cd",
+                      margin: "5px 0 0",
+                    }}
+                  >
                     {product.fusedProcess || "—"}
                   </p>
                 </div>
-                <div style={{ padding: "clamp(12px,2.5vw,18px) clamp(10px,2.5vw,20px)" }}>
+                <div
+                  style={{
+                    padding: "clamp(12px,2.5vw,18px) clamp(10px,2.5vw,20px)",
+                  }}
+                >
                   <Label>Bulk Density</Label>
-                  <p style={{ fontSize: "clamp(1rem,3vw,1.35rem)", fontWeight: 700, color: "#eee8cd", margin: "5px 0 0" }}>
+                  <p
+                    style={{
+                      fontSize: "clamp(1rem,3vw,1.35rem)",
+                      fontWeight: 700,
+                      color: "#eee8cd",
+                      margin: "5px 0 0",
+                    }}
+                  >
                     {product.bulkDensity != null ? product.bulkDensity : "—"}
                   </p>
                 </div>
-                <div className="bm-stats-c3" style={{ padding: "clamp(12px,2.5vw,18px) clamp(14px,4vw,28px)" }}>
+                <div
+                  className="bm-stats-c3"
+                  style={{
+                    padding: "clamp(12px,2.5vw,18px) clamp(14px,4vw,28px)",
+                  }}
+                >
                   <Label>Color Tone</Label>
                   {product.colorTones?.length > 0 ? (
-                    <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "7px" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "6px",
+                        flexWrap: "wrap",
+                        marginTop: "7px",
+                      }}
+                    >
                       {product.colorTones.map((tone, i) => (
-                        <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "3px" }}>
-                          <div style={{
-                            width: "28px", height: "18px", borderRadius: "3px",
-                            background: tone.color || "#ccc",
-                            border: "1px solid rgba(255,255,255,0.12)",
-                          }} />
-                          <span style={{ fontSize: "0.42rem", color: "rgba(238,232,205,0.55)", textTransform: "uppercase", textAlign: "center", lineHeight: 1.4 }}>
+                        <div
+                          key={i}
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            gap: "3px",
+                          }}
+                        >
+                          <div
+                            style={{
+                              width: "28px",
+                              height: "18px",
+                              borderRadius: "3px",
+                              background: tone.color || "#ccc",
+                              border: "1px solid rgba(255,255,255,0.12)",
+                            }}
+                          />
+                          <span
+                            style={{
+                              fontSize: "0.42rem",
+                              color: "rgba(238,232,205,0.55)",
+                              textTransform: "uppercase",
+                              textAlign: "center",
+                              lineHeight: 1.4,
+                            }}
+                          >
                             {tone.name}
                           </span>
                           {tone.color && (
-                            <span style={{ fontSize: "0.38rem", color: "rgba(238,232,205,0.3)", textAlign: "center", letterSpacing: "0.04em", fontFamily: "monospace" }}>
+                            <span
+                              style={{
+                                fontSize: "0.38rem",
+                                color: "rgba(238,232,205,0.3)",
+                                textAlign: "center",
+                                letterSpacing: "0.04em",
+                                fontFamily: "monospace",
+                              }}
+                            >
                               {tone.color.toUpperCase()}
                             </span>
                           )}
@@ -454,7 +507,14 @@ const msdsUrl = product?.msds || null;
                       ))}
                     </div>
                   ) : (
-                    <span style={{ color: "rgba(255,255,255,0.25)", fontSize: "0.85rem" }}>—</span>
+                    <span
+                      style={{
+                        color: "rgba(255,255,255,0.25)",
+                        fontSize: "0.85rem",
+                      }}
+                    >
+                      —
+                    </span>
                   )}
                 </div>
               </div>
@@ -472,25 +532,47 @@ const msdsUrl = product?.msds || null;
               `}</style>
               <div className="bm-body">
                 {/* Chemical Composition */}
-                <div style={{ padding: "clamp(14px,3vw,20px) clamp(14px,4vw,28px)" }}>
-                  <h2 style={{
-                    fontSize: "clamp(0.5rem,1.3vw,0.58rem)", fontWeight: 700, textTransform: "uppercase",
-                    letterSpacing: "0.08em", color: "#fbbf24", lineHeight: 1.5, marginBottom: "10px",
-                  }}>
-                    Chemical Composition<br />& Physical Analysis
+                <div
+                  style={{
+                    padding: "clamp(14px,3vw,20px) clamp(14px,4vw,28px)",
+                  }}
+                >
+                  <h2
+                    style={{
+                      fontSize: "clamp(0.5rem,1.3vw,0.58rem)",
+                      fontWeight: 700,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.08em",
+                      color: "#fbbf24",
+                      lineHeight: 1.5,
+                      marginBottom: "10px",
+                    }}
+                  >
+                    Chemical Composition
+                    <br />& Physical Analysis
                   </h2>
                   {product.chemicalComposition?.length > 0 ? (
-                    <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                    <table
+                      style={{ width: "100%", borderCollapse: "collapse" }}
+                    >
                       <thead>
                         <tr>
                           {["Name", "Typical", "Min %", "Max %"].map((h) => (
-                            <th key={h} style={{
-                              textAlign: "left", fontSize: "0.44rem",
-                              color: "rgba(238,232,205,0.35)", fontWeight: 600,
-                              textTransform: "uppercase", letterSpacing: "0.06em",
-                              borderBottom: "1px solid rgba(255,255,255,0.08)",
-                              paddingRight: "8px", paddingBottom: "6px",
-                            }}>
+                            <th
+                              key={h}
+                              style={{
+                                textAlign: "left",
+                                fontSize: "0.44rem",
+                                color: "rgba(238,232,205,0.35)",
+                                fontWeight: 600,
+                                textTransform: "uppercase",
+                                letterSpacing: "0.06em",
+                                borderBottom:
+                                  "1px solid rgba(255,255,255,0.08)",
+                                paddingRight: "8px",
+                                paddingBottom: "6px",
+                              }}
+                            >
                               {h}
                             </th>
                           ))}
@@ -498,57 +580,121 @@ const msdsUrl = product?.msds || null;
                       </thead>
                       <tbody>
                         {product.chemicalComposition.map((row, i) => (
-                          <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-                            {[row.name, row.typical, row.min, row.max].map((cell, j) => (
-                              <td key={j} style={{
-                                fontSize: "0.52rem",
-                                color: j === 0 ? "rgba(238,232,205,0.88)" : "rgba(238,232,205,0.55)",
-                                fontWeight: j === 0 ? 600 : 400,
-                                padding: "5px 8px 5px 0",
-                              }}>
-                                {cell || "—"}
-                              </td>
-                            ))}
+                          <tr
+                            key={i}
+                            style={{
+                              borderBottom: "1px solid rgba(255,255,255,0.04)",
+                            }}
+                          >
+                            {[row.name, row.typical, row.min, row.max].map(
+                              (cell, j) => (
+                                <td
+                                  key={j}
+                                  style={{
+                                    fontSize: "0.52rem",
+                                    color:
+                                      j === 0
+                                        ? "rgba(238,232,205,0.88)"
+                                        : "rgba(238,232,205,0.55)",
+                                    fontWeight: j === 0 ? 600 : 400,
+                                    padding: "5px 8px 5px 0",
+                                  }}
+                                >
+                                  {cell || "—"}
+                                </td>
+                              ),
+                            )}
                           </tr>
                         ))}
                       </tbody>
                     </table>
                   ) : (
-                    <p style={{ fontSize: "0.58rem", color: "rgba(238,232,205,0.3)" }}>
+                    <p
+                      style={{
+                        fontSize: "0.58rem",
+                        color: "rgba(238,232,205,0.3)",
+                      }}
+                    >
                       No composition data available.
                     </p>
                   )}
                 </div>
 
                 {/* Remarks / Sizing / Application */}
-                <div className="bm-body-right" style={{ padding: "clamp(14px,3vw,20px) clamp(14px,4vw,20px)", display: "flex", flexDirection: "column", gap: "14px" }}>
+                <div
+                  className="bm-body-right"
+                  style={{
+                    padding: "clamp(14px,3vw,20px) clamp(14px,4vw,20px)",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "14px",
+                  }}
+                >
                   {[
                     { label: "Remarks", value: product.remarks },
                     { label: "Sizing", value: product.sizing },
-                    { label: "Industrial Application", value: product.industrialApplication },
+                    {
+                      label: "Industrial Application",
+                      value: product.industrialApplication,
+                    },
                   ].map(({ label, value }) =>
                     value ? (
                       <div key={label}>
-                        <p style={{ fontSize: "0.52rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#fbbf24", margin: 0 }}>
+                        <p
+                          style={{
+                            fontSize: "0.52rem",
+                            fontWeight: 700,
+                            textTransform: "uppercase",
+                            letterSpacing: "0.1em",
+                            color: "#fbbf24",
+                            margin: 0,
+                          }}
+                        >
                           {label}
                         </p>
                         <Divider />
-                        <p style={{ fontSize: "0.58rem", color: "rgba(238,232,205,0.72)", lineHeight: 1.65, margin: 0 }}>
+                        <p
+                          style={{
+                            fontSize: "0.58rem",
+                            color: "rgba(238,232,205,0.72)",
+                            lineHeight: 1.65,
+                            margin: 0,
+                          }}
+                        >
                           {value}
                         </p>
                       </div>
-                    ) : null
+                    ) : null,
                   )}
                 </div>
               </div>
             </div>
 
             {/* Footer */}
-            <div style={{ padding: "12px clamp(14px,4vw,28px)", textAlign: "center", background: "rgba(0,0,0,0.25)" }}>
-              <p style={{ fontSize: "0.48rem", color: "rgba(238,232,205,0.35)", margin: 0 }}>
-                © Room 1112, 11/F Hollywood Plaza, Nathan road 610 Mongkok, Hong Kong
+            <div
+              style={{
+                padding: "12px clamp(14px,4vw,28px)",
+                textAlign: "center",
+                background: "rgba(0,0,0,0.25)",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: "0.48rem",
+                  color: "rgba(238,232,205,0.35)",
+                  margin: 0,
+                }}
+              >
+                © Room 1112, 11/F Hollywood Plaza, Nathan road 610 Mongkok, Hong
+                Kong
               </p>
-              <p style={{ fontSize: "0.42rem", color: "rgba(238,232,205,0.2)", marginTop: "3px" }}>
+              <p
+                style={{
+                  fontSize: "0.42rem",
+                  color: "rgba(238,232,205,0.2)",
+                  marginTop: "3px",
+                }}
+              >
                 COPYRIGHT © 2017-2026 BEST MOUNTAIN LIMITED
               </p>
             </div>
@@ -556,7 +702,7 @@ const msdsUrl = product?.msds || null;
         </motion.div>
       </div>
     </motion.div>,
-    document.body
+    document.body,
   );
 });
 

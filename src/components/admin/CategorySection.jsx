@@ -1,6 +1,12 @@
-'use no memo';
+"use no memo";
 import { useState } from "react";
-import { FiPlus, FiEdit2, FiTrash2, FiGrid, FiAlertCircle } from "react-icons/fi";
+import {
+  FiPlus,
+  FiEdit2,
+  FiTrash2,
+  FiGrid,
+  FiAlertCircle,
+} from "react-icons/fi";
 import Modal from "./Modal";
 import ConfirmDialog from "./ConfirmDialog";
 import CategoryForm from "./CategoryForm";
@@ -11,7 +17,9 @@ function EmptyState() {
     <div className="py-20 text-center">
       <FiGrid className="text-slate-300 text-5xl mx-auto mb-3" />
       <p className="text-slate-500 font-medium text-sm">No categories yet.</p>
-      <p className="text-slate-400 text-xs mt-1">Click <strong>Add Category</strong> to get started.</p>
+      <p className="text-slate-400 text-xs mt-1">
+        Click <strong>Add Category</strong> to get started.
+      </p>
     </div>
   );
 }
@@ -22,7 +30,10 @@ function ErrorDialog({ isOpen, onClose, message }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+      <div
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={onClose}
+      />
       {/* Panel */}
       <div className="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl p-6">
         <div className="flex items-start gap-4 mb-5">
@@ -30,7 +41,9 @@ function ErrorDialog({ isOpen, onClose, message }) {
             <FiAlertCircle className="text-red-500 text-lg" />
           </div>
           <div>
-            <h3 className="text-slate-800 font-bold text-base mb-1">Cannot Delete Category</h3>
+            <h3 className="text-slate-800 font-bold text-base mb-1">
+              Cannot Delete Category
+            </h3>
             <p className="text-slate-600 text-sm leading-relaxed">{message}</p>
           </div>
         </div>
@@ -48,15 +61,29 @@ function ErrorDialog({ isOpen, onClose, message }) {
 }
 
 // ── CategorySection ──────────────────────────────────────────────────────
-export default function CategorySection({ categories, onAdd, onUpdate, onDelete }) {
+export default function CategorySection({
+  categories,
+  onAdd,
+  onUpdate,
+  onDelete,
+}) {
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
-  const [errorMsg, setErrorMsg] = useState("");   // "" = hidden
+  const [errorMsg, setErrorMsg] = useState(""); // "" = hidden
 
-  function openAdd() { setEditing(null); setModalOpen(true); }
-  function openEdit(cat) { setEditing(cat); setModalOpen(true); }
-  function closeModal() { setModalOpen(false); setEditing(null); }
+  function openAdd() {
+    setEditing(null);
+    setModalOpen(true);
+  }
+  function openEdit(cat) {
+    setEditing(cat);
+    setModalOpen(true);
+  }
+  function closeModal() {
+    setModalOpen(false);
+    setEditing(null);
+  }
 
   function handleFormSubmit(data) {
     if (editing) {
@@ -84,9 +111,12 @@ export default function CategorySection({ categories, onAdd, onUpdate, onDelete 
       {/* ── Header ─────────────────────────────────────────────────────── */}
       <div className="flex flex-wrap items-start justify-between gap-3 mb-5">
         <div>
-          <h2 className="text-slate-800 text-lg md:text-xl font-bold">All Categories</h2>
+          <h2 className="text-slate-800 text-lg md:text-xl font-bold">
+            All Categories
+          </h2>
           <p className="text-slate-500 text-sm mt-0.5">
-            {categories.length} {categories.length === 1 ? "category" : "categories"} total
+            {categories.length}{" "}
+            {categories.length === 1 ? "category" : "categories"} total
           </p>
         </div>
         <button
@@ -109,7 +139,10 @@ export default function CategorySection({ categories, onAdd, onUpdate, onDelete 
                 <tr>
                   {["#", "Category Name", "Actions"].map(function (h) {
                     return (
-                      <th key={h} className="px-4 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500 whitespace-nowrap">
+                      <th
+                        key={h}
+                        className="px-4 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500 whitespace-nowrap"
+                      >
                         {h}
                       </th>
                     );
@@ -119,7 +152,10 @@ export default function CategorySection({ categories, onAdd, onUpdate, onDelete 
               <tbody className="divide-y divide-slate-100">
                 {categories.map(function (c, idx) {
                   return (
-                    <tr key={c._id} className="hover:bg-slate-50 transition-colors">
+                    <tr
+                      key={c._id}
+                      className="hover:bg-slate-50 transition-colors"
+                    >
                       <td className="px-4 py-4 text-slate-400 font-mono text-xs w-10">
                         {String(idx + 1).padStart(2, "0")}
                       </td>
@@ -128,20 +164,26 @@ export default function CategorySection({ categories, onAdd, onUpdate, onDelete 
                           <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center shrink-0">
                             <FiGrid className="text-indigo-500 text-xs" />
                           </div>
-                          <span className="text-slate-800 font-medium">{c.name}</span>
+                          <span className="text-slate-800 font-medium">
+                            {c.name}
+                          </span>
                         </div>
                       </td>
                       <td className="px-4 py-4 w-24">
                         <div className="flex items-center gap-2">
                           <button
-                            onClick={function () { openEdit(c); }}
+                            onClick={function () {
+                              openEdit(c);
+                            }}
                             title="Edit"
                             className="p-2 rounded-lg text-slate-400 hover:bg-indigo-50 hover:text-indigo-600 transition cursor-pointer"
                           >
                             <FiEdit2 className="text-sm" />
                           </button>
                           <button
-                            onClick={function () { setDeleteTarget(c); }}
+                            onClick={function () {
+                              setDeleteTarget(c);
+                            }}
                             title="Delete"
                             className="p-2 rounded-lg text-slate-400 hover:bg-red-50 hover:text-red-500 transition cursor-pointer"
                           >
@@ -166,25 +208,36 @@ export default function CategorySection({ categories, onAdd, onUpdate, onDelete 
           <div className="space-y-3">
             {categories.map(function (c, idx) {
               return (
-                <div key={c._id} className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
+                <div
+                  key={c._id}
+                  className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4"
+                >
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0">
                       <FiGrid className="text-indigo-500 text-sm" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <span className="text-slate-400 font-mono text-xs">{String(idx + 1).padStart(2, "0")} </span>
-                      <span className="text-slate-800 font-semibold text-sm">{c.name}</span>
+                      <span className="text-slate-400 font-mono text-xs">
+                        {String(idx + 1).padStart(2, "0")}{" "}
+                      </span>
+                      <span className="text-slate-800 font-semibold text-sm">
+                        {c.name}
+                      </span>
                     </div>
                   </div>
                   <div className="flex gap-2 mt-3 pt-3 border-t border-slate-100">
                     <button
-                      onClick={function () { openEdit(c); }}
+                      onClick={function () {
+                        openEdit(c);
+                      }}
                       className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg border border-slate-200 text-slate-500 text-xs font-medium hover:border-indigo-300 hover:text-indigo-600 transition cursor-pointer"
                     >
                       <FiEdit2 className="text-xs" /> Edit
                     </button>
                     <button
-                      onClick={function () { setDeleteTarget(c); }}
+                      onClick={function () {
+                        setDeleteTarget(c);
+                      }}
                       className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg border border-slate-200 text-slate-500 text-xs font-medium hover:border-red-300 hover:text-red-500 transition cursor-pointer"
                     >
                       <FiTrash2 className="text-xs" /> Delete
@@ -201,7 +254,7 @@ export default function CategorySection({ categories, onAdd, onUpdate, onDelete 
       <Modal
         isOpen={modalOpen}
         onClose={closeModal}
-        title={editing ? ("Edit: " + editing.name) : "Add New Category"}
+        title={editing ? "Edit: " + editing.name : "Add New Category"}
         size="sm"
       >
         <CategoryForm
@@ -214,19 +267,25 @@ export default function CategorySection({ categories, onAdd, onUpdate, onDelete 
       {/* ── Delete Confirmation ──────────────────────────────────────────── */}
       <ConfirmDialog
         isOpen={!!deleteTarget}
-        onClose={function () { setDeleteTarget(null); }}
+        onClose={function () {
+          setDeleteTarget(null);
+        }}
         onConfirm={handleDeleteConfirm}
-        message={"Are you sure you want to delete \"" + (deleteTarget ? deleteTarget.name : "") + "\"? This action cannot be undone."}
+        message={
+          'Are you sure you want to delete "' +
+          (deleteTarget ? deleteTarget.name : "") +
+          '"? This action cannot be undone.'
+        }
       />
 
       {/* ── Error Dialog (shown when delete is blocked by backend) ─────── */}
       <ErrorDialog
         isOpen={!!errorMsg}
-        onClose={function () { setErrorMsg(""); }}
+        onClose={function () {
+          setErrorMsg("");
+        }}
         message={errorMsg}
       />
     </div>
   );
 }
-
-

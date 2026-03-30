@@ -24,10 +24,7 @@ export default function PrimaryButton({
     const el = document.getElementById(scrollTo);
     if (!el) return;
 
-    const y =
-      el.getBoundingClientRect().top +
-      window.scrollY -
-      offset;
+    const y = el.getBoundingClientRect().top + window.scrollY - offset;
 
     window.scrollTo({ top: y, behavior: "smooth" });
   };
@@ -95,9 +92,7 @@ export default function PrimaryButton({
         </span>
 
         {/* Text */}
-        <span className="whitespace-nowrap">
-          {children}
-        </span>
+        <span className="whitespace-nowrap">{children}</span>
       </span>
     </>
   );
@@ -105,11 +100,7 @@ export default function PrimaryButton({
   // 1. Smooth scroll
   if (scrollTo) {
     return (
-      <button
-        type={type}
-        onClick={handleScroll}
-        className={baseClasses}
-      >
+      <button type={type} onClick={handleScroll} className={baseClasses}>
         {Content}
       </button>
     );
@@ -140,11 +131,7 @@ export default function PrimaryButton({
 
   // 4. Normal button
   return (
-    <button
-      type={type}
-      onClick={onClick}
-      className={baseClasses}
-    >
+    <button type={type} onClick={onClick} className={baseClasses}>
       {Content}
     </button>
   );

@@ -1,9 +1,12 @@
-
-
-
-'use no memo';
+"use no memo";
 import { useState, useEffect, useRef } from "react";
-import { FiPlus, FiTrash2, FiUploadCloud, FiChevronDown, FiX } from "react-icons/fi";
+import {
+  FiPlus,
+  FiTrash2,
+  FiUploadCloud,
+  FiChevronDown,
+  FiX,
+} from "react-icons/fi";
 
 /* ─────────────────────────────────────────────────────────────
    GLOBAL STYLES  (injected once, inside the component tree)
@@ -310,28 +313,32 @@ const EMPTY_ROW = { name: "", typical: "", min: "", max: "" };
 // ── Helpers ─────────────────────────────────────────────────────────────
 function makeEmpty() {
   return {
-    categoryId: "", name: "", shortName: "",
-    colorTones: DEFAULT_TONES.map(t => ({ ...t })),
-    bulkDensity: "", fusedProcess: "",
+    categoryId: "",
+    name: "",
+    shortName: "",
+    colorTones: DEFAULT_TONES.map((t) => ({ ...t })),
+    bulkDensity: "",
+    fusedProcess: "",
     chemicalComposition: [{ ...EMPTY_ROW }],
-    remarks: "", sizing: "", industrialApplication: "",
-    image: null, imagePreview: "",
+    remarks: "",
+    sizing: "",
+    industrialApplication: "",
+    image: null,
+    imagePreview: "",
   };
 }
 
 function deepClone(p) {
- const BASE_URL =
- (import.meta.env.VITE_API_URL || "http://localhost:5000/api")
-   .replace("/api","");
+  const BASE_URL = (
+    import.meta.env.VITE_API_URL || "http://localhost:5000/api"
+  ).replace("/api", "");
   const catId = p.category?._id || p.category || p.categoryId || "";
   return {
-    ...p, categoryId: String(catId),
-    colorTones: (p.colorTones || []).map(t => ({ ...t })),
-    chemicalComposition: (p.chemicalComposition || []).map(r => ({ ...r })),
- imagePreview:
- p?.image && p.image.startsWith("http")
-   ? p.image
-   : "",
+    ...p,
+    categoryId: String(catId),
+    colorTones: (p.colorTones || []).map((t) => ({ ...t })),
+    chemicalComposition: (p.chemicalComposition || []).map((r) => ({ ...r })),
+    imagePreview: p?.image && p.image.startsWith("http") ? p.image : "",
     image: null,
   };
 }
@@ -350,12 +357,13 @@ function Field({ label, required, error, children }) {
   return (
     <div>
       <label className="pf-label">
-        {label}{required && <span className="pf-required">*</span>}
+        {label}
+        {required && <span className="pf-required">*</span>}
       </label>
       {children}
       {error && (
         <p className="pf-err">
-          <FiX size={11}/> {error}
+          <FiX size={11} /> {error}
         </p>
       )}
     </div>
@@ -363,11 +371,18 @@ function Field({ label, required, error, children }) {
 }
 
 // ── Main Component ──────────────────────────────────────────────────────
-export default function ProductForm({ initial, categories, onSubmit, onCancel }) {
-  const [form, setForm] = useState(() => initial ? deepClone(initial) : makeEmpty());
+export default function ProductForm({
+  initial,
+  categories,
+  onSubmit,
+  onCancel,
+}) {
+  const [form, setForm] = useState(() =>
+    initial ? deepClone(initial) : makeEmpty(),
+  );
   const [errors, setErrors] = useState({});
   const [msdsOpen, setMsdsOpen] = useState(false);
-const [pdfFile, setPdfFile] = useState(null);
+  const [pdfFile, setPdfFile] = useState(null);
   const styleRef = useRef(null);
 
   // Inject global CSS once
@@ -380,91 +395,102 @@ const [pdfFile, setPdfFile] = useState(null);
     }
   }, []);
 
-  
+ useEffect(() => {
+  if (!initial) return;
 
-  useEffect(() => {
+  const catId =
+    initial.category?._id ||
+    initial.category ||
+    initial.categoryId ||
+    "";
 
- if (!initial) return;
+  setForm({
+    ...initial,
 
- const BASE_URL =
- import.meta.env.DEV
-   ? "http://localhost:5000"
-   : import.meta.env.VITE_API_URL.replace("/api","");
- setForm({
-   ...initial,
+    categoryId: String(catId), // ⭐ important fix
 
-  imagePreview:
- initial.image && initial.image.startsWith("http")
-   ? initial.image
-   : "",
+    imagePreview:
+      initial.image && initial.image.startsWith("http")
+        ? initial.image
+        : "",
 
-   image: null,
+    image: null,
 
-   colorTones: initial.colorTones || [],
+    colorTones: initial.colorTones || [],
 
-   chemicalComposition:
-     initial.chemicalComposition || []
-
- });
-
+    chemicalComposition: initial.chemicalComposition || [],
+  });
 }, [initial]);
 
   function setField(key, val) {
-    setForm(p => ({ ...p, [key]: val }));
+    setForm((p) => ({ ...p, [key]: val }));
   }
   function setToneName(i, v) {
-    setForm(p => { const t = p.colorTones.map((x,j) => j===i ? {...x,name:v} : x); return {...p,colorTones:t}; });
+    setForm((p) => {
+      const t = p.colorTones.map((x, j) => (j === i ? { ...x, name: v } : x));
+      return { ...p, colorTones: t };
+    });
   }
   function setToneColor(i, v) {
-    setForm(p => { const t = p.colorTones.map((x,j) => j===i ? {...x,color:v} : x); return {...p,colorTones:t}; });
+    setForm((p) => {
+      const t = p.colorTones.map((x, j) => (j === i ? { ...x, color: v } : x));
+      return { ...p, colorTones: t };
+    });
   }
   function addRow() {
-    setForm(p => ({ ...p, chemicalComposition: [...p.chemicalComposition, { ...EMPTY_ROW }] }));
+    setForm((p) => ({
+      ...p,
+      chemicalComposition: [...p.chemicalComposition, { ...EMPTY_ROW }],
+    }));
   }
   function removeRow(i) {
-    setForm(p => ({ ...p, chemicalComposition: p.chemicalComposition.filter((_,j) => j!==i) }));
+    setForm((p) => ({
+      ...p,
+      chemicalComposition: p.chemicalComposition.filter((_, j) => j !== i),
+    }));
   }
   function setRowField(i, col, val) {
-    setForm(p => { const rows = p.chemicalComposition.map((r,j) => j===i ? {...r,[col]:val} : r); return {...p,chemicalComposition:rows}; });
+    setForm((p) => {
+      const rows = p.chemicalComposition.map((r, j) =>
+        j === i ? { ...r, [col]: val } : r,
+      );
+      return { ...p, chemicalComposition: rows };
+    });
   }
   function clearError(k) {
-    setErrors(p => ({ ...p, [k]: "" }));
+    setErrors((p) => ({ ...p, [k]: "" }));
   }
   function handleImageChange(e) {
     const file = e.target.files[0];
     if (!file) return;
     const preview = URL.createObjectURL(file);
-    setForm(p => ({ ...p, image: file, imagePreview: preview }));
+    setForm((p) => ({ ...p, image: file, imagePreview: preview }));
   }
   function removeImage() {
-    setForm(p => ({ ...p, image: null, imagePreview: "" }));
+    setForm((p) => ({ ...p, image: null, imagePreview: "" }));
   }
 
-//   function handleUploadMSDS() {
-//   if (!pdfFile) {
-//     alert("Please select PDF");
-//     return;
-//   }
+  //   function handleUploadMSDS() {
+  //   if (!pdfFile) {
+  //     alert("Please select PDF");
+  //     return;
+  //   }
 
-//   const fd = new FormData();
-//   fd.append("msds", pdfFile);
+  //   const fd = new FormData();
+  //   fd.append("msds", pdfFile);
 
-//   onSubmit(fd); // same API use cheyyam
-//   setMsdsOpen(false);
-//   setPdfFile(null);
-// }
-function handleUploadMSDS() {
+  //   onSubmit(fd); // same API use cheyyam
+  //   setMsdsOpen(false);
+  //   setPdfFile(null);
+  // }
+  function handleUploadMSDS() {
+    if (!pdfFile) {
+      alert("Please select PDF");
+      return;
+    }
 
- if (!pdfFile) {
-
-  alert("Please select PDF");
-  return;
-
- }
-
- setMsdsOpen(false);
-
-}
+    setMsdsOpen(false);
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -472,32 +498,36 @@ function handleUploadMSDS() {
     if (!form.categoryId) errs.categoryId = "Category is required";
     if (!form.name.trim()) errs.name = "Product name is required";
     if (!form.shortName.trim()) errs.shortName = "Short name is required";
-    if (Object.keys(errs).length) { setErrors(errs); return; }
+    if (Object.keys(errs).length) {
+      setErrors(errs);
+      return;
+    }
 
     const fd = new FormData();
     fd.append("name", form.name);
     fd.append("shortName", form.shortName);
     fd.append("category", form.categoryId);
-    fd.append("bulkDensity", form.bulkDensity === "" ? "" : Number(form.bulkDensity));
+    fd.append(
+      "bulkDensity",
+      form.bulkDensity === "" ? "" : Number(form.bulkDensity),
+    );
     fd.append("fusedProcess", form.fusedProcess);
     fd.append("remarks", form.remarks);
     fd.append("sizing", form.sizing);
     fd.append("industrialApplication", form.industrialApplication);
     fd.append("colorTones", JSON.stringify(form.colorTones));
     fd.append("chemicalComposition", JSON.stringify(form.chemicalComposition));
-   if (form.image) {
-  fd.append("image", form.image);
-}
+    if (form.image) {
+      fd.append("image", form.image);
+    }
 
-if (pdfFile) {
+    if (pdfFile) {
+      fd.append("msds", pdfFile);
+    }
 
- fd.append("msds", pdfFile);
-
-}
-
-if (form.imagePreview === "" && initial?.image) {
-  fd.append("removeImage", "true");
-}
+    if (form.imagePreview === "" && initial?.image) {
+      fd.append("removeImage", "true");
+    }
     onSubmit(fd);
   }
 
@@ -509,23 +539,28 @@ if (form.imagePreview === "" && initial?.image) {
         noValidate
         style={{ display: "flex", flexDirection: "column", gap: "18px" }}
       >
-
         {/* ── 1. Basic Info ───────────────────────────────────── */}
         <div className="pf-card pf-section">
           <SectionTitle>Basic Information</SectionTitle>
           <div className="pf-grid-2">
-
             <div className="pf-grid-full">
               <Field label="Category" required error={errors.categoryId}>
                 <div className="pf-select-wrap">
                   <select
                     value={form.categoryId}
-                    onChange={e => { setField("categoryId", e.target.value); clearError("categoryId"); }}
+                    onChange={(e) => {
+                      setField("categoryId", e.target.value);
+                      clearError("categoryId");
+                    }}
                     className={`pf-input${errors.categoryId ? " pf-error" : ""}`}
                     style={{ paddingRight: "36px", cursor: "pointer" }}
                   >
                     <option value="">Select a category…</option>
-                    {(categories || []).map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
+                    {(categories || []).map((c) => (
+                      <option key={c._id} value={c._id}>
+                        {c.name}
+                      </option>
+                    ))}
                   </select>
                   <FiChevronDown className="pf-select-icon" />
                 </div>
@@ -536,7 +571,10 @@ if (form.imagePreview === "" && initial?.image) {
               <input
                 type="text"
                 value={form.name}
-                onChange={e => { setField("name", e.target.value); clearError("name"); }}
+                onChange={(e) => {
+                  setField("name", e.target.value);
+                  clearError("name");
+                }}
                 placeholder="e.g. White Fused Alumina"
                 className={`pf-input${errors.name ? " pf-error" : ""}`}
               />
@@ -546,32 +584,44 @@ if (form.imagePreview === "" && initial?.image) {
               <input
                 type="text"
                 value={form.shortName}
-                onChange={e => { setField("shortName", e.target.value); clearError("shortName"); }}
+                onChange={(e) => {
+                  setField("shortName", e.target.value);
+                  clearError("shortName");
+                }}
                 placeholder="e.g. WFA"
                 className={`pf-input${errors.shortName ? " pf-error" : ""}`}
               />
             </Field>
-
           </div>
         </div>
 
         {/* ── 2. Color Tones ──────────────────────────────────── */}
         <div className="pf-card pf-section">
           <SectionTitle>Color Tones</SectionTitle>
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+          >
             {form.colorTones.map((tone, idx) => (
               <div
                 key={idx}
                 className="pf-tone"
                 style={{
-                  display: "flex", alignItems: "center", gap: "10px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
                   animationDelay: `${idx * 0.07}s`,
                 }}
               >
-                <span style={{
-                  fontSize: "11px", fontFamily: "'DM Mono',monospace",
-                  color: "var(--c-muted)", width: "18px", flexShrink: 0, textAlign: "right",
-                }}>
+                <span
+                  style={{
+                    fontSize: "11px",
+                    fontFamily: "'DM Mono',monospace",
+                    color: "var(--c-muted)",
+                    width: "18px",
+                    flexShrink: 0,
+                    textAlign: "right",
+                  }}
+                >
                   {idx + 1}
                 </span>
 
@@ -584,14 +634,14 @@ if (form.imagePreview === "" && initial?.image) {
                   <input
                     type="color"
                     value={tone.color}
-                    onChange={e => setToneColor(idx, e.target.value)}
+                    onChange={(e) => setToneColor(idx, e.target.value)}
                   />
                 </div>
 
                 <input
                   type="text"
                   value={tone.name}
-                  onChange={e => setToneName(idx, e.target.value)}
+                  onChange={(e) => setToneName(idx, e.target.value)}
                   placeholder={`Tone ${idx + 1} name`}
                   className="pf-input"
                   style={{ flex: 1 }}
@@ -611,9 +661,10 @@ if (form.imagePreview === "" && initial?.image) {
               <input
                 type="number"
                 value={form.bulkDensity}
-                onChange={e => setField("bulkDensity", e.target.value)}
+                onChange={(e) => setField("bulkDensity", e.target.value)}
                 placeholder="e.g. 1850"
-                min="0" step="any"
+                min="0"
+                step="any"
                 className="pf-input"
               />
             </Field>
@@ -621,7 +672,7 @@ if (form.imagePreview === "" && initial?.image) {
               <input
                 type="text"
                 value={form.fusedProcess}
-                onChange={e => setField("fusedProcess", e.target.value)}
+                onChange={(e) => setField("fusedProcess", e.target.value)}
                 placeholder="e.g. Electric Arc Furnace"
                 className="pf-input"
               />
@@ -632,79 +683,138 @@ if (form.imagePreview === "" && initial?.image) {
         {/* ── 4. Product Image ────────────────────────────────── */}
         <div className="pf-card pf-section">
           <SectionTitle>Product Image</SectionTitle>
-          <div style={{ display: "flex", gap: "20px", alignItems: "flex-start", flexWrap: "wrap" }}>
-
+          <div
+            style={{
+              display: "flex",
+              gap: "20px",
+              alignItems: "flex-start",
+              flexWrap: "wrap",
+            }}
+          >
             {/* Preview */}
-            <div className={`pf-img-zone${form.imagePreview ? " has-img" : ""}`}>
+            <div
+              className={`pf-img-zone${form.imagePreview ? " has-img" : ""}`}
+            >
               {form.imagePreview ? (
-                <img src={form.imagePreview} alt="Preview" style={{ width:"100%",height:"100%",objectFit:"contain",padding:"8px" }} />
+                <img
+                  src={form.imagePreview}
+                  alt="Preview"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "contain",
+                    padding: "8px",
+                  }}
+                />
               ) : (
-                <div style={{ display:"flex",flexDirection:"column",alignItems:"center",gap:"6px",color:"var(--c-muted)" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "6px",
+                    color: "var(--c-muted)",
+                  }}
+                >
                   <FiUploadCloud size={22} />
-                  <span style={{ fontSize:"11px" }}>No image</span>
+                  <span style={{ fontSize: "11px" }}>No image</span>
                 </div>
               )}
-             
             </div>
 
             {/* Controls */}
-            <div style={{ flex:1, minWidth:"180px", display:"flex", flexDirection:"column", gap:"10px" }}>
+            <div
+              style={{
+                flex: 1,
+                minWidth: "180px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+              }}
+            >
               <label className="pf-upload-btn">
                 <FiUploadCloud size={16} />
-                <span style={{ flex:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>
+                <span
+                  style={{
+                    flex: 1,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
                   {form.image ? form.image.name : "Upload product image"}
                 </span>
-                <input type="file" accept="image/*" onChange={handleImageChange} style={{ display:"none" }} />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  style={{ display: "none" }}
+                />
               </label>
 
               {form.imagePreview && (
-                <button type="button" onClick={removeImage} className="pf-remove-img">
+                <button
+                  type="button"
+                  onClick={removeImage}
+                  className="pf-remove-img"
+                >
                   <FiTrash2 size={12} /> Remove image
                 </button>
               )}
 
-              <p style={{ fontSize:"11.5px", color:"var(--c-muted)", margin:0 }}>
+              <p
+                style={{
+                  fontSize: "11.5px",
+                  color: "var(--c-muted)",
+                  margin: 0,
+                }}
+              >
                 PNG, JPG, WEBP · recommended 500 × 500 px
               </p>
             </div>
-          
-
           </div>
         </div>
-          {/* ── 5. MSDS File ───────────────────────── */}
-<div className="pf-card pf-section">
-  <SectionTitle>MSDS File</SectionTitle>
+        {/* ── 5. MSDS File ───────────────────────── */}
+        <div className="pf-card pf-section">
+          <SectionTitle>MSDS File</SectionTitle>
 
-  <button
-    type="button"
-    onClick={() => setMsdsOpen(true)}
-    className="pf-btn-accent"
-  >
-    Upload MSDS
-  </button>
+          <button
+            type="button"
+            onClick={() => setMsdsOpen(true)}
+            className="pf-btn-accent"
+          >
+            Upload MSDS
+          </button>
 
-  {pdfFile && (
-
-    <p style={{
-      marginTop:"8px",
-      fontSize:"12px",
-      color:"#6b6860"
-    }}>
-
-      Selected:
-      {" "}
-      {pdfFile.name}
-
-    </p>
-
-  )}
-
-</div>
+          {pdfFile && (
+            <p
+              style={{
+                marginTop: "8px",
+                fontSize: "12px",
+                color: "#6b6860",
+              }}
+            >
+              Selected: {pdfFile.name}
+            </p>
+          )}
+        </div>
 
         {/* ── 5. Chemical Composition ─────────────────────────── */}
         <div className="pf-card pf-section">
-          <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:"18px", paddingBottom:"10px", borderBottom:"1.5px solid var(--c-border)" }}>
-            <div className="pf-sec-title" style={{ margin:0, border:0, padding:0 }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: "18px",
+              paddingBottom: "10px",
+              borderBottom: "1.5px solid var(--c-border)",
+            }}
+          >
+            <div
+              className="pf-sec-title"
+              style={{ margin: 0, border: 0, padding: 0 }}
+            >
               <span className="pf-sec-dot" />
               Chemical Composition &amp; Physical Analysis
             </div>
@@ -713,36 +823,64 @@ if (form.imagePreview === "" && initial?.image) {
             </button>
           </div>
 
-          <div style={{ border:"1.5px solid var(--c-border)", borderRadius:"10px", overflow:"hidden" }}>
-            <div style={{ overflowX:"auto" }}>
-              <table className="pf-table" style={{ minWidth:"440px" }}>
+          <div
+            style={{
+              border: "1.5px solid var(--c-border)",
+              borderRadius: "10px",
+              overflow: "hidden",
+            }}
+          >
+            <div style={{ overflowX: "auto" }}>
+              <table className="pf-table" style={{ minWidth: "440px" }}>
                 <thead>
                   <tr>
-                    {["Parameter / Name", "Typical", "Min %", "Max %", ""].map(h => (
-                      <th key={h} className="pf-th">{h}</th>
-                    ))}
+                    {["Parameter / Name", "Typical", "Min %", "Max %", ""].map(
+                      (h) => (
+                        <th key={h} className="pf-th">
+                          {h}
+                        </th>
+                      ),
+                    )}
                   </tr>
                 </thead>
                 <tbody>
                   {form.chemicalComposition.map((row, idx) => (
-                    <tr key={idx} className="pf-comp-row" style={{ animationDelay:`${idx*0.05}s` }}>
-                      {(["name","typical","min","max"]).map(col => {
-                        const ph = { name:"e.g. Al₂O₃", typical:"98.5%", min:"98%", max:"99%" };
+                    <tr
+                      key={idx}
+                      className="pf-comp-row"
+                      style={{ animationDelay: `${idx * 0.05}s` }}
+                    >
+                      {["name", "typical", "min", "max"].map((col) => {
+                        const ph = {
+                          name: "e.g. Al₂O₃",
+                          typical: "98.5%",
+                          min: "98%",
+                          max: "99%",
+                        };
                         return (
                           <td key={col} className="pf-td">
                             <input
                               type="text"
                               value={row[col]}
-                              onChange={e => setRowField(idx, col, e.target.value)}
+                              onChange={(e) =>
+                                setRowField(idx, col, e.target.value)
+                              }
                               placeholder={ph[col]}
                               className="pf-cell"
                             />
                           </td>
                         );
                       })}
-                      <td className="pf-td" style={{ width:"40px", textAlign:"center" }}>
+                      <td
+                        className="pf-td"
+                        style={{ width: "40px", textAlign: "center" }}
+                      >
                         {form.chemicalComposition.length > 1 && (
-                          <button type="button" onClick={() => removeRow(idx)} className="pf-btn-del">
+                          <button
+                            type="button"
+                            onClick={() => removeRow(idx)}
+                            className="pf-btn-del"
+                          >
                             <FiTrash2 size={12} />
                           </button>
                         )}
@@ -753,7 +891,13 @@ if (form.imagePreview === "" && initial?.image) {
               </table>
             </div>
           </div>
-          <p style={{ fontSize:"11.5px", color:"var(--c-muted)", marginTop:"8px" }}>
+          <p
+            style={{
+              fontSize: "11.5px",
+              color: "var(--c-muted)",
+              marginTop: "8px",
+            }}
+          >
             Hover a row to reveal the delete button.
           </p>
         </div>
@@ -761,13 +905,14 @@ if (form.imagePreview === "" && initial?.image) {
         {/* ── 6. Additional Information ───────────────────────── */}
         <div className="pf-card pf-section">
           <SectionTitle>Additional Information</SectionTitle>
-          <div style={{ display:"flex", flexDirection:"column", gap:"14px" }}>
-
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "14px" }}
+          >
             <Field label="Remarks">
               <input
                 type="text"
                 value={form.remarks}
-                onChange={e => setField("remarks", e.target.value)}
+                onChange={(e) => setField("remarks", e.target.value)}
                 placeholder="Any additional notes or remarks…"
                 className="pf-input"
               />
@@ -777,7 +922,7 @@ if (form.imagePreview === "" && initial?.image) {
               <input
                 type="text"
                 value={form.sizing}
-                onChange={e => setField("sizing", e.target.value)}
+                onChange={(e) => setField("sizing", e.target.value)}
                 placeholder="e.g. 0–1 mm, 1–3 mm, 3–5 mm"
                 className="pf-input"
               />
@@ -787,12 +932,13 @@ if (form.imagePreview === "" && initial?.image) {
               <input
                 type="text"
                 value={form.industrialApplication}
-                onChange={e => setField("industrialApplication", e.target.value)}
+                onChange={(e) =>
+                  setField("industrialApplication", e.target.value)
+                }
                 placeholder="e.g. Steel, Cement, Refractories"
                 className="pf-input"
               />
             </Field>
-
           </div>
         </div>
 
@@ -800,31 +946,33 @@ if (form.imagePreview === "" && initial?.image) {
         <div
           className="pf-section"
           style={{
-            display:"flex", flexDirection:"row", gap:"10px", justifyContent:"flex-end",
-            flexWrap:"wrap", paddingTop:"6px",
+            display: "flex",
+            flexDirection: "row",
+            gap: "10px",
+            justifyContent: "flex-end",
+            flexWrap: "wrap",
+            paddingTop: "6px",
           }}
         >
           <button type="button" onClick={onCancel} className="pf-btn-ghost">
             Cancel
           </button>
-          <button type="submit" className="pf-btn-accent">
-            {initial ? "Update Product" : "Add Product"}
-          </button>
+          <button
+  type="button"
+  onClick={handleSubmit}
+  className="pf-btn-accent"
+>
+  {initial ? "Update Product" : "Add Product"}
+</button>
         </div>
         {msdsOpen && (
+          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+            <div className="bg-white p-5 rounded-xl w-[320px]">
+              <h3 className="font-semibold mb-3 text-black">Upload MSDS PDF</h3>
 
-<div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-
-<div className="bg-white p-5 rounded-xl w-[320px]">
-
-<h3 className="font-semibold mb-3 text-black">
-Upload MSDS PDF
-</h3>
-
-<div className="flex flex-col gap-2">
-
-<label
-className="
+              <div className="flex flex-col gap-2">
+                <label
+                  className="
 flex items-center justify-between
 px-4 py-3
 border border-gray-300
@@ -834,33 +982,28 @@ hover:border-emerald-500
 hover:bg-emerald-50
 transition
 "
->
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg">📄</span>
 
-<div className="flex items-center gap-3">
+                    <span className="text-sm text-gray-700 truncate">
+                      {pdfFile ? pdfFile.name : "Click to upload MSDS PDF"}
+                    </span>
+                  </div>
 
-<span className="text-lg">📄</span>
+                  <input
+                    type="file"
+                    accept="application/pdf"
+                    onChange={(e) => setPdfFile(e.target.files[0])}
+                    className="hidden"
+                  />
+                </label>
 
-<span className="text-sm text-gray-700 truncate">
-{pdfFile ? pdfFile.name : "Click to upload MSDS PDF"}
-</span>
-
-</div>
-
-<input
-type="file"
-accept="application/pdf"
-onChange={(e)=>setPdfFile(e.target.files[0])}
-className="hidden"
-/>
-
-</label>
-
-{pdfFile && (
-
-<button
-type="button"
-onClick={()=>setPdfFile(null)}
-className="
+                {pdfFile && (
+                  <button
+                    type="button"
+                    onClick={() => setPdfFile(null)}
+                    className="
 self-end
 flex items-center gap-1
 text-sm
@@ -868,22 +1011,17 @@ text-red-600
 hover:text-red-700
 transition
 "
->
+                  >
+                    🗑 Remove file
+                  </button>
+                )}
+              </div>
 
-🗑 Remove file
-
-</button>
-
-)}
-
-</div>
-
-<div className="flex gap-2 mt-4">
-
-<button
-type="button"
-onClick={handleUploadMSDS}
-className="
+              <div className="flex gap-2 mt-4">
+                <button
+                  type="button"
+                  onClick={handleUploadMSDS}
+                  className="
 px-5 py-2.5
 bg-emerald-600
 text-white
@@ -896,26 +1034,21 @@ transition
 duration-200
 cursor-pointer
 "
->
-Upload
-</button>
+                >
+                  Upload
+                </button>
 
-<button
-type="button"
-onClick={()=>setMsdsOpen(false)}
-className="px-4 py-2 bg-gray-200 text-black font-medium rounded-lg hover:bg-gray-300 transition cursor-pointer"
->
-Cancel
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-)}
-
+                <button
+                  type="button"
+                  onClick={() => setMsdsOpen(false)}
+                  className="px-4 py-2 bg-gray-200 text-black font-medium rounded-lg hover:bg-gray-300 transition cursor-pointer"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </form>
     </div>
   );
