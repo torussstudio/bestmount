@@ -26,9 +26,10 @@ export default function AdminSidebar({ activeSection, onSection, onClose }) {
   }
 
   return (
-    <aside className="w-64 h-full flex flex-col bg-gradient-to-b from-slate-950 to-slate-900 text-white border-r border-white/10">
+    <aside className="w-64 h-full flex flex-col text-white border-r border-white/10 relative overflow-hidden bg-[url('/home-bg.webp')] bg-cover bg-center">
+      <div className="absolute inset-0 bg-black/60" />
       {/* LOGO */}
-      <div className="flex items-center justify-center px-5 py-6 border-b border-white/10">
+      <div className="relative z-10 flex items-center justify-center px-5 py-6 border-b border-white/10">
         <div className="flex flex-col items-center">
           <img
             src="/logo.png"
@@ -48,7 +49,7 @@ export default function AdminSidebar({ activeSection, onSection, onClose }) {
       </div>
 
       {/* NAVIGATION */}
-      <nav className="flex-1 px-3 py-5 space-y-1">
+      <nav className="relative z-10 flex-1 px-3 py-5 space-y-1">
         <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-widest px-3 mb-3">
           Content
         </p>
@@ -60,22 +61,20 @@ export default function AdminSidebar({ activeSection, onSection, onClose }) {
             <button
               key={id}
               onClick={() => onSection(id)}
-              className={`
+             className={`
+relative w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer
 
-  relative w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer
-
-  ${
-    isActive
-      ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30"
-      : "text-slate-400 hover:text-white hover:bg-white/5"
-  }
-
-  `}
+${
+  isActive
+    ? "bg-gradient-to-r from-yellow-400/30 via-yellow-300/20 to-yellow-400/10 text-yellow-200 backdrop-blur-md"
+    : "text-slate-400 hover:text-white hover:bg-white/5"
+}
+`}
             >
               {/* active indicator */}
-              {isActive && (
+              {/* {isActive && (
                 <div className="absolute left-0 top-0 h-full w-[3px] bg-white rounded-r-full" />
-              )}
+              )} */}
 
               <Icon className="text-lg" />
 
@@ -86,7 +85,7 @@ export default function AdminSidebar({ activeSection, onSection, onClose }) {
       </nav>
 
       {/* LOGOUT */}
-      <div className="px-3 py-4 border-t border-white/10">
+      <div className="relative z-10 px-3 py-4 border-t border-white/10">
         <button
           onClick={() => setShowLogoutConfirm(true)}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition cursor-pointer"

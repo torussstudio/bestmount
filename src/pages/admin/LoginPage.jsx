@@ -66,34 +66,35 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-[100dvh] flex items-center justify-center px-4 bg-gradient-to-br from-slate-100 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 relative overflow-hidden">
+    <div className="min-h-[100dvh] flex items-center justify-center px-4 relative overflow-hidden bg-[url('/about-bg.webp')] bg-cover bg-center bg-no-repeat">
+      <div className="absolute inset-0 bg-black/40" />
       {/* animated glow */}
-      <div className="absolute w-[420px] h-[420px] bg-indigo-500/20 blur-[120px] rounded-full -top-40 -left-40 animate-pulse" />
+      {/* <div className="absolute w-[420px] h-[420px] bg-indigo-500/20 blur-[120px] rounded-full -top-40 -left-40 animate-pulse" />
 
-      <div className="absolute w-[420px] h-[420px] bg-violet-500/20 blur-[120px] rounded-full -bottom-40 -right-40 animate-pulse" />
+      <div className="absolute w-[420px] h-[420px] bg-violet-500/20 blur-[120px] rounded-full -bottom-40 -right-40 animate-pulse" /> */}
 
       <div className="w-full max-w-md relative z-10">
         <div className="rounded-3xl border border-white/20 dark:border-white/10 bg-white/70 dark:bg-white/5 backdrop-blur-xl shadow-2xl p-7">
           {/* logo */}
-          <div className="flex flex-col items-center mb-7">
+          <div className="flex flex-col items-center mb-10">
             <div className="flex items-center gap-3 mb-4">
               {/* company logo image */}
               <img
                 src="/logo.png"
                 alt="logo"
-                className="w-20 h-20 object-contain"
+                className="w-36 md:w-44 object-contain"
               />
 
               {/* animated icon fallback */}
             </div>
-
+{/* 
             <h1 className="text-xl font-semibold text-slate-900 dark:text-white">
               Best Mountain Admin
             </h1>
 
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
               Manage products & MSDS
-            </p>
+            </p> */}
           </div>
 
           {/* error */}
@@ -120,7 +121,7 @@ export default function LoginPage() {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="admin"
-                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white/70 dark:bg-white/5 border border-slate-300 dark:border-white/10 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/40 outline-none transition"
+                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white/70 dark:bg-white/5 border border-slate-300 dark:border-white/10 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 outline-none transition"
                 />
               </div>
             </div>
@@ -139,7 +140,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••"
-                  className="w-full pl-9 pr-10 py-2.5 rounded-xl bg-white/70 dark:bg-white/5 border border-slate-300 dark:border-white/10 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/40 outline-none transition"
+                  className="w-full pl-9 pr-10 py-2.5 rounded-xl bg-white/70 dark:bg-white/5 border border-slate-300 dark:border-white/10 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 outline-none transition"
                 />
 
                 <button
@@ -167,7 +168,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold shadow-lg hover:brightness-110 transition"
+              className="w-full py-3 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-white font-medium transition hover:bg-white/20 hover:scale-[1.02] cursor-pointer"
             >
               {loading ? "Signing in..." : "Sign in"}
             </button>
