@@ -35,7 +35,7 @@ export default function Contact() {
                         <p className="text-3xl md:text-4xl mt-10 text-center text-white font-thin">
                             We believe progress is built together.
                         </p>
-                        <p className="max-w-xl mt-6 text-center leading-tight">Reach out to explore sustainable raw materials, partnerships, or collaborations that add real value.</p>
+                        <p className="max-w-xl mt-6 ml-18 text-center leading-tight">Reach out to explore sustainable raw materials, partnerships, or collaborations that add real value.</p>
                         <div className="text-center mt-10">
                         <PrimaryButton scrollTo="contact-form" offset={100}>
                         Get in Touch
