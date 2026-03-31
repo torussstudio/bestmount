@@ -246,13 +246,17 @@ export default function ProductSection({
           </p>
         </div>
         <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={openAdd}
-            className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-xl cursor-pointer"
-          >
-            <FiPlus /> Add Product
-          </button>
+       <button
+  type="button"
+  onClick={openAdd}
+  className="flex items-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer
+  bg-gradient-to-r from-amber-400/30 via-yellow-300/50 to-amber-500/10
+  text-black backdrop-blur-md border border-yellow-400/20
+  hover:from-amber-400/40 hover:via-yellow-300/30 hover:to-amber-500/20
+  transition-all"
+>
+  <FiPlus /> Add Product
+</button>
         </div>
       </div>
 

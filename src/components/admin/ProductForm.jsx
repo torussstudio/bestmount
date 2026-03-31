@@ -567,18 +567,19 @@ export default function ProductForm({
               </Field>
             </div>
 
-            <Field label="Product Name" required error={errors.name}>
-              <input
-                type="text"
-                value={form.name}
-                onChange={(e) => {
-                  setField("name", e.target.value);
-                  clearError("name");
-                }}
-                placeholder="e.g. White Fused Alumina"
-                className={`pf-input${errors.name ? " pf-error" : ""}`}
-              />
-            </Field>
+          <Field label="Product Name" required error={errors.name}>
+  <input
+    type="text"
+    value={form.name}
+    onChange={(e) => {
+      setField("name", e.target.value);
+      clearError("name");
+    }}
+    placeholder="e.g. White Fused Alumina"
+    className={`pf-input${errors.name ? " pf-error" : ""}`}
+    style={{ textTransform: "uppercase" }}
+  />
+</Field>
 
             <Field label="Short Name" required error={errors.shortName}>
               <input
@@ -590,6 +591,7 @@ export default function ProductForm({
                 }}
                 placeholder="e.g. WFA"
                 className={`pf-input${errors.shortName ? " pf-error" : ""}`}
+                style={{ textTransform: "uppercase" }}
               />
             </Field>
           </div>

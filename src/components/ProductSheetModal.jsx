@@ -8,7 +8,7 @@ import { useEffect, useState, forwardRef } from "react";
 const Label = ({ children }) => (
   <p
     style={{
-      fontSize: "0.58rem",
+      fontSize: "clamp(0.7rem,1.6vw,0.85rem)",
       fontWeight: 700,
       textTransform: "uppercase",
       letterSpacing: "0.12em",
@@ -191,7 +191,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                   border: "none",
                   cursor: "pointer",
                   color: "rgba(255,255,255,0.45)",
-                  fontSize: "0.75rem",
+                  fontSize: "0.95rem",
                 }}
               >
                 ← Back
@@ -209,8 +209,8 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                     background: "rgba(34,197,94,0.15)",
                     border: "1px solid rgba(34,197,94,0.35)",
                     color: "#22c55e",
-                    fontSize: "0.72rem",
-                    fontWeight: 600,
+                    fontSize: "0.90rem",
+                    fontWeight: 700,
                     cursor: "pointer",
                   }}
                 >
@@ -240,8 +240,8 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                   background: "rgba(255,193,7,0.15)",
                   border: "1px solid rgba(255,193,7,0.35)",
                   color: "#fbbf24",
-                  fontSize: "0.72rem",
-                  fontWeight: 600,
+                  fontSize: "0.90rem",
+                  fontWeight: 700,
                   cursor: "pointer",
                 }}
               >
@@ -296,7 +296,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                 <span
                   style={{
                     fontSize: "clamp(0.5rem,1.5vw,0.62rem)",
-                    fontWeight: 700,
+                    fontWeight: 900,
                     textTransform: "uppercase",
                     letterSpacing: "0.1em",
                     padding: "4px 10px",
@@ -493,7 +493,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                           {tone.color && (
                             <span
                               style={{
-                                fontSize: "0.38rem",
+                                fontSize: "clamp(0.6rem,1.2vw,0.75rem)",
                                 color: "rgba(238,232,205,0.3)",
                                 textAlign: "center",
                                 letterSpacing: "0.04em",
@@ -510,7 +510,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                     <span
                       style={{
                         color: "rgba(255,255,255,0.25)",
-                        fontSize: "0.85rem",
+                        fontSize: "0.95rem",
                       }}
                     >
                       —
@@ -539,7 +539,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                 >
                   <h2
                     style={{
-                      fontSize: "clamp(0.5rem,1.3vw,0.58rem)",
+                     fontSize: "clamp(0.8rem,1.4vw,0.72rem)",
                       fontWeight: 700,
                       textTransform: "uppercase",
                       letterSpacing: "0.08em",
@@ -562,7 +562,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                               key={h}
                               style={{
                                 textAlign: "left",
-                                fontSize: "0.44rem",
+                                fontSize: "0.70rem",
                                 color: "rgba(238,232,205,0.35)",
                                 fontWeight: 600,
                                 textTransform: "uppercase",
@@ -591,12 +591,12 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                                 <td
                                   key={j}
                                   style={{
-                                    fontSize: "0.52rem",
+                                    fontSize: "0.62rem",
                                     color:
                                       j === 0
                                         ? "rgba(238,232,205,0.88)"
                                         : "rgba(238,232,205,0.55)",
-                                    fontWeight: j === 0 ? 600 : 400,
+                                    fontWeight: j === 0 ? 800 : 600,
                                     padding: "5px 8px 5px 0",
                                   }}
                                 >
@@ -642,7 +642,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                       <div key={label}>
                         <p
                           style={{
-                            fontSize: "0.52rem",
+                            fontSize: "0.90rem",
                             fontWeight: 700,
                             textTransform: "uppercase",
                             letterSpacing: "0.1em",
@@ -655,7 +655,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                         <Divider />
                         <p
                           style={{
-                            fontSize: "0.58rem",
+                            fontSize: "0.85rem",
                             color: "rgba(238,232,205,0.72)",
                             lineHeight: 1.65,
                             margin: 0,

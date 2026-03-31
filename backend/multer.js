@@ -15,7 +15,7 @@ const storage = new CloudinaryStorage({
       return {
         folder: "bestmount_msds",
 
-        resource_type: "raw",
+        resource_type: "auto",
 
         public_id: cleanName,
 
