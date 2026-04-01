@@ -84,16 +84,36 @@ router.get("/:id", async (req, res) => {
 // ✅ DOWNLOAD MSDS
 router.get("/msds/:id", async (req, res) => {
 
-  const product = await Product.findById(req.params.id);
+  try {
 
-  if (!product?.msds) {
-    return res.status(404).json({ message: "MSDS not found" });
+    const product = await Product.findById(req.params.id);
+
+    if (!product?.msds) {
+      return res.status(404).json({
+        message: "MSDS not found"
+      });
+    }
+
+    const fileName = product.msds.split("/").pop() + ".pdf";
+
+    res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
+    res.setHeader("Content-Type", "application/pdf");
+
+    const https = require("https");
+
+    https.get(product.msds, (fileStream) => {
+      fileStream.pipe(res);
+    });
+
+  } catch (err) {
+
+    res.status(500).json({
+      message: "Download failed"
+    });
+
   }
 
-  res.redirect(product.msds);
-
 });
-
 // ✅ UPDATE product (replace OR remove image)
 router.put(
   "/:id",
