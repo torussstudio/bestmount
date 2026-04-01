@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import logoSrc from "../assets/images/bm-logo-tm-w.png";
 import ProductPDF from "./ProductPDF";
 import { useEffect, useState, forwardRef } from "react";
+import API from "../api.js"
 
 const Label = ({ children }) => (
   <p
@@ -93,32 +94,16 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
       alert("PDF generation failed");
     }
   };
-  const handleMSDSDownload = async () => {
-    try {
-      const response = await fetch(msdsUrl);
+const handleMSDSDownload = () => {
 
-      const blob = await response.blob();
+  console.log("MSDS clicked");
 
-      const url = window.URL.createObjectURL(blob);
+  window.open(
+    `${API}/products/msds/${product._id}`,
+    "_blank"
+  );
 
-      const link = document.createElement("a");
-
-      link.href = url;
-
-      link.download = `${product.shortName}-MSDS.pdf`;
-
-      document.body.appendChild(link);
-
-      link.click();
-
-      document.body.removeChild(link);
-
-      window.URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
+};
   return ReactDOM.createPortal(
     <motion.div
       ref={ref}
