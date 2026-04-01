@@ -1,3 +1,74 @@
+
+
+// const multer = require("multer");
+// const { CloudinaryStorage } = require("multer-storage-cloudinary");
+// const cloudinary = require("./config/cloudinary");
+
+// const storage = new CloudinaryStorage({
+//   cloudinary,
+
+//   params: async (req, file) => {
+
+//     // MSDS PDF
+//     if (file.fieldname === "msds") {
+
+//   const cleanName = file.originalname
+//     .replace(/\.[^/.]+$/, "")
+//     .replace(/[^a-zA-Z0-9_-]/g, "_");
+
+//   return {
+
+//     folder: "bestmount_msds",
+
+//     resource_type: "raw",
+
+//     type: "upload",   // 👈 IMPORTANT (forces public file)
+
+//     public_id: cleanName
+
+//   };
+
+// }
+
+//     // PRODUCT IMAGE
+//     if (file.fieldname === "image") {
+
+//       return {
+//         folder: "bestmount_products",
+//         resource_type: "image"
+//       };
+//     }
+
+//   }
+// });
+
+// const fileFilter = (req, file, cb) => {
+
+//   const allowedTypes = [
+//     "image/png",
+//     "image/jpeg",
+//     "image/jpg",
+//     "image/webp",
+//     "application/pdf"
+//   ];
+
+//   if (allowedTypes.includes(file.mimetype)) {
+
+//     cb(null, true);
+
+//   } else {
+
+//     cb(new Error("Only image or pdf allowed"), false);
+
+//   }
+
+// };
+
+// module.exports = multer({
+//   storage,
+//   fileFilter
+// });
+
 const multer = require("multer");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const cloudinary = require("./config/cloudinary");
@@ -6,50 +77,62 @@ const storage = new CloudinaryStorage({
   cloudinary,
 
   params: (req, file) => {
-    // PDF file
-    if (file.mimetype === "application/pdf") {
+
+    // MSDS PDF
+    if (file.fieldname === "msds") {
+
       const cleanName = file.originalname
-        .replace(/\.[^/.]+$/, "") // remove extension
-        .replace(/[^a-zA-Z0-9-_]/g, "_"); // remove special characters
+        .replace(/\.[^/.]+$/, "")
+        .replace(/[^a-zA-Z0-9_-]/g, "_")
+        .toLowerCase();
 
       return {
+
         folder: "bestmount_msds",
 
-        resource_type: "auto",
+        resource_type: "raw",   // important
 
-        public_id: cleanName,
+        type: "upload",         // public file
 
-        format: "pdf",
+        public_id: cleanName
+
       };
     }
 
-    // Image file
+    // PRODUCT IMAGE
     return {
+
       folder: "bestmount_products",
 
-      allowed_formats: ["jpg", "png", "jpeg", "webp"],
+      resource_type: "image"
+
     };
-  },
+  }
 });
 
 const fileFilter = (req, file, cb) => {
+
   const allowedTypes = [
     "image/png",
-    "image/jpg",
     "image/jpeg",
+    "image/jpg",
     "image/webp",
-    "application/pdf",
+    "application/pdf"
   ];
 
   if (allowedTypes.includes(file.mimetype)) {
+
     cb(null, true);
+
   } else {
+
     cb(new Error("Only image or pdf allowed"), false);
+
   }
+
 };
 
 module.exports = multer({
   storage,
-
-  fileFilter,
+  fileFilter
 });

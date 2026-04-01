@@ -81,6 +81,18 @@ router.get("/:id", async (req, res) => {
     });
   }
 });
+// ✅ DOWNLOAD MSDS
+router.get("/msds/:id", async (req, res) => {
+
+  const product = await Product.findById(req.params.id);
+
+  if (!product?.msds) {
+    return res.status(404).json({ message: "MSDS not found" });
+  }
+
+  res.redirect(product.msds);
+
+});
 
 // ✅ UPDATE product (replace OR remove image)
 router.put(
