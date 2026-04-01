@@ -119,13 +119,17 @@ export default function CategorySection({
             {categories.length === 1 ? "category" : "categories"} total
           </p>
         </div>
-        <button
-          type="button"
-          onClick={openAdd}
-          className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl shadow-md shadow-indigo-500/20 transition cursor-pointer shrink-0"
-        >
-          <FiPlus className="text-base" /> Add Category
-        </button>
+         <button
+  type="button"
+  onClick={openAdd}
+  className="flex items-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer
+  bg-gradient-to-r from-amber-400/30 via-yellow-300/50 to-amber-500/10
+  text-black backdrop-blur-md border border-yellow-400/20
+  hover:from-amber-400/40 hover:via-yellow-300/30 hover:to-amber-500/20
+  transition-all"
+>
+  <FiPlus /> Add Category
+</button>
       </div>
 
       {/* ── Desktop Table ───────────────────────────────────────────────── */}
