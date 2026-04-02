@@ -234,7 +234,7 @@ export default function ProductSection({
   return (
     <div>
       {/* ── Header ───────────────────────────────────────────────────── */}
-      <div className="flex flex-wrap items-start justify-between gap-3 mb-5">
+      <div className="flex flex-wrap items-start justify-between gap-3 mb-5 " >
         <div>
           <h2 className="text-slate-800 text-lg md:text-xl font-bold">
             All Products

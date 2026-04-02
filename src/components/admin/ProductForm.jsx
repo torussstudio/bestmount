@@ -572,9 +572,9 @@ export default function ProductForm({
     type="text"
     value={form.name}
     onChange={(e) => {
-      setField("name", e.target.value);
-      clearError("name");
-    }}
+  setField("name", e.target.value.toUpperCase());
+  clearError("name");
+}}
     placeholder="e.g. White Fused Alumina"
     className={`pf-input${errors.name ? " pf-error" : ""}`}
     style={{ textTransform: "uppercase" }}
@@ -585,10 +585,10 @@ export default function ProductForm({
               <input
                 type="text"
                 value={form.shortName}
-                onChange={(e) => {
-                  setField("shortName", e.target.value);
-                  clearError("shortName");
-                }}
+               onChange={(e) => {
+  setField("shortName", e.target.value.toUpperCase());a
+  clearError("shortName");
+}}
                 placeholder="e.g. WFA"
                 className={`pf-input${errors.shortName ? " pf-error" : ""}`}
                 style={{ textTransform: "uppercase" }}

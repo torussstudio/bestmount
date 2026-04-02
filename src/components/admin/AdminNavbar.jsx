@@ -9,7 +9,7 @@ export default function AdminNavbar({ section, onMenuToggle }) {
   const title = TITLES[section] ?? "Dashboard";
 
   return (
-    <header className="h-16 flex items-center justify-between px-4 md:px-6 bg-gradient-to-r from-white to-slate-50 border-b border-slate-200 shadow-sm">
+    <header className="h-16 flex items-center justify-between px-4 md:px-6 bg-gradient-to-r from-white to-slate-50 border-b border-slate-200 shadow-sm" style={{backgroundImage:"url('/about-bg.webp')"}} >
       {/* LEFT */}
       <div className="flex items-center gap-3">
         {/* menu button */}
@@ -22,7 +22,7 @@ export default function AdminNavbar({ section, onMenuToggle }) {
 
         {/* title */}
         <div>
-          <h1 className="text-slate-800 text-lg font-semibold tracking-tight">
+          <h1 className="text-white text-lg font-semibold tracking-tight">
             {title}
           </h1>
 
