@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, createElement } from "react";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../utils/auth";
 import ConfirmDialog from "./ConfirmDialog";
@@ -54,7 +54,7 @@ export default function AdminSidebar({ activeSection, onSection, onClose }) {
           Content
         </p>
 
-        {MENU_ITEMS.map(({ id, label, icon: Icon }) => {
+        {MENU_ITEMS.map(({ id, label, icon }) => {
           const isActive = activeSection === id;
 
           return (
@@ -76,7 +76,7 @@ ${
                 <div className="absolute left-0 top-0 h-full w-[3px] bg-white rounded-r-full" />
               )} */}
 
-              <Icon className="text-lg" />
+              {createElement(icon, { className: "text-lg" })}
 
               {label}
             </button>

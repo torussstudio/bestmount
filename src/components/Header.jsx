@@ -4,8 +4,9 @@ import Container from "./layout/Container";
 import logo from "../assets/images/bm-logo-tm-w.png";
 import { Link } from "react-router-dom";
 import HashLink from "./HashLink";
+import { memo } from "react";
 
-const Dropdown = ({ open }) => (
+const Dropdown = memo(({ open }) => (
   <div
     className={`
       absolute top-[calc(100%+15px)] right-0 min-w-[220px] z-50
@@ -29,9 +30,9 @@ const Dropdown = ({ open }) => (
       </ul>
     </div>
   </div>
-);
+));
 
-const Hamburger = ({ open }) => (
+const Hamburger = memo(({ open }) => (
   <div className="flex items-center gap-1">
     <div className="flex flex-col gap-[6px]">
       <span className="block w-6 h-[2px] bg-white" />
@@ -46,7 +47,7 @@ const Hamburger = ({ open }) => (
       `}
     />
   </div>
-);
+));
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -93,7 +94,7 @@ export default function Header() {
                 type="button"
                 aria-expanded={open}
                 aria-label="Toggle menu"
-                onClick={() => setOpen(!open)}
+                onClick={() => setOpen(prev => !prev)}
                 className="cursor-pointer"
               >
                 <Hamburger open={open} />

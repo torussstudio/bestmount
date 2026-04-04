@@ -1,5 +1,3 @@
-"use no memo";
-
 import Modal from "./Modal";
 import { FiAlertTriangle } from "react-icons/fi";
 

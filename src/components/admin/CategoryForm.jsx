@@ -1,5 +1,3 @@
-"use no memo";
-
 import { useState, useEffect } from "react";
 import { FiTag, FiAlertCircle } from "react-icons/fi";
 

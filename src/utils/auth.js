@@ -19,10 +19,13 @@ export function logout() {
 }
 
 /**
- * Check if admin is logged in
+ * Check if admin is logged in (both session markers must be present)
  */
 export function isLoggedIn() {
-  return !!localStorage.getItem("admin");
+  return (
+    localStorage.getItem(ADMIN_KEY) === "true" &&
+    !!localStorage.getItem("admin")
+  );
 }
 
 /**

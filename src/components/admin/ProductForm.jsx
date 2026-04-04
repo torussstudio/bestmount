@@ -1,5 +1,4 @@
-"use no memo";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   FiPlus,
   FiTrash2,
@@ -316,6 +315,7 @@ function makeEmpty() {
     categoryId: "",
     name: "",
     shortName: "",
+    isActive: true,
     colorTones: DEFAULT_TONES.map((t) => ({ ...t })),
     bulkDensity: "",
     fusedProcess: "",
@@ -336,6 +336,7 @@ function deepClone(p) {
   return {
     ...p,
     categoryId: String(catId),
+    isActive: p.isActive !== false,
     colorTones: (p.colorTones || []).map((t) => ({ ...t })),
     chemicalComposition: (p.chemicalComposition || []).map((r) => ({ ...r })),
     imagePreview: p?.image && p.image.startsWith("http") ? p.image : "",
@@ -383,115 +384,97 @@ export default function ProductForm({
   const [errors, setErrors] = useState({});
   const [msdsOpen, setMsdsOpen] = useState(false);
   const [pdfFile, setPdfFile] = useState(null);
-  const styleRef = useRef(null);
 
   // Inject global CSS once
   useEffect(() => {
-    if (!document.getElementById("pf-style")) {
-      const el = document.createElement("style");
-      el.id = "pf-style";
-      el.textContent = GLOBAL_CSS;
-      document.head.appendChild(el);
-    }
+    if (document.getElementById("pf-style")) return;
+
+    const el = document.createElement("style");
+
+    el.id = "pf-style";
+
+    el.textContent = GLOBAL_CSS;
+
+    document.head.appendChild(el);
   }, []);
 
- useEffect(() => {
-  if (!initial) return;
-
-  const catId =
-    initial.category?._id ||
-    initial.category ||
-    initial.categoryId ||
-    "";
-
-  setForm({
-    ...initial,
-
-    categoryId: String(catId), // ⭐ important fix
-
-    imagePreview:
-      initial.image && initial.image.startsWith("http")
-        ? initial.image
-        : "",
-
-    image: null,
-
-    colorTones: initial.colorTones || [],
-
-    chemicalComposition: initial.chemicalComposition || [],
-  });
-}, [initial]);
-
-  function setField(key, val) {
+  const setField = (key, val) => {
     setForm((p) => ({ ...p, [key]: val }));
-  }
-  function setToneName(i, v) {
+  };
+  const setToneName = (i, v) => {
     setForm((p) => {
       const t = p.colorTones.map((x, j) => (j === i ? { ...x, name: v } : x));
       return { ...p, colorTones: t };
     });
-  }
-  function setToneColor(i, v) {
+  };
+  const setToneColor = (i, v) => {
     setForm((p) => {
       const t = p.colorTones.map((x, j) => (j === i ? { ...x, color: v } : x));
       return { ...p, colorTones: t };
     });
-  }
-  function addRow() {
+  };
+  const addRow = () => {
     setForm((p) => ({
       ...p,
       chemicalComposition: [...p.chemicalComposition, { ...EMPTY_ROW }],
     }));
-  }
-  function removeRow(i) {
+  };
+  const removeRow = (i) => {
     setForm((p) => ({
       ...p,
       chemicalComposition: p.chemicalComposition.filter((_, j) => j !== i),
     }));
-  }
-  function setRowField(i, col, val) {
+  };
+  const setRowField = (i, col, val) => {
     setForm((p) => {
       const rows = p.chemicalComposition.map((r, j) =>
         j === i ? { ...r, [col]: val } : r,
       );
       return { ...p, chemicalComposition: rows };
     });
-  }
-  function clearError(k) {
+  };
+  const clearError = (k) => {
     setErrors((p) => ({ ...p, [k]: "" }));
-  }
+  };
   function handleImageChange(e) {
     const file = e.target.files[0];
+
     if (!file) return;
+
     const preview = URL.createObjectURL(file);
-    setForm((p) => ({ ...p, image: file, imagePreview: preview }));
+
+    setForm((p) => {
+      if (p.imagePreview) URL.revokeObjectURL(p.imagePreview);
+
+      return {
+        ...p,
+        image: file,
+        imagePreview: preview,
+      };
+    });
   }
-  function removeImage() {
-    setForm((p) => ({ ...p, image: null, imagePreview: "" }));
-  }
 
-  //   function handleUploadMSDS() {
-  //   if (!pdfFile) {
-  //     alert("Please select PDF");
-  //     return;
-  //   }
+  const removeImage = () => {
+    setForm((p) => {
+      if (p.imagePreview) URL.revokeObjectURL(p.imagePreview);
 
-  //   const fd = new FormData();
-  //   fd.append("msds", pdfFile);
+      return {
+        ...p,
+        image: null,
+        imagePreview: "",
+      };
+    });
+  };
 
-  //   onSubmit(fd); // same API use cheyyam
-  //   setMsdsOpen(false);
-  //   setPdfFile(null);
-  // }
   function handleUploadMSDS() {
     if (!pdfFile) {
       alert("Please select PDF");
+
       return;
     }
 
     setMsdsOpen(false);
   }
-
   function handleSubmit(e) {
     e.preventDefault();
     const errs = {};
@@ -515,6 +498,7 @@ export default function ProductForm({
     fd.append("remarks", form.remarks);
     fd.append("sizing", form.sizing);
     fd.append("industrialApplication", form.industrialApplication);
+    fd.append("isActive", form.isActive ? "true" : "false");
     fd.append("colorTones", JSON.stringify(form.colorTones));
     fd.append("chemicalComposition", JSON.stringify(form.chemicalComposition));
     if (form.image) {
@@ -567,33 +551,55 @@ export default function ProductForm({
               </Field>
             </div>
 
-          <Field label="Product Name" required error={errors.name}>
-  <input
-    type="text"
-    value={form.name}
-    onChange={(e) => {
-  setField("name", e.target.value.toUpperCase());
-  clearError("name");
-}}
-    placeholder="e.g. White Fused Alumina"
-    className={`pf-input${errors.name ? " pf-error" : ""}`}
-    style={{ textTransform: "uppercase" }}
-  />
-</Field>
+            <Field label="Product Name" required error={errors.name}>
+              <input
+                type="text"
+                value={form.name}
+                onChange={(e) => {
+                  setField("name", e.target.value.toUpperCase());
+                  clearError("name");
+                }}
+                placeholder="e.g. White Fused Alumina"
+                className={`pf-input${errors.name ? " pf-error" : ""}`}
+                style={{ textTransform: "uppercase" }}
+              />
+            </Field>
 
             <Field label="Short Name" required error={errors.shortName}>
               <input
                 type="text"
                 value={form.shortName}
-               onChange={(e) => {
-  setField("shortName", e.target.value.toUpperCase());a
-  clearError("shortName");
-}}
+                onChange={(e) => {
+                  setField("shortName", e.target.value.toUpperCase());
+                  clearError("shortName");
+                }}
                 placeholder="e.g. WFA"
                 className={`pf-input${errors.shortName ? " pf-error" : ""}`}
                 style={{ textTransform: "uppercase" }}
               />
             </Field>
+
+            <div className="pf-grid-full">
+              <label className="pf-label">Visible on public website</label>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={form.isActive}
+                onClick={() => setField("isActive", !form.isActive)}
+                className={
+                  "inline-flex h-8 w-14 cursor-pointer rounded-full p-0.5 transition-colors " +
+                  (form.isActive
+                    ? "justify-end bg-emerald-600"
+                    : "justify-start bg-slate-300")
+                }
+              >
+                <span className="pointer-events-none h-7 w-7 rounded-full bg-white shadow" />
+              </button>
+              <p className="text-xs text-[var(--c-muted)] mt-1.5">
+                Turn off to hide this product from the materials page and
+                product sheet links.
+              </p>
+            </div>
           </div>
         </div>
 
@@ -785,7 +791,7 @@ export default function ProductForm({
             onClick={() => setMsdsOpen(true)}
             className="pf-btn-accent"
           >
-            Upload MSDS
+            Select MSDS
           </button>
 
           {pdfFile && (
@@ -959,13 +965,9 @@ export default function ProductForm({
           <button type="button" onClick={onCancel} className="pf-btn-ghost">
             Cancel
           </button>
-          <button
-  type="button"
-  onClick={handleSubmit}
-  className="pf-btn-accent"
->
-  {initial ? "Update Product" : "Add Product"}
-</button>
+          <button type="submit" className="pf-btn-accent">
+            {initial ? "Update Product" : "Add Product"}
+          </button>
         </div>
         {msdsOpen && (
           <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">

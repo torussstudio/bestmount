@@ -1,5 +1,5 @@
-"use no memo";
-import { useState } from "react";
+
+import { useState, useEffect, useMemo, memo } from "react";
 import {
   FiPlus,
   FiEdit2,
@@ -12,26 +12,25 @@ import { MdOutlineInventory2 } from "react-icons/md";
 import Modal from "./Modal";
 import ConfirmDialog from "./ConfirmDialog";
 import ProductForm from "./ProductForm";
+import { productImageSrc, PRODUCT_PLACEHOLDER_SRC } from "../../utils/productImage";
 
 // ── ProductImageThumb ──────────────────────────────────────────────────
-function ProductImageThumb({ image, name }) {
-  const imageUrl = image || null;
+const ProductImageThumb = memo(function ProductImageThumb({ image, name }) {
+  const [src, setSrc] = useState(() => productImageSrc(image));
 
-  if (!image) {
-    return (
-      <div className="w-8 h-8 rounded-md bg-slate-100 border border-slate-200 shrink-0 flex items-center justify-center">
-        <MdOutlineInventory2 className="text-slate-300 text-sm" />
-      </div>
-    );
-  }
+  useEffect(() => {
+    setSrc(productImageSrc(image));
+  }, [image]);
+
   return (
     <img
-      src={imageUrl}
-      alt={name || "Product image"}
-      className="w-15 h-15 rounded-md object-contain border border-slate-200 shrink-0"
+      src={src}
+      alt={name || "Product"}
+      className="w-12 h-12 rounded-md object-contain border border-slate-200 shrink-0 bg-white"
+      onError={() => setSrc(PRODUCT_PLACEHOLDER_SRC)}
     />
   );
-}
+});
 
 // ── EmptyState ─────────────────────────────────────────────────────────
 function EmptyState({ title, subtitle }) {
@@ -113,19 +112,23 @@ function CategoryFilterPanel({ categories, selectedId, onSelect }) {
 }
 
 // ── ProductSection ─────────────────────────────────────────────────────
-export default function ProductSection({
+function isProductActive(p) {
+  return p.isActive !== false;
+}
+
+function ProductSection({
   products,
   categories,
   onAdd,
   onUpdate,
   onDelete,
+  onToggleActive,
 }) {
   // CRUD state
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
-  const [msdsOpen, setMsdsOpen] = useState(false);
-  const [pdfFile, setPdfFile] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Search / filter state
   const [searchText, setSearchText] = useState("");
@@ -133,60 +136,33 @@ export default function ProductSection({
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
   // ── CRUD helpers ────────────────────────────────────────────────────
-  function openAdd() {
-    setEditing(null);
+  // function openAdd  () {
+    const openAdd = () => {
+  setEditing(null);
     setModalOpen(true);
   }
-  function openEdit(p) {
+  const openEdit=(p)=> {
     setEditing(p);
     setModalOpen(true);
   }
-  function closeModal() {
+const closeModal = () => {
     setModalOpen(false);
     setEditing(null);
   }
 
-  function handleSubmit(data) {
-    if (editing) {
-      onUpdate(editing._id, data);
-    } else {
-      onAdd(data);
-    }
-    closeModal();
-  }
-
-  async function handleUploadMSDS() {
-    if (!pdfFile) {
-      alert("select pdf");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("msds", pdfFile);
-
+  const handleSubmit = async (data) => {
+    setIsSubmitting(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/msds/upload`, {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        alert(data.message || "upload failed");
-        return;
+      if (editing) {
+        await onUpdate(editing._id, data);
+      } else {
+        await onAdd(data);
       }
-
-      alert("uploaded");
-
-      setMsdsOpen(false);
-      setPdfFile(null);
-    } catch (err) {
-      console.log(err);
-
-      alert("upload failed");
+    } finally {
+      setIsSubmitting(false);
+      closeModal();
     }
-  }
+  };
 
   function getProductCategoryId(p) {
     if (p.category && typeof p.category === "object")
@@ -218,17 +194,29 @@ export default function ProductSection({
     setSelectedCategoryId(id);
   }
 
-  // ── Derive filtered products ──────────────────────────────────────────
-  var query = searchText.trim().toLowerCase();
-  var filtered = products.filter(function (p) {
-    if (query && !p.name.toLowerCase().includes(query)) return false;
-    if (filterMode === "category" && selectedCategoryId) {
-      if (getProductCategoryId(p) !== String(selectedCategoryId)) return false;
-    }
-    return true;
-  });
+  const filtered = useMemo(() => {
+    const query = searchText.trim().toLowerCase();
 
-  var isFiltered = query || (filterMode === "category" && selectedCategoryId);
+    return products.filter((p) => {
+      if (query && !p.name.toLowerCase().includes(query)) return false;
+
+      if (filterMode === "active" && !isProductActive(p)) return false;
+      if (filterMode === "inactive" && isProductActive(p)) return false;
+
+      if (filterMode === "category" && selectedCategoryId) {
+        if (getProductCategoryId(p) !== String(selectedCategoryId))
+          return false;
+      }
+
+      return true;
+    });
+  }, [products, searchText, filterMode, selectedCategoryId]);
+
+  const isFiltered =
+    searchText.trim() !== "" ||
+    (filterMode === "category" && selectedCategoryId) ||
+    filterMode === "active" ||
+    filterMode === "inactive";
 
   // ── Render ─────────────────────────────────────────────────────────────
   return (
@@ -267,9 +255,7 @@ export default function ProductSection({
           <input
             type="text"
             value={searchText}
-            onChange={function (e) {
-              setSearchText(e.target.value);
-            }}
+            onChange={(e) => setSearchText(e.target.value)}
             placeholder="Search products by name…"
             className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-slate-800 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition placeholder-slate-400"
           />
@@ -293,8 +279,10 @@ export default function ProductSection({
             onChange={handleFilterModeChange}
             className="appearance-none w-full min-w-0 sm:min-w-[140px] max-w-full pl-3 sm:pl-4 pr-9 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition cursor-pointer"
           >
-            <option value="all">All</option>
-            <option value="category">Category</option>
+            <option value="all">All products</option>
+            <option value="active">Active only</option>
+            <option value="inactive">Inactive only</option>
+            <option value="category">By category…</option>
           </select>
           <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none" />
         </div>
@@ -361,6 +349,7 @@ export default function ProductSection({
                     "Category",
                     "Bulk Density",
                     "Fused Process",
+                    "On site",
                     "Actions",
                   ].map(function (h) {
                     return (
@@ -406,6 +395,29 @@ export default function ProductSection({
                       </td>
                       <td className="px-4 py-4 text-slate-500 max-w-[180px] truncate">
                         {p.fusedProcess || "—"}
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <button
+                          type="button"
+                          role="switch"
+                          aria-checked={isProductActive(p)}
+                          title={
+                            isProductActive(p)
+                              ? "Visible on website — click to hide"
+                              : "Hidden from website — click to show"
+                          }
+                          onClick={function () {
+                            onToggleActive(p._id, !isProductActive(p));
+                          }}
+                          className={
+                            "inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full p-0.5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 " +
+                            (isProductActive(p)
+                              ? "justify-end bg-emerald-500"
+                              : "justify-start bg-slate-300")
+                          }
+                        >
+                          <span className="pointer-events-none h-6 w-6 rounded-full bg-white shadow" />
+                        </button>
                       </td>
                       <td className="px-4 py-4 w-24">
                         <div className="flex items-center gap-2">
@@ -485,6 +497,27 @@ export default function ProductSection({
                           {p.fusedProcess || ""}
                         </p>
                       )}
+                      <div className="flex items-center gap-2 mt-2">
+                        <span className="text-[11px] text-slate-500 font-medium">
+                          On site
+                        </span>
+                        <button
+                          type="button"
+                          role="switch"
+                          aria-checked={isProductActive(p)}
+                          onClick={function () {
+                            onToggleActive(p._id, !isProductActive(p));
+                          }}
+                          className={
+                            "inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full p-0.5 transition-colors " +
+                            (isProductActive(p)
+                              ? "justify-end bg-emerald-500"
+                              : "justify-start bg-slate-300")
+                          }
+                        >
+                          <span className="pointer-events-none h-6 w-6 rounded-full bg-white shadow" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                   <div className="flex gap-2 mt-3 pt-3 border-t border-slate-100">
@@ -520,6 +553,7 @@ export default function ProductSection({
         size="xl"
       >
         <ProductForm
+          key={editing?._id || "new"}
           initial={editing}
           categories={categories}
           onSubmit={handleSubmit}
@@ -546,3 +580,4 @@ export default function ProductSection({
   );
 }
 
+export default memo(ProductSection);

@@ -40,25 +40,26 @@ const storage = new CloudinaryStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-
-  const allowedTypes = [
+  const allowedImageTypes = [
     "image/png",
     "image/jpeg",
     "image/jpg",
     "image/webp",
-    "application/pdf"
   ];
 
-  if (allowedTypes.includes(file.mimetype)) {
+  const isImage = allowedImageTypes.includes(file.mimetype);
 
-    cb(null, true);
+  // Some browsers upload PDFs with "application/octet-stream".
+  const isPdf =
+    file.mimetype === "application/pdf" ||
+    (file.originalname &&
+      file.originalname.toLowerCase().endsWith(".pdf"));
 
-  } else {
-
-    cb(new Error("Only image or pdf allowed"), false);
-
+  if (isImage || isPdf) {
+    return cb(null, true);
   }
 
+  return cb(new Error("Only image or pdf allowed"), false);
 };
 
 module.exports = multer({

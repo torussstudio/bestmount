@@ -1,6 +1,4 @@
-"use no memo";
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -19,7 +17,6 @@ import CategorySection from "../../components/admin/CategorySection";
 import API from "../../api";
 
 export default function DashboardPage() {
-    
   const navigate = useNavigate();
 
   const [section, setSection] = useState("products");
@@ -32,191 +29,170 @@ export default function DashboardPage() {
 
   const [fetchError, setFetchError] = useState("");
 
-  async function fetchProducts() {
+  const fetchProducts = useCallback(async () => {
     try {
-      const res = await fetch(`${API}/products`);
-
-      if (!res.ok) throw new Error("Failed to fetch products");
-
-      const data = await res.json();
-
-      setProducts(data);
+      const res = await API.get("/products?status=all");
+      setProducts(res.data);
     } catch (err) {
       console.error(err);
 
       throw err;
     }
-  }
-
-  async function fetchCategories() {
-    try {
-      const res = await fetch(`${API}/categories`);
-
-      if (!res.ok) throw new Error("Failed to fetch categories");
-
-      const data = await res.json();
-
-      setCategories(data);
-    } catch (err) {
-      console.error(err);
-
-      throw err;
-    }
-  }
-
-  useEffect(() => {
-    setLoading(true);
-
-    setFetchError("");
-
-    Promise.all([fetchProducts(), fetchCategories()])
-
-      .catch(() => {
-        setFetchError("Unable to load dashboard. Server may be waking up.");
-      })
-
-      .finally(() => {
-        setLoading(false);
-      });
   }, []);
 
-  async function addProduct(formData) {
+  const fetchCategories = useCallback(async () => {
     try {
-      const res = await fetch(
-        `${API}/products`,
-
-        {
-          method: "POST",
-
-          body: formData,
-        },
-      );
-
-      if (!res.ok) throw new Error("Failed to add product");
-
-      await fetchProducts();
-
-      toast.success("Product added");
+      const res = await API.get("/categories");
+      setCategories(res.data);
     } catch (err) {
-      toast.error(err.message);
-    }
-  }
+      console.error(err);
 
-  async function updateProduct(id, formData) {
+      throw err;
+    }
+  }, []);
+
+  useEffect(() => {
+
+  let mounted = true;
+
+  const load = async () => {
+
     try {
-      const res = await fetch(
-        `${API}/products/${id}`,
 
-        {
-          method: "PUT",
+      await Promise.all([
+        fetchProducts(),
+        fetchCategories()
+      ]);
 
-          body: formData,
-        },
-      );
+    } catch {
 
-      if (!res.ok) throw new Error("Failed to update");
+      if (mounted)
+        setFetchError(
+          "Unable to load dashboard. Server may be waking up."
+        );
 
-      await fetchProducts();
+    } finally {
 
-      toast.success("Product updated");
-    } catch (err) {
-      toast.error("Update failed");
-    }
-  }
+      if (mounted)
+        setLoading(false);
 
-  async function deleteProduct(id) {
-    try {
-      const res = await fetch(
-        `${API}/products/${id}`,
-
-        {
-          method: "DELETE",
-        },
-      );
-
-      if (!res.ok) throw new Error("Delete failed");
-
-      await fetchProducts();
-
-      toast.success("Product deleted");
-    } catch (err) {
-      toast.error(err.message);
-    }
-  }
-
-  async function addCategory(data) {
-    try {
-      const res = await fetch(
-        `${API}/categories`,
-
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json",
-          },
-
-          body: JSON.stringify(data),
-        },
-      );
-
-      if (!res.ok) throw new Error("Failed");
-
-      await fetchCategories();
-
-      toast.success("Category added");
-    } catch (err) {
-      toast.error(err.message);
-    }
-  }
-
-  async function updateCategory(id, data) {
-    try {
-      const res = await fetch(
-        `${API}/categories/${id}`,
-
-        {
-          method: "PUT",
-
-          headers: {
-            "Content-Type": "application/json",
-          },
-
-          body: JSON.stringify(data),
-        },
-      );
-
-      if (!res.ok) throw new Error("Failed");
-
-      await fetchCategories();
-
-      toast.success("Category updated");
-    } catch (err) {
-      toast.error(err.message);
-    }
-  }
-
-  async function deleteCategory(id) {
-    const res = await fetch(
-      `${API}/categories/${id}`,
-
-      {
-        method: "DELETE",
-      },
-    );
-
-    if (!res.ok) {
-      const body = await res.json().catch(() => ({}));
-
-      throw new Error(body.message || "Delete failed");
     }
 
-    await fetchCategories();
+  };
 
-    toast.success("Category deleted");
-  }
+  load();
 
-  if (!isLoggedIn()) return null;
+  return () => {
+    mounted = false;
+  };
+
+}, [fetchProducts, fetchCategories]);
+
+  const addProduct = useCallback(
+    async (formData) => {
+      try {
+        await API.post("/products", formData);
+        await fetchProducts();
+        toast.success("Product added");
+      } catch (err) {
+        toast.error(
+          err.response?.data?.message || err.message || "Product add failed",
+        );
+      }
+    },
+    [fetchProducts],
+  );
+
+  const updateProduct = useCallback(
+    async (id, formData) => {
+      try {
+        await API.put(`/products/${id}`, formData);
+        await fetchProducts();
+        toast.success("Product updated");
+      } catch (err) {
+        toast.error(
+          err.response?.data?.message || err.message || "Update failed",
+        );
+      }
+    },
+    [fetchProducts],
+  );
+
+  const deleteProduct = useCallback(
+    async (id) => {
+      try {
+        await API.delete(`/products/${id}`);
+        await fetchProducts();
+        toast.success("Product deleted");
+      } catch (err) {
+        toast.error(err.message);
+      }
+    },
+    [fetchProducts],
+  );
+
+  const toggleProductActive = useCallback(
+    async (id, isActive) => {
+      try {
+        await API.patch(`/products/${id}/status`, { isActive });
+        await fetchProducts();
+        toast.success(
+          isActive ? "Product is visible on the site" : "Product hidden from the site",
+        );
+      } catch (err) {
+        toast.error(
+          err.response?.data?.message ||
+            err.message ||
+            "Could not update product status",
+        );
+      }
+    },
+    [fetchProducts],
+  );
+
+  const addCategory = useCallback(
+    async (data) => {
+      try {
+        await API.post("/categories", data);
+        await fetchCategories();
+        toast.success("Category added");
+      } catch (err) {
+        toast.error(err.message);
+      }
+    },
+    [fetchCategories],
+  );
+
+  const updateCategory = useCallback(
+    async (id, data) => {
+      try {
+        await API.put(`/categories/${id}`, data);
+        await fetchCategories();
+        toast.success("Category updated");
+      } catch (err) {
+        toast.error(err.message);
+      }
+    },
+    [fetchCategories],
+  );
+
+  const deleteCategory = useCallback(
+    async (id) => {
+      try {
+        await API.delete(`/categories/${id}`);
+        await fetchCategories();
+        toast.success("Category deleted");
+      } catch (err) {
+        throw new Error(err.response?.data?.message || "Delete failed");
+      }
+    },
+    [fetchCategories],
+  );
+
+  if (!isLoggedIn()) {
+  navigate("/admin/login");
+  return null;
+}
 
   /* loading screen */
   if (loading) {
@@ -260,6 +236,7 @@ export default function DashboardPage() {
           onAdd={addProduct}
           onUpdate={updateProduct}
           onDelete={deleteProduct}
+          onToggleActive={toggleProductActive}
         />
       ) : (
         <CategorySection

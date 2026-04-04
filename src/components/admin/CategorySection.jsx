@@ -1,5 +1,4 @@
-"use no memo";
-import { useState } from "react";
+import { useState, memo } from "react";
 import {
   FiPlus,
   FiEdit2,
@@ -61,7 +60,7 @@ function ErrorDialog({ isOpen, onClose, message }) {
 }
 
 // ── CategorySection ──────────────────────────────────────────────────────
-export default function CategorySection({
+function CategorySection({
   categories,
   onAdd,
   onUpdate,
@@ -72,20 +71,20 @@ export default function CategorySection({
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [errorMsg, setErrorMsg] = useState(""); // "" = hidden
 
-  function openAdd() {
+  const openAdd = () => {
     setEditing(null);
     setModalOpen(true);
   }
-  function openEdit(cat) {
+  const openEdit = (cat) => {
     setEditing(cat);
     setModalOpen(true);
   }
-  function closeModal() {
+ const closeModal = () => {
     setModalOpen(false);
     setEditing(null);
   }
 
-  function handleFormSubmit(data) {
+  const handleFormSubmit = (data) => {
     if (editing) {
       onUpdate(editing._id, data);
     } else {
@@ -94,7 +93,7 @@ export default function CategorySection({
     closeModal();
   }
 
-  async function handleDeleteConfirm() {
+  const handleDeleteConfirm = async () => {
     if (!deleteTarget) return;
     try {
       await onDelete(deleteTarget._id);
@@ -141,7 +140,7 @@ export default function CategorySection({
             <table className="w-full text-sm text-left">
               <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
-                  {["#", "Category Name", "Actions"].map(function (h) {
+                  {["#", "Category Name", "Actions"].map((h) => {
                     return (
                       <th
                         key={h}
@@ -154,7 +153,7 @@ export default function CategorySection({
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {categories.map(function (c, idx) {
+                {categories.map((c, idx) => {
                   return (
                     <tr
                       key={c._id}
@@ -210,7 +209,7 @@ export default function CategorySection({
           <EmptyState />
         ) : (
           <div className="space-y-3">
-            {categories.map(function (c, idx) {
+            {categories.map((c, idx) => {
               return (
                 <div
                   key={c._id}
@@ -293,3 +292,6 @@ export default function CategorySection({
     </div>
   );
 }
+
+export default memo(CategorySection);
+

@@ -1,10 +1,8 @@
-"use no memo";
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { setAdminSession } from "../../utils/auth";
 import { FiUser, FiLock, FiEye, FiEyeOff, FiAlertCircle } from "react-icons/fi";
-import { MdOutlineTerrain } from "react-icons/md";
 import API from "../../api";
 
 export default function LoginPage() {
@@ -18,53 +16,70 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(true);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+const handleSubmit = async (e) => {
 
-    setError("");
+  e.preventDefault();
 
-    if (!username.trim()) {
-      setError("Username required");
-      return;
-    }
+  setError("");
 
-    if (!password.trim()) {
-      setError("Password required");
-      return;
-    }
+  if (!username.trim()) {
 
-    setLoading(true);
+    setError("Username required");
 
-    try {
-      const res = await fetch(`${API}/admin/login`, {
-        method: "POST",
+    return;
 
-        headers: {
-          "Content-Type": "application/json",
-        },
+  }
 
-        body: JSON.stringify({
-          username: username.trim(),
-          password,
-        }),
-      });
+  if (!password.trim()) {
 
-      const data = await res.json();
+    setError("Password required");
 
-      if (res.ok) {
-        setAdminSession(data.admin, remember);
+    return;
 
-        navigate("/admin", { replace: true });
-      } else {
-        setError(data.message || "Login failed");
-      }
-    } catch {
+  }
+
+  setLoading(true);
+
+  let timeoutId;
+  try {
+
+    const controller = new AbortController();
+
+    timeoutId = setTimeout(() => {
+
+      controller.abort();
+
+    }, 8000);
+
+    const res = await API.post("/admin/login", 
+      {
+        username: username.trim(),
+        password,
+      },
+      { signal: controller.signal }
+    );
+
+    clearTimeout(timeoutId);
+
+    // axios throws on 4xx/5xx, so if we reach here it's successful
+    setAdminSession(res.data.admin, remember);
+    navigate("/admin", { replace: true });
+
+  } catch (err) {
+    if (timeoutId) clearTimeout(timeoutId);
+    
+    if (axios.isCancel(err)) {
+      setError("Server taking too long");
+    } else if (err.response && err.response.data && err.response.data.message) {
+      setError(err.response.data.message);
+    } else {
       setError("Server error");
     }
 
+  } finally {
     setLoading(false);
   }
-
+};
   return (
     <div className="min-h-[100dvh] flex items-center justify-center px-4 relative overflow-hidden bg-[url('/about-bg.webp')] bg-cover bg-center bg-no-repeat">
       <div className="absolute inset-0 bg-black/40" />
@@ -145,7 +160,7 @@ export default function LoginPage() {
 
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={() => setShowPassword(prev => !prev)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-500"
                 >
                   {showPassword ? <FiEyeOff /> : <FiEye />}

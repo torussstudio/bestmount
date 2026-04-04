@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const upload = require("../multer");
-const path = require("path");
-const fs = require("fs");
 
 // upload pdf
 router.post("/upload", upload.single("msds"), (req, res) => {
@@ -16,7 +14,7 @@ router.post("/upload", upload.single("msds"), (req, res) => {
     res.json({
       message: "MSDS uploaded successfully",
 
-      file: req.file.filename,
+      file: req.file.path || req.file.filename,
     });
   } catch (err) {
     console.log(err);

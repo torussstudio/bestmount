@@ -2,9 +2,11 @@ import ReactDOM from "react-dom";
 import { pdf } from "@react-pdf/renderer";
 import { motion } from "framer-motion";
 import logoSrc from "../assets/images/bm-logo-tm-w.png";
-import ProductPDF from "./ProductPDF";
 import { useEffect, useState, forwardRef } from "react";
-import API from "../api.js"
+import { API_BASE_URL } from "../api.js";
+import { productImageSrc, PRODUCT_PLACEHOLDER_SRC } from "../utils/productImage.js";
+
+const MotionDiv = motion.div;
 
 const Label = ({ children }) => (
   <p
@@ -35,10 +37,16 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
   ref,
 ) {
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [heroImgSrc, setHeroImgSrc] = useState(() =>
+    productImageSrc(product?.image),
+  );
   const categoryName = product?.category?.name ?? "";
 
-  const imageUrl = product?.image || null;
   const msdsUrl = product?.msds || null;
+
+  useEffect(() => {
+    setHeroImgSrc(productImageSrc(product?.image));
+  }, [product?._id, product?.image]);
 
   /* Lock body scroll while open */
   useEffect(() => {
@@ -65,6 +73,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
         return;
       }
 
+      const { default: ProductPDF } = await import("./ProductPDF");
       const blob = await pdf(<ProductPDF product={product} />).toBlob();
 
       if (!blob) {
@@ -96,16 +105,14 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
   };
 const handleMSDSDownload = () => {
 
-  console.log("MSDS clicked");
-
   window.open(
-    `${API}/products/msds/${product._id}`,
+    `${API_BASE_URL}/products/msds/${product._id}`,
     "_blank"
   );
 
 };
   return ReactDOM.createPortal(
-    <motion.div
+    <MotionDiv
       ref={ref}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -141,7 +148,7 @@ const handleMSDSDownload = () => {
           boxSizing: "border-box",
         }}
       >
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, scale: 0.97, y: 6 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.97, y: 6 }}
@@ -307,21 +314,21 @@ const handleMSDSDownload = () => {
                 gap: "16px",
               }}
             >
-              {imageUrl && (
-                <img
-                  src={imageUrl}
-                  alt={product.name}
-                  onClick={() => setPreviewOpen(true)}
-                  style={{
-                    width: "120px",
-                    height: "120px",
-                    borderRadius: "10px",
-                    objectFit: "contain",
-                    border: "1px solid rgba(255,255,255,0.12)",
-                    cursor: "zoom-in",
-                  }}
-                />
-              )}
+              <img
+                src={heroImgSrc}
+                alt={product.name}
+                onClick={() => setPreviewOpen(true)}
+                onError={() => setHeroImgSrc(PRODUCT_PLACEHOLDER_SRC)}
+                style={{
+                  width: "120px",
+                  height: "120px",
+                  borderRadius: "10px",
+                  objectFit: "contain",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  cursor: "zoom-in",
+                  background: "rgba(255,255,255,0.04)",
+                }}
+              />
 
               {previewOpen && (
                 <div
@@ -338,7 +345,7 @@ const handleMSDSDownload = () => {
                   }}
                 >
                   <img
-                    src={imageUrl}
+                    src={heroImgSrc}
                     alt="preview"
                     onClick={(e) => e.stopPropagation()}
                     style={{
@@ -684,9 +691,9 @@ const handleMSDSDownload = () => {
               </p>
             </div>
           </div>
-        </motion.div>
+        </MotionDiv>
       </div>
-    </motion.div>,
+    </MotionDiv>,
     document.body,
   );
 });

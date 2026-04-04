@@ -1,23 +1,32 @@
-
 import { AnimatePresence } from "framer-motion";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { Suspense, lazy } from "react";
+
 import ScrollToTop from "./components/ScrollToTop";
 import PageWrapper from "./components/layout/PageWrapper";
 
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-
-import LoginPage from "./pages/admin/LoginPage";
-import DashboardPage from "./pages/admin/DashboardPage";
-import NotFound from "./pages/NotFound";
-import ProductDataSheet from "./pages/ProductDataSheet";
-
 import { isLoggedIn } from "./utils/auth";
+
+/* lazy load pages */
+const Home = lazy(() => import("./pages/Home"));
+const About = lazy(() => import("./pages/About"));
+const Contact = lazy(() => import("./pages/Contact"));
+
+const LoginPage = lazy(() => import("./pages/admin/LoginPage"));
+const DashboardPage = lazy(() => import("./pages/admin/DashboardPage"));
+const ProductDataSheet = lazy(() => import("./pages/ProductDataSheet"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 function ProtectedRoute({ children }) {
   return isLoggedIn() ? children : <Navigate to="/admin/login" replace />;
 }
+
+function GuestRoute({ children }) {
+  return isLoggedIn() ? <Navigate to="/admin" replace /> : children;
+}
+
+// Dark fallback — matches the site background, eliminates grey/white flash
+const PageFallback = <div style={{ background: "#0a0a0a", minHeight: "100vh" }} />;
 
 export default function App() {
   const location = useLocation();
@@ -26,65 +35,74 @@ export default function App() {
     <>
       <ScrollToTop />
 
-      <AnimatePresence mode="wait" initial={false}>
-        <Routes location={location} key={location.pathname}>
+      <Suspense fallback={PageFallback}>
+        <AnimatePresence mode="wait" initial={false}>
+          <Routes location={location} key={location.pathname}>
 
-          {/* Public Routes */}
-          <Route
-            path="/"
-            element={
-              <PageWrapper key="home">
-                <Home />
-              </PageWrapper>
-            }
-          />
+            {/* Public Routes */}
+            <Route
+              path="/"
+              element={
+                <PageWrapper key="home">
+                  <Home />
+                </PageWrapper>
+              }
+            />
 
-          <Route
-            path="/about"
-            element={
-              <PageWrapper key="about">
-                <About />
-              </PageWrapper>
-            }
-          />
+            <Route
+              path="/about"
+              element={
+                <PageWrapper key="about">
+                  <About />
+                </PageWrapper>
+              }
+            />
 
-          <Route
-            path="/contact"
-            element={
-              <PageWrapper key="contact">
-                <Contact />
-              </PageWrapper>
-            }
-          />
+            <Route
+              path="/contact"
+              element={
+                <PageWrapper key="contact">
+                  <Contact />
+                </PageWrapper>
+              }
+            />
 
-          {/* Admin Login */}
-          <Route path="/admin/login" element={<LoginPage />} />
+            {/* Admin Login — logged-in users go to dashboard */}
+            <Route
+              path="/admin/login"
+              element={
+                <GuestRoute>
+                  <LoginPage />
+                </GuestRoute>
+              }
+            />
 
-          {/* ✅ Protected Admin Routes */}
-          <Route
-            path="/admin/*"
-            element={
-              <ProtectedRoute>
-                <DashboardPage />
-              </ProtectedRoute>
-            }
-          />
+            {/* Protected Admin Routes */}
+            <Route
+              path="/admin/*"
+              element={
+                <ProtectedRoute>
+                  <DashboardPage />
+                </ProtectedRoute>
+              }
+            />
 
-          {/* Product data sheet */}
-          <Route
-            path="/product/:id"
-            element={
-              <PageWrapper key="datasheet">
-                <ProductDataSheet />
-              </PageWrapper>
-            }
-          />
+            {/* Product data sheet */}
+            <Route
+              path="/product/:id"
+              element={
+                <PageWrapper key="datasheet">
+                  <ProductDataSheet />
+                </PageWrapper>
+              }
+            />
 
-          {/* 404 – catch-all */}
-          <Route path="*" element={<NotFound />} />
+            {/* 404 */}
+            <Route path="*" element={<NotFound />} />
 
-        </Routes>
-      </AnimatePresence>
+          </Routes>
+        </AnimatePresence>
+      </Suspense>
     </>
   );
 }

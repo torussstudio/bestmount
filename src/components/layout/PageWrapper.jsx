@@ -1,31 +1,30 @@
 import { motion } from "framer-motion";
 
+const MotionDiv = motion.div;
+
 const variants = {
-  initial: { 
-    opacity: 0, 
-    filter: "blur(20px)",
+  initial: {
+    opacity: 0,
   },
-  animate: { 
-    opacity: 1, 
-    filter: "blur(0px)",
+  animate: {
+    opacity: 1,
     transition: {
-      duration: 0.5,
-      ease: [0.25, 0.1, 0.25, 1]
-    }
+      duration: 0.35,
+      ease: [0.25, 0.1, 0.25, 1],
+    },
   },
-  exit: { 
-    opacity: 0, 
-    filter: "blur(20px)",
+  exit: {
+    opacity: 0,
     transition: {
-      duration: 0.4,
-      ease: [0.25, 0.1, 0.25, 1]
-    }
+      duration: 0.25,
+      ease: [0.25, 0.1, 0.25, 1],
+    },
   },
 };
 
 export default function PageWrapper({ children }) {
   return (
-    <motion.div
+    <MotionDiv
       initial="initial"
       animate="animate"
       exit="exit"
@@ -34,6 +33,6 @@ export default function PageWrapper({ children }) {
       style={{ position: "relative" }}
     >
       {children}
-    </motion.div>
+    </MotionDiv>
   );
 }

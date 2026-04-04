@@ -1,10 +1,26 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import API from "../api";
+import API, { API_BASE_URL } from "../api";
 import jsPDF from "jspdf";
 import logoSrc from "../assets/images/bm-logo-tm-w.png";
+import { productImageSrc, PRODUCT_PLACEHOLDER_SRC } from "../utils/productImage";
 
 /* ─── small helpers ─────────────────────────────────────── */
+function ProductHeroThumb({ imageUrl, name }) {
+  const [src, setSrc] = useState(() => productImageSrc(imageUrl));
+  useEffect(() => {
+    setSrc(productImageSrc(imageUrl));
+  }, [imageUrl]);
+  return (
+    <img
+      src={src}
+      alt={name || "Product"}
+      className="max-h-full max-w-full object-contain p-2"
+      onError={() => setSrc(PRODUCT_PLACEHOLDER_SRC)}
+    />
+  );
+}
+
 const Label = ({ children }) => (
   <p className="text-[10px] font-bold uppercase tracking-widest text-amber-400 mb-1">
     {children}
@@ -180,10 +196,6 @@ function buildPDF(product) {
     y += 18;
   }
 
-  // Right panel (fixed y position relative to body start)
-  let ry = 80 + 110 + 90 + 50; // body start + heading offset
-  rightSects.forEach(({ label, value } = {}) => {});
-
   const rightData = [
     { label: "REMARKS",               value: product.remarks },
     { label: "SIZING",                value: product.sizing },
@@ -238,28 +250,55 @@ export default function ProductDataSheet() {
   const [product, setProduct] = useState(null);
   const sheetRef = useRef(null);
 
-  const [loading, setLoading]     = useState(true);
+  const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState(false);
-  const [error, setError]         = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchProduct = async () => {
+    let cancelled = false;
+    const load = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        const res = await fetch(`${API}/products`);
-        if (!res.ok) throw new Error("Failed to fetch");
-        const all = await res.json();
-        const found = all.find((p) => p._id === id);
-        if (!found) throw new Error("Not found");
-        setProduct(found);
+        const { data } = await API.get(`/products/${id}`);
+        if (!cancelled) setProduct(data);
       } catch {
-        setError("Product not found.");
+        if (!cancelled) setError("Product not found.");
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
-    fetchProduct();
+    load();
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
 
+  const handleDownloadPDF = useCallback(() => {
+    if (!product) return;
+    setDownloading(true);
+    try {
+      const pdf = buildPDF(product);
+      const filename = `${product.shortName || product.name || "datasheet"}-TDS.pdf`;
+      pdf.save(filename);
+    } catch (err) {
+      console.error("Download failed:", err);
+      alert("Download failed: " + (err.message || err));
+    } finally {
+      setDownloading(false);
+    }
+  }, [product]);
+
+  const handleDownloadMSDS = useCallback(() => {
+    if (!product?.msds) {
+      alert("MSDS not available");
+      return;
+    }
+    window.open(
+      `${API_BASE_URL}/products/msds/${product._id}`,
+      "_blank",
+    );
+  }, [product]);
 
   /* ── loading / error states ── */
   if (loading) {
@@ -286,62 +325,51 @@ export default function ProductDataSheet() {
     );
   }
 
-
-  const handleDownloadPDF = () => {
-    if (!product) return;
-    setDownloading(true);
-    try {
-      const pdf = buildPDF(product);
-      const filename = `${product.shortName || product.name || "datasheet"}-TDS.pdf`;
-      pdf.save(filename);
-    } catch (err) {
-      console.error("Download failed:", err);
-      alert("Download failed: " + (err.message || err));
-    } finally {
-      setDownloading(false);
-    }
-  };
-
   const categoryName = product.category?.name ?? "";
-
 
   return (
     <div className="py-10 px-4" style={{ background: "#111" }}>
       {/* ── action bar ── */}
-      <div className="max-w-[600px] mx-auto mb-6 flex items-center justify-between">
-        <Link
-          to="/#materials"
-          className="text-sm text-white/40 hover:text-white/80 transition-colors flex items-center gap-1"
-        >
-          ← Back
-        </Link>
-        <button
-          onClick={handleDownloadPDF}
-          disabled={downloading}
-          className="flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 disabled:opacity-50"
-          style={{
-            background: "rgba(255,193,7,0.15)",
-            border: "1px solid rgba(255,193,7,0.3)",
-            color: "#fbbf24",
-          }}
-        >
-          {downloading ? (
-            "Generating…"
-          ) : (
-            <>
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path
-                  d="M7 1v8m0 0L4 6m3 3l3-3M1 11h12"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              Download
-            </>
-          )}
-        </button>
+      <div className="max-w-3xl mx-auto mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <Link
+            to="/#materials"
+            className="inline-flex items-center gap-2 text-sm md:text-base text-white/50 hover:text-white/80 transition-colors"
+          >
+            <span className="text-base md:text-lg">←</span>
+            <span>Back to materials</span>
+          </Link>
+
+          <div className="flex flex-col xs:flex-row gap-3 w-full sm:w-auto">
+            {/* TDS PDF */}
+            <button
+              onClick={handleDownloadPDF}
+              disabled={downloading}
+              className="w-full xs:w-auto inline-flex items-center justify-center gap-2 rounded-full text-sm md:text-base font-semibold transition-all duration-200 disabled:opacity-60 px-5 py-2.5 md:px-6 md:py-3"
+              style={{
+                background: "rgba(255,193,7,0.15)",
+                border: "1px solid rgba(255,193,7,0.3)",
+                color: "#fbbf24",
+              }}
+            >
+              {downloading ? "Generating…" : "Download TDS"}
+            </button>
+
+            {/* MSDS PDF */}
+            <button
+              onClick={handleDownloadMSDS}
+              disabled={!product?.msds}
+              className="w-full xs:w-auto inline-flex items-center justify-center gap-2 rounded-full text-sm md:text-base font-semibold transition-all duration-200 disabled:opacity-40 px-5 py-2.5 md:px-6 md:py-3"
+              style={{
+                background: "rgba(255,255,255,0.08)",
+                border: "1px solid rgba(255,255,255,0.15)",
+                color: "#eee8cd",
+              }}
+            >
+              Download MSDS
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* ── DATA SHEET (visual display) ── */}
@@ -380,14 +408,13 @@ export default function ProductDataSheet() {
           style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}
         >
           <div
-            className="hidden sm:flex flex-shrink-0 w-32 sm:w-40 h-28 sm:h-36 rounded-xl items-center justify-center"
+            className="hidden sm:flex flex-shrink-0 w-32 sm:w-40 h-28 sm:h-36 rounded-xl items-center justify-center overflow-hidden"
             style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}
           >
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" opacity="0.2">
-              <rect x="2" y="2" width="36" height="36" rx="4" stroke="#eee8cd" strokeWidth="1.5"/>
-              <circle cx="13" cy="13" r="4" stroke="#eee8cd" strokeWidth="1.5"/>
-              <path d="M2 28l10-8 8 7 6-5 12 9" stroke="#eee8cd" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            <ProductHeroThumb
+              imageUrl={product.image}
+              name={product.shortName || product.name}
+            />
           </div>
           <div className="flex flex-col justify-center">
             <h1
