@@ -144,6 +144,7 @@ const cookieOptions = {
   sameSite: isProduction ? "none" : "lax",
   path: "/",
   maxAge: 15 * 60 * 1000,
+  domain: isProduction ? "bestmount.onrender.com" : undefined,
 };
 
 const refreshCookieOptions = {
@@ -152,6 +153,7 @@ const refreshCookieOptions = {
   sameSite: isProduction ? "none" : "lax",
   path: "/",
   maxAge: 7 * 24 * 60 * 60 * 1000,
+  domain: isProduction ? "bestmount.onrender.com" : undefined,
 };
 
 // POST /api/admin/login
