@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { setAdminSession } from "../../utils/auth";
-import { FiUser, FiLock, FiEye, FiEyeOff, FiAlertCircle } from "react-icons/fi";
 import API from "../../api";
+import { FiUser, FiLock, FiEye, FiEyeOff, FiAlertCircle } from "react-icons/fi";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -14,7 +13,6 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
-  const [remember, setRemember] = useState(true);
 
 const handleSubmit = async (e) => {
 
@@ -46,12 +44,10 @@ const handleSubmit = async (e) => {
     const controller = new AbortController();
 
     timeoutId = setTimeout(() => {
-
       controller.abort();
+    }, 60000);
 
-    }, 8000);
-
-    const res = await API.post("/admin/login", 
+    await API.post("/admin/login", 
       {
         username: username.trim(),
         password,
@@ -62,9 +58,7 @@ const handleSubmit = async (e) => {
     clearTimeout(timeoutId);
 
     // axios throws on 4xx/5xx, so if we reach here it's successful
-    setAdminSession(res.data.admin, remember);
-    navigate("/admin", { replace: true });
-
+      navigate("/admin", { replace: true });
   } catch (err) {
     if (timeoutId) clearTimeout(timeoutId);
     
@@ -167,17 +161,6 @@ const handleSubmit = async (e) => {
                 </button>
               </div>
             </div>
-
-            {/* remember */}
-            <label className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={remember}
-                onChange={() => setRemember(!remember)}
-                className="accent-indigo-600"
-              />
-              Remember me
-            </label>
 
             {/* submit */}
             <button

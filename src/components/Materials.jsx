@@ -460,7 +460,9 @@ export default function Materials() {
         setCategories(cats);
         setProducts(prods);
 
-        if (cats.length > 0) setSelectedCategory(cats[0]._id);
+       if (cats.length > 0 && !selectedCategory) {
+  setSelectedCategory(cats[0]._id);
+}
       } catch (err) {
         console.error("Failed to load materials data", err);
         if (mounted) setError("Unable to load materials data from the server.");
@@ -475,8 +477,15 @@ export default function Materials() {
   }, []);
 
   const filteredProducts = useMemo(() => {
-    return products.filter((p) => p.category?._id === selectedCategory);
-  }, [products, selectedCategory]);
+  return products.filter((p) => {
+    const catId =
+      typeof p.category === "object"
+        ? p.category?._id
+        : p.category;
+
+    return catId === selectedCategory;
+  });
+}, [products, selectedCategory]);
 
   const selectedCategoryName = useMemo(() => {
     return categories.find((c) => c._id === selectedCategory)?.name ?? "";

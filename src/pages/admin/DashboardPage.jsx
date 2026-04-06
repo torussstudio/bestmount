@@ -1,9 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 
-import { useNavigate } from "react-router-dom";
-
-import { isLoggedIn } from "../../utils/auth";
-
 import { toast } from "react-hot-toast";
 
 import { FiAlertCircle } from "react-icons/fi";
@@ -17,7 +13,6 @@ import CategorySection from "../../components/admin/CategorySection";
 import API from "../../api";
 
 export default function DashboardPage() {
-  const navigate = useNavigate();
 
   const [section, setSection] = useState("products");
 
@@ -51,42 +46,34 @@ export default function DashboardPage() {
     }
   }, []);
 
+  const [retryCount, setRetryCount] = useState(0);
+
   useEffect(() => {
+    let mounted = true;
 
-  let mounted = true;
+    const load = async () => {
+      setLoading(true);
+      setFetchError("");
+      try {
+        await Promise.all([
+          fetchProducts(),
+          fetchCategories()
+        ]);
+      } catch {
+        if (mounted)
+          setFetchError("Unable to load dashboard. Server may be waking up.");
+      } finally {
+        if (mounted)
+          setLoading(false);
+      }
+    };
 
-  const load = async () => {
+    load();
 
-    try {
-
-      await Promise.all([
-        fetchProducts(),
-        fetchCategories()
-      ]);
-
-    } catch {
-
-      if (mounted)
-        setFetchError(
-          "Unable to load dashboard. Server may be waking up."
-        );
-
-    } finally {
-
-      if (mounted)
-        setLoading(false);
-
-    }
-
-  };
-
-  load();
-
-  return () => {
-    mounted = false;
-  };
-
-}, [fetchProducts, fetchCategories]);
+    return () => {
+      mounted = false;
+    };
+  }, [fetchProducts, fetchCategories, retryCount]);
 
   const addProduct = useCallback(
     async (formData) => {
@@ -189,11 +176,6 @@ export default function DashboardPage() {
     [fetchCategories],
   );
 
-  if (!isLoggedIn()) {
-  navigate("/admin/login");
-  return null;
-}
-
   /* loading screen */
   if (loading) {
     return (
@@ -217,7 +199,7 @@ export default function DashboardPage() {
           <p className="text-red-400 text-sm mb-5">{fetchError}</p>
 
           <button
-            onClick={() => window.location.reload()}
+            onClick={() => setRetryCount(c => c + 1)}
             className="px-5 py-2.5 rounded-xl text-white text-sm font-semibold bg-gradient-to-r from-indigo-600 to-violet-600 hover:brightness-110 transition"
           >
             Retry

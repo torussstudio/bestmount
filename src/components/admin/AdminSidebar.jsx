@@ -19,9 +19,8 @@ export default function AdminSidebar({ activeSection, onSection, onClose }) {
 
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
-  function handleLogout() {
-    logout();
-
+  async function handleLogout() {
+    await logout();
     navigate("/", { replace: true });
   }
 

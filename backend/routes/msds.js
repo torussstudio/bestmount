@@ -3,7 +3,9 @@ const router = express.Router();
 const upload = require("../multer");
 
 // upload pdf
-router.post("/upload", upload.single("msds"), (req, res) => {
+const authenticateToken = require("../middleware/auth");
+
+router.post("/upload", authenticateToken, upload.single("msds"), (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({

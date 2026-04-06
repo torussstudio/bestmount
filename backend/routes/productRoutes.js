@@ -2,6 +2,7 @@ const express = require("express");
 const https = require("https");
 const router = express.Router();
 const upload = require("../multer");
+const authenticateToken = require("../middleware/auth");
 
 const Product = require("../models/Product");
 
@@ -18,8 +19,9 @@ function parseBodyBoolean(val, defaultValue) {
 
 // ✅ GET all products
 // Query: status=all | active | inactive (default: active only — public / frontend)
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   try {
+    console.log("GET /api/products called", req.originalUrl);
     // Support both query styles:
     //  - ?status=all|active|inactive
     //  - ?active=true|false (requested by frontend)
@@ -44,17 +46,17 @@ router.get("/", async (req, res) => {
       .populate("category")
       .lean();
 
+    console.log(`Fetched ${products.length} products from DB`);
     res.json(products);
-  } catch {
-    res.status(500).json({
-      message: "Failed to fetch products",
-    });
+  } catch (err) {
+    next(err);
   }
 });
 
 // ✅ ADD product
 router.post(
   "/",
+  authenticateToken,
   upload.fields([
     { name: "image", maxCount: 1 },
     { name: "msds", maxCount: 1 },
@@ -94,18 +96,13 @@ router.post(
       res.json(product);
     } catch (err) {
       console.log("PRODUCT CREATE ERROR 👉", err);
-
-      res.status(500).json({
-        message: err.message,
-        // Helps debug multipart/mongoose validation failures locally
-        details: err?.stack,
-      });
+      next(err);
     }
   },
 );
 
 // ✅ DOWNLOAD MSDS (must be registered before GET /:id or "msds" is captured as :id)
-router.get("/msds/:id", async (req, res) => {
+router.get("/msds/:id", async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.id)
       .select("msds isActive")
@@ -124,33 +121,40 @@ router.get("/msds/:id", async (req, res) => {
     }
 
     const fileName = product.msds.split("/").pop() + ".pdf";
+    const client = product.msds.startsWith("https") ? https : require("http");
 
-    res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
-    res.setHeader("Content-Type", "application/pdf");
-
-    https
+    client
       .get(product.msds, (fileStream) => {
+        if (fileStream.statusCode !== 200) {
+          fileStream.resume();
+          if (!res.headersSent) {
+             return res.status(fileStream.statusCode).json({ message: "File not found or unavailable on CDN" });
+          }
+          return;
+        }
+
+        res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
+        res.setHeader("Content-Type", "application/pdf");
+
         fileStream.on("error", () => {
           if (!res.headersSent) {
-            res.status(500).json({ message: "Download failed" });
+            next(new Error("Download failed"));
           }
         });
         fileStream.pipe(res);
       })
-      .on("error", () => {
+      .on("error", (err) => {
         if (!res.headersSent) {
-          res.status(500).json({ message: "Download failed" });
+          next(err);
         }
       });
-  } catch {
-    res.status(500).json({
-      message: "Download failed",
-    });
+  } catch (err) {
+    next(err);
   }
 });
 
 // ✅ Toggle active (admin) — must be before GET /:id
-async function updateProductStatus(req, res) {
+async function updateProductStatus(req, res, next) {
   try {
     const { isActive } = req.body;
     if (typeof isActive !== "boolean") {
@@ -171,17 +175,17 @@ async function updateProductStatus(req, res) {
     }
 
     res.json(updated);
-  } catch {
-    res.status(500).json({ message: "Failed to update product status" });
+  } catch (err) {
+    next(err);
   }
 }
 
-router.patch("/:id/status", updateProductStatus);
+router.patch("/:id/status", authenticateToken, updateProductStatus);
 // Backwards-compatible alias (in case any old frontend code is still running)
-router.patch("/:id/active", updateProductStatus);
+router.patch("/:id/active", authenticateToken, updateProductStatus);
 
 // ✅ GET single product
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.id)
       .populate("category")
@@ -200,21 +204,20 @@ router.get("/:id", async (req, res) => {
     }
 
     res.json(product);
-  } catch {
-    res.status(500).json({
-      message: "Failed to fetch product",
-    });
+  } catch (err) {
+    next(err);
   }
 });
 
 // ✅ UPDATE product (replace OR remove image)
 router.put(
   "/:id",
+  authenticateToken,
   upload.fields([
     { name: "image", maxCount: 1 },
     { name: "msds", maxCount: 1 },
   ]),
-  async (req, res) => {
+  async (req, res, next) => {
     try {
       const existing = await Product.findById(req.params.id);
 
@@ -274,26 +277,21 @@ router.put(
       res.json(updated);
     } catch (err) {
       console.log(err);
-
-      res.status(500).json({
-        message: "Failed to update product",
-      });
+      next(err);
     }
   },
 );
 
 // ✅ DELETE product
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authenticateToken, async (req, res, next) => {
   try {
     await Product.findByIdAndDelete(req.params.id);
 
     res.json({
       message: "Product deleted",
     });
-  } catch {
-    res.status(500).json({
-      message: "Failed to delete product",
-    });
+  } catch (err) {
+    next(err);
   }
 });
 

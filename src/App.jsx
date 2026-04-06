@@ -1,11 +1,11 @@
 import { AnimatePresence } from "framer-motion";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useState, useEffect } from "react";
 
 import ScrollToTop from "./components/ScrollToTop";
 import PageWrapper from "./components/layout/PageWrapper";
 
-import { isLoggedIn } from "./utils/auth";
+import { checkAuthStatus } from "./utils/auth";
 
 /* lazy load pages */
 const Home = lazy(() => import("./pages/Home"));
@@ -18,11 +18,27 @@ const ProductDataSheet = lazy(() => import("./pages/ProductDataSheet"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 function ProtectedRoute({ children }) {
-  return isLoggedIn() ? children : <Navigate to="/admin/login" replace />;
+  const [authStatus, setAuthStatus] = useState({ loading: true, isLoggedIn: false });
+
+  useEffect(() => {
+    checkAuthStatus().then(st => setAuthStatus({ loading: false, isLoggedIn: st.isLoggedIn }));
+  }, []);
+
+  if (authStatus.loading) return null;
+
+  return authStatus.isLoggedIn ? children : <Navigate to="/admin/login" replace />;
 }
 
 function GuestRoute({ children }) {
-  return isLoggedIn() ? <Navigate to="/admin" replace /> : children;
+  const [authStatus, setAuthStatus] = useState({ loading: true, isLoggedIn: false });
+
+  useEffect(() => {
+    checkAuthStatus().then(st => setAuthStatus({ loading: false, isLoggedIn: st.isLoggedIn }));
+  }, []);
+
+  if (authStatus.loading) return null;
+
+  return authStatus.isLoggedIn ? <Navigate to="/admin" replace /> : children;
 }
 
 // Dark fallback — matches the site background, eliminates grey/white flash

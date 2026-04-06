@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const compression = require("compression");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 const connectDB = require("./config/db");
@@ -8,6 +9,7 @@ const adminRoutes = require("./routes/adminRoutes");
 const productRoutes = require("./routes/productRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const msdsRoutes = require("./routes/msds");
+const authenticateToken = require("./middleware/auth");
 
 const app = express();
 
@@ -16,17 +18,34 @@ connectDB();
 // ✅ Gzip compress all responses
 app.use(compression());
 
+const allowedOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(",").map((s) => s.trim())
+  : ["http://localhost:5173", "http://localhost:5174"];
+
 app.use(
-  process.env.CORS_ORIGIN
-    ? cors({
-        origin: process.env.CORS_ORIGIN.split(",").map((s) => s.trim()),
-      })
-    : cors(),
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS origin denied"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
 );
+
+// Enable cookie parsing
+app.use(cookieParser());
 
 app.use(express.json());
 
+// Public routes
 app.use("/api/admin", adminRoutes);
+
+// Public routes for listing products and categories
 app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/msds", msdsRoutes);
@@ -41,11 +60,11 @@ app.use((err, req, res, next) => {
   console.error("API ERROR:", err);
 
   const status = err?.statusCode || err?.status || 500;
-  const message =
-    err?.message || (status >= 500 ? "Internal server error" : "Bad request");
+  const message = err?.message || (status >= 500 ? "Internal server error" : "Bad request");
 
   res.status(status).json({
     message,
+    ...(process.env.NODE_ENV !== "production" && { stack: err.stack }),
   });
 });
 

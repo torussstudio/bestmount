@@ -128,7 +128,6 @@ function ProductSection({
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Search / filter state
   const [searchText, setSearchText] = useState("");
@@ -151,7 +150,6 @@ const closeModal = () => {
   }
 
   const handleSubmit = async (data) => {
-    setIsSubmitting(true);
     try {
       if (editing) {
         await onUpdate(editing._id, data);
@@ -159,7 +157,6 @@ const closeModal = () => {
         await onAdd(data);
       }
     } finally {
-      setIsSubmitting(false);
       closeModal();
     }
   };

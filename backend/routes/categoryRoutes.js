@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const authenticateToken = require("../middleware/auth");
 
 const Category = require("../models/Category");
 const Product = require("../models/Product");
@@ -7,15 +8,17 @@ const Product = require("../models/Product");
 // GET all categories
 router.get("/", async (req, res) => {
   try {
+    console.log("GET /api/categories called");
     const categories = await Category.find().lean();
+    console.log(`Fetched ${categories.length} categories from DB`);
     res.json(categories);
   } catch (err) {
-    res.status(500).json({ message: "Failed to fetch categories" });
+    next(err);
   }
 });
 
 // ADD category
-router.post("/", async (req, res) => {
+router.post("/", authenticateToken, async (req, res) => {
   try {
     const { name } = req.body;
 
@@ -23,12 +26,12 @@ router.post("/", async (req, res) => {
 
     res.json(category);
   } catch (err) {
-    res.status(500).json({ message: "Failed to add category" });
+    next(err);
   }
 });
 
 // UPDATE category
-router.put("/:id", async (req, res) => {
+router.put("/:id", authenticateToken, async (req, res) => {
   try {
     const { name } = req.body;
 
@@ -44,12 +47,12 @@ router.put("/:id", async (req, res) => {
 
     res.json(updated);
   } catch (err) {
-    res.status(500).json({ message: "Failed to update category" });
+    next(err);
   }
 });
 
 // DELETE category (blocked if products are linked)
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authenticateToken, async (req, res) => {
   try {
     // Check if any products reference this category
     const linkedCount = await Product.countDocuments({
@@ -64,7 +67,7 @@ router.delete("/:id", async (req, res) => {
     await Category.findByIdAndDelete(req.params.id);
     res.json({ message: "Category deleted" });
   } catch (err) {
-    res.status(500).json({ message: "Failed to delete category" });
+    next(err);
   }
 });
 
