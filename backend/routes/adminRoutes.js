@@ -30,7 +30,7 @@ const cookieOptions = {
   secure: true,
   sameSite: "none",
   path: "/",
-  maxAge: 15 * 60 * 1000,
+  domain: ".onrender.com"   // ⭐ IMPORTANT
 };
 
 const refreshCookieOptions = {
@@ -38,7 +38,7 @@ const refreshCookieOptions = {
   secure: true,
   sameSite: "none",
   path: "/",
-  maxAge: 7 * 24 * 60 * 60 * 1000,
+  domain: ".onrender.com"
 };
 
 // POST /api/admin/login
