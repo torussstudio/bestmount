@@ -15,15 +15,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
 const handleSubmit = async (e) => {
-  const res = await API.post("/admin/login", {
-  username: username.trim(),
-  password,
-});
-
-localStorage.setItem("access_token", res.data.accessToken);
-localStorage.setItem("refresh_token", res.data.refreshToken);
-
-navigate("/admin", { replace: true });
+  
 
   e.preventDefault();
 
