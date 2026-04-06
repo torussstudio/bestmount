@@ -72,16 +72,15 @@ router.post("/login", async (req, res, next) => {
     );
 
     // Set HttpOnly cookies
-    res.cookie("access_token", accessToken, cookieOptions);
-    res.cookie("refresh_token", refreshToken, refreshCookieOptions);
-
-    res.json({
-      message: "Login successful",
-      admin: {
-        id: admin._id,
-        username: admin.username,
-      },
-    });
+   res.json({
+  message: "Login successful",
+  accessToken,
+  refreshToken,
+  admin: {
+    id: admin._id,
+    username: admin.username,
+  },
+});
   } catch (error) {
     console.error("Login error:", error);
     next(error);
