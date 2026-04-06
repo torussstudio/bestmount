@@ -15,6 +15,9 @@ const app = express();
 
 connectDB();
 
+// Trust reverse proxy (Render) to allow secure cross-domain HTTPS cookies
+app.set("trust proxy", 1);
+
 // ✅ Gzip compress all responses
 app.use(compression());
 
