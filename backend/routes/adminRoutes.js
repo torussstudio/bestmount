@@ -7,22 +7,38 @@ const Admin = require("../models/Admin");
 const authenticateToken = require("../middleware/auth");
 
 // Cookie options for security
-const isProduction = process.env.NODE_ENV === "production";
+// const isProduction = process.env.NODE_ENV === "production";
+
+// const cookieOptions = {
+//   httpOnly: true,
+//   secure: isProduction,
+//   sameSite: isProduction ? "none" : "lax",
+//   path: "/",
+//   maxAge: 15 * 60 * 1000, // 15 minutes
+// };
+
+// const refreshCookieOptions = {
+//   httpOnly: true,
+//   secure: isProduction,
+//   sameSite: isProduction ? "none" : "lax",
+//   path: "/",
+//   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+// };
 
 const cookieOptions = {
   httpOnly: true,
-  secure: isProduction,
-  sameSite: isProduction ? "none" : "lax",
+  secure: true,
+  sameSite: "none",
   path: "/",
-  maxAge: 15 * 60 * 1000, // 15 minutes
+  maxAge: 15 * 60 * 1000,
 };
 
 const refreshCookieOptions = {
   httpOnly: true,
-  secure: isProduction,
-  sameSite: isProduction ? "none" : "lax",
+  secure: true,
+  sameSite: "none",
   path: "/",
-  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
 // POST /api/admin/login
@@ -120,8 +136,8 @@ router.get("/me", authenticateToken, async (req, res, next) => {
 
 // POST /api/admin/logout
 router.post("/logout", (req, res) => {
-  res.clearCookie("access_token");
-  res.clearCookie("refresh_token");
+  res.clearCookie("access_token", cookieOptions);
+res.clearCookie("refresh_token", refreshCookieOptions);
   res.json({ message: "Logged out successfully" });
 });
 
