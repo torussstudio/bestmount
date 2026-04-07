@@ -12,7 +12,7 @@ mongoose.connect(process.env.MONGO_URI).then(async () => {
   if (adminExists) {
     // Update existing admin with hashed password
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash("123456", salt);
+    const hashedPassword = await bcrypt.hash("bM+852J", salt);
     
     adminExists.password = hashedPassword;
     await adminExists.save();
@@ -20,7 +20,7 @@ mongoose.connect(process.env.MONGO_URI).then(async () => {
   } else {
     // Hash password before storing
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash("123456", salt);
+    const hashedPassword = await bcrypt.hash("bM+852J", salt);
 
     await Admin.create({
       username: "admin",
