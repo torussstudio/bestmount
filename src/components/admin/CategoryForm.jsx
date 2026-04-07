@@ -86,21 +86,19 @@ export default function CategoryForm({
             }}
             placeholder="Abrasives"
             autoFocus
-            className={`
+className={`
+w-full pl-9 pr-3 py-2.5 rounded-xl border text-sm
+text-black placeholder:text-slate-400
+shadow-sm outline-none transition
 
- w-full pl-9 pr-3 py-2.5 rounded-xl border text-sm
- text-black placeholder:text-slate-400
- shadow-sm outline-none transition
+border-[#e4e1d8]
 
+focus:border-[#2d6a4f]
+focus:ring-2
+focus:ring-[#2d6a4f33]
 
-
- ${
-   duplicate
-     ? "border-red-400 focus:ring-red-400"
-     : "border-slate-200 focus:ring-indigo-500/40 focus:border-indigo-500"
- }
-
- `}
+${duplicate ? "border-red-400 focus:ring-red-400" : ""}
+`}
           />
         </div>
 
@@ -127,30 +125,18 @@ export default function CategoryForm({
         <button
           type="submit"
           disabled={loading || !name.trim() || duplicate}
-          className="
-
- min-w-[140px]
-
- flex items-center justify-center gap-2
-
- px-5 py-2.5 rounded-xl
-
- text-white text-sm font-semibold
-
- bg-gradient-to-r from-indigo-600 to-violet-600
-
- hover:brightness-110
-
- shadow-lg shadow-indigo-900/20
-
- transition
-
- disabled:opacity-60
-
- cursor-pointer
-
- "
-        >
+className="
+min-w-[140px]
+flex items-center justify-center gap-2
+px-5 py-2.5 rounded-xl
+text-white text-sm font-semibold
+bg-emerald-600
+hover:bg-emerald-700
+shadow-lg shadow-emerald-900/20
+transition
+disabled:opacity-60
+cursor-pointer
+">
           {loading && (
             <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin " />
           )}

@@ -6,6 +6,7 @@ import {
   FiChevronDown,
   FiX,
 } from "react-icons/fi";
+import imageCompression from "browser-image-compression";
 
 /* ─────────────────────────────────────────────────────────────
    GLOBAL STYLES  (injected once, inside the component tree)
@@ -341,6 +342,8 @@ function deepClone(p) {
     chemicalComposition: (p.chemicalComposition || []).map((r) => ({ ...r })),
     imagePreview: p?.image && p.image.startsWith("http") ? p.image : "",
     image: null,
+     msdsPreview:
+      p?.msds && p.msds.startsWith("http") ? p.msds : "",
   };
 }
 
@@ -384,6 +387,10 @@ export default function ProductForm({
   const [errors, setErrors] = useState({});
   const [msdsOpen, setMsdsOpen] = useState(false);
   const [pdfFile, setPdfFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
+  const [msdsError, setMsdsError] = useState("");
+  const [tempPdf, setTempPdf] = useState(null);
 
   // Inject global CSS once
   useEffect(() => {
@@ -397,6 +404,21 @@ export default function ProductForm({
 
     document.head.appendChild(el);
   }, []);
+
+  useEffect(() => {
+
+  if (initial?.msds) {
+
+    setPdfFile({
+      file: {
+        name: initial.msds.split("/").pop()
+      },
+      preview: initial.msds
+    });
+
+  }
+
+}, [initial]);
 
   const setField = (key, val) => {
     setForm((p) => ({ ...p, [key]: val }));
@@ -436,23 +458,39 @@ export default function ProductForm({
   const clearError = (k) => {
     setErrors((p) => ({ ...p, [k]: "" }));
   };
-  function handleImageChange(e) {
-    const file = e.target.files[0];
+ async function handleImageChange(e) {
+  const file = e.target.files[0];
+  if (!file) return;
 
-    if (!file) return;
+  setImageLoading(true);
 
-    const preview = URL.createObjectURL(file);
+  const options = {
+    maxSizeMB: 0.4,
+    maxWidthOrHeight: 1300,
+    useWebWorker: true,
+  };
+
+  try {
+    const compressedFile = await imageCompression(file, options);
+
+    const preview = URL.createObjectURL(compressedFile);
 
     setForm((p) => {
       if (p.imagePreview) URL.revokeObjectURL(p.imagePreview);
 
       return {
         ...p,
-        image: file,
+        image: compressedFile,
         imagePreview: preview,
       };
     });
+
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setImageLoading(false);
   }
+}
 
   const removeImage = () => {
     setForm((p) => {
@@ -466,34 +504,44 @@ export default function ProductForm({
     });
   };
 
-  function handleUploadMSDS() {
-    if (!pdfFile) {
-      alert("Please select PDF");
+function handleUploadMSDS() {
 
-      return;
-    }
-
-    setMsdsOpen(false);
+  if (!tempPdf?.file) {
+    alert("Please select PDF");
+    return;
   }
-  function handleSubmit(e) {
-    e.preventDefault();
-    const errs = {};
-    if (!form.categoryId) errs.categoryId = "Category is required";
-    if (!form.name.trim()) errs.name = "Product name is required";
-    if (!form.shortName.trim()) errs.shortName = "Short name is required";
-    if (Object.keys(errs).length) {
-      setErrors(errs);
-      return;
-    }
 
+  setPdfFile(tempPdf);   // final save
+  setTempPdf(null);      // clear temp
+  setMsdsOpen(false);
+
+}
+
+ async function handleSubmit(e) {
+  e.preventDefault();
+
+  if (loading) return; // prevent double click
+
+  setLoading(true);
+
+  const errs = {};
+  if (!form.categoryId) errs.categoryId = "Category is required";
+  if (!form.name.trim()) errs.name = "Product name is required";
+  if (!form.shortName.trim()) errs.shortName = "Short name is required";
+
+  if (Object.keys(errs).length) {
+    setErrors(errs);
+    setLoading(false);
+    return;
+  }
+
+  try {
     const fd = new FormData();
+
     fd.append("name", form.name);
     fd.append("shortName", form.shortName);
     fd.append("category", form.categoryId);
-    fd.append(
-      "bulkDensity",
-      form.bulkDensity === "" ? "" : Number(form.bulkDensity),
-    );
+    fd.append("bulkDensity", form.bulkDensity || "");
     fd.append("fusedProcess", form.fusedProcess);
     fd.append("remarks", form.remarks);
     fd.append("sizing", form.sizing);
@@ -501,19 +549,20 @@ export default function ProductForm({
     fd.append("isActive", form.isActive ? "true" : "false");
     fd.append("colorTones", JSON.stringify(form.colorTones));
     fd.append("chemicalComposition", JSON.stringify(form.chemicalComposition));
-    if (form.image) {
-      fd.append("image", form.image);
-    }
 
-    if (pdfFile) {
-      fd.append("msds", pdfFile);
-    }
+    if (form.image) fd.append("image", form.image);
+    if (pdfFile?.file) {
+  fd.append("msds", pdfFile.file);
+}
 
-    if (form.imagePreview === "" && initial?.image) {
-      fd.append("removeImage", "true");
-    }
-    onSubmit(fd);
+    await onSubmit(fd);
+
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setLoading(false);
   }
+}
 
   // ── Render ─────────────────────────────────────────────────────────────
   return (
@@ -740,34 +789,49 @@ export default function ProductForm({
                 gap: "10px",
               }}
             >
-              <label className="pf-upload-btn">
-                <FiUploadCloud size={16} />
-                <span
-                  style={{
-                    flex: 1,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {form.image ? form.image.name : "Upload product image"}
-                </span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  style={{ display: "none" }}
-                />
-              </label>
+          <label
+  className="pf-upload-btn"
+  style={{
+    opacity: imageLoading ? 0.6 : 1,
+    pointerEvents: imageLoading ? "none" : "auto"
+  }}
+>
+  <FiUploadCloud size={16} />
+
+  <span
+    style={{
+      flex: 1,
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap",
+    }}
+  >
+    {imageLoading
+      ? "⏳ Processing image..."
+      : form.image
+        ? form.image.name
+        : "Upload product image"}
+  </span>
+
+  <input
+    type="file"
+    accept="image/*"
+    onChange={handleImageChange}
+    style={{ display: "none" }}
+  />
+</label>
 
               {form.imagePreview && (
                 <button
-                  type="button"
-                  onClick={removeImage}
-                  className="pf-remove-img"
-                >
-                  <FiTrash2 size={12} /> Remove image
-                </button>
+  type="button"
+  onClick={() => {
+    const ok = window.confirm("Remove this image?");
+    if (ok) removeImage();
+  }}
+  className="pf-remove-img"
+>
+  <FiTrash2 size={12} /> Remove image
+</button>
               )}
 
               <p
@@ -787,24 +851,111 @@ export default function ProductForm({
           <SectionTitle>MSDS File</SectionTitle>
 
           <button
-            type="button"
-            onClick={() => setMsdsOpen(true)}
-            className="pf-btn-accent"
-          >
-            Select MSDS
-          </button>
+  type="button"
+  onClick={() => {
+    if (pdfFile) {
+      setMsdsError("Only one MSDS file allowed. Remove existing file first.");
+      return;
+    }
 
-          {pdfFile && (
-            <p
-              style={{
-                marginTop: "8px",
-                fontSize: "12px",
-                color: "#6b6860",
-              }}
-            >
-              Selected: {pdfFile.name}
-            </p>
-          )}
+    setMsdsError("");
+    setMsdsOpen(true);
+  }}
+  className="pf-btn-accent"
+>
+  Select MSDS
+</button>
+
+{msdsError && (
+  <p
+    style={{
+      color: "#c0392b",
+      fontSize: "12px",
+      marginTop: "6px"
+    }}
+  >
+    {msdsError}
+  </p>
+)}
+
+         {pdfFile && (
+  <div
+    style={{
+      marginTop: "12px",
+      padding: "14px",
+      border: "1.5px solid var(--c-border)",
+      borderRadius: "12px",
+      display: "flex",
+      alignItems: "center",
+      gap: "12px",
+      background: "var(--c-bg)"
+    }}
+  >
+
+    {/* icon */}
+    <div
+      style={{
+        width: "42px",
+        height: "42px",
+        borderRadius: "8px",
+        background: "#ede9fe",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: "20px"
+      }}
+    >
+      📄
+    </div>
+
+    {/* text */}
+    <div style={{ flex: 1 }}>
+      <div
+        style={{
+          fontSize: "13px",
+          fontWeight: 600,
+          color: "var(--c-ink)"
+        }}
+      >
+        {pdfFile.file.name}
+      </div>
+
+<a
+  href={`${pdfFile.preview}#toolbar=1`}
+  target="_blank"
+  rel="noopener noreferrer"
+  style={{
+    fontSize: "12px",
+    color: "var(--c-accent)",
+    textDecoration: "none"
+  }}
+>
+  View PDF
+</a>
+    </div>
+
+    {/* remove */}
+   <button
+  type="button"
+  onClick={() => {
+
+    const ok = window.confirm(
+      "Remove MSDS file?"
+    );
+
+    if (!ok) return;
+
+    setPdfFile(null);
+    setMsdsError("");
+
+  }}
+  className="pf-remove-img"
+>
+  Remove
+</button>
+
+  </div>
+)}
         </div>
 
         {/* ── 5. Chemical Composition ─────────────────────────── */}
@@ -965,9 +1116,23 @@ export default function ProductForm({
           <button type="button" onClick={onCancel} className="pf-btn-ghost">
             Cancel
           </button>
-          <button type="submit" className="pf-btn-accent">
-            {initial ? "Update Product" : "Add Product"}
-          </button>
+          <button
+  type="submit"
+  disabled={loading}
+  className="pf-btn-accent"
+  style={{
+    opacity: loading ? 0.7 : 1,
+    cursor: loading ? "not-allowed" : "pointer"
+  }}
+>
+  {loading ? (
+  <>
+    ⏳ Saving...
+  </>
+) : (
+  initial ? "Update Product" : "Add Product"
+)}
+</button>
         </div>
         {msdsOpen && (
           <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
@@ -990,23 +1155,33 @@ transition
                   <div className="flex items-center gap-3">
                     <span className="text-lg">📄</span>
 
-                    <span className="text-sm text-gray-700 truncate">
-                      {pdfFile ? pdfFile.name : "Click to upload MSDS PDF"}
-                    </span>
+                   <span className="text-sm text-gray-700 truncate">
+  {tempPdf ? tempPdf.file.name : "Click to upload MSDS PDF"}
+</span>
                   </div>
 
                   <input
                     type="file"
                     accept="application/pdf"
-                    onChange={(e) => setPdfFile(e.target.files[0])}
+                    onChange={(e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const preview = URL.createObjectURL(file);
+
+ setTempPdf({
+  file,
+  preview
+});
+}}
                     className="hidden"
                   />
                 </label>
 
-                {pdfFile && (
+                {tempPdf && (
                   <button
                     type="button"
-                    onClick={() => setPdfFile(null)}
+                    onClick={() => setTempPdf(null)}
                     className="
 self-end
 flex items-center gap-1

@@ -97,14 +97,6 @@ const handleSubmit = async (e) => {
 
               {/* animated icon fallback */}
             </div>
-{/* 
-            <h1 className="text-xl font-semibold text-slate-900 dark:text-white">
-              Best Mountain Admin
-            </h1>
-
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              Manage products & MSDS
-            </p> */}
           </div>
 
           {/* error */}
@@ -130,7 +122,7 @@ const handleSubmit = async (e) => {
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  placeholder="admin"
+                  placeholder="Admin"
                   className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white/70 dark:bg-white/5 border border-slate-300 dark:border-white/10 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 outline-none transition"
                 />
               </div>
@@ -172,10 +164,6 @@ const handleSubmit = async (e) => {
               {loading ? "Signing in..." : "Sign in"}
             </button>
           </form>
-
-          <p className="text-center text-[11px] text-slate-400 mt-6">
-            admin / 123456
-          </p>
         </div>
       </div>
     </div>
