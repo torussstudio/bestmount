@@ -78,13 +78,10 @@ const handleSubmit = async (e) => {
   return (
     <div className="min-h-[100dvh] flex items-center justify-center px-4 relative overflow-hidden bg-[url('/about-bg.webp')] bg-cover bg-center bg-no-repeat">
       <div className="absolute inset-0 bg-black/40" />
-      {/* animated glow */}
-      {/* <div className="absolute w-[420px] h-[420px] bg-indigo-500/20 blur-[120px] rounded-full -top-40 -left-40 animate-pulse" />
-
-      <div className="absolute w-[420px] h-[420px] bg-violet-500/20 blur-[120px] rounded-full -bottom-40 -right-40 animate-pulse" /> */}
+    
 
       <div className="w-full max-w-md relative z-10">
-        <div className="rounded-3xl border border-white/20 dark:border-white/10 bg-white/70 dark:bg-white/5 backdrop-blur-xl shadow-2xl p-7">
+        <div className="rounded-3xl border border-white/10 bg-black/40 backdrop-blur-xl shadow-2xl p-7">
           {/* logo */}
           <div className="flex flex-col items-center mb-10">
             <div className="flex items-center gap-3 mb-4">
@@ -111,7 +108,7 @@ const handleSubmit = async (e) => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* username */}
             <div>
-              <label className="text-xs text-slate-500 dark:text-slate-400">
+              <label className="text-xs text-white/60">
                 Username
               </label>
 
@@ -123,14 +120,14 @@ const handleSubmit = async (e) => {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="Admin"
-                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white/70 dark:bg-white/5 border border-slate-300 dark:border-white/10 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 outline-none transition"
+                 className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white/10 border border-white/10 text-white placeholder:text-white/40 focus:border-white/30 focus:ring-2 focus:ring-white/20 outline-none transition"
                 />
               </div>
             </div>
 
             {/* password */}
             <div>
-              <label className="text-xs text-slate-500 dark:text-slate-400">
+              <label className="text-xs text-white/60">
                 Password
               </label>
 
@@ -142,7 +139,7 @@ const handleSubmit = async (e) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••"
-                  className="w-full pl-9 pr-10 py-2.5 rounded-xl bg-white/70 dark:bg-white/5 border border-slate-300 dark:border-white/10 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 outline-none transition"
+                 className="w-full pl-9 pr-10 py-2.5 rounded-xl bg-white/10 border border-white/10 text-white placeholder:text-white/40 focus:border-white/30 focus:ring-2 focus:ring-white/20 outline-none transition"
                 />
 
                 <button
