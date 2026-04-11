@@ -239,6 +239,13 @@ router.put(
         msdsFile = req.files.msds[0].path;
       }
 
+      // remove pdf
+if (req.body.removeMsds === "true") {
+
+  msdsFile = null;
+
+}
+
       let colorTones = [];
       let chemicalComposition = [];
 

@@ -391,6 +391,8 @@ export default function ProductForm({
   const [imageLoading, setImageLoading] = useState(false);
   const [msdsError, setMsdsError] = useState("");
   const [tempPdf, setTempPdf] = useState(null);
+  const [removeImageFlag, setRemoveImageFlag] = useState(false);
+const [removeMsdsFlag, setRemoveMsdsFlag] = useState(false);
 
   // Inject global CSS once
   useEffect(() => {
@@ -493,16 +495,26 @@ export default function ProductForm({
 }
 
   const removeImage = () => {
-    setForm((p) => {
-      if (p.imagePreview) URL.revokeObjectURL(p.imagePreview);
 
-      return {
-        ...p,
-        image: null,
-        imagePreview: "",
-      };
-    });
-  };
+  setRemoveImageFlag(true);
+
+  setForm((p) => {
+
+    if (p.imagePreview) URL.revokeObjectURL(p.imagePreview);
+
+    return {
+
+      ...p,
+
+      image: null,
+
+      imagePreview: "",
+
+    };
+
+  });
+
+};
 
 function handleUploadMSDS() {
 
@@ -553,6 +565,13 @@ function handleUploadMSDS() {
     if (form.image) fd.append("image", form.image);
     if (pdfFile?.file) {
   fd.append("msds", pdfFile.file);
+}
+if (removeImageFlag) {
+  fd.append("removeImage", "true");
+}
+
+if (removeMsdsFlag) {
+  fd.append("removeMsds", "true");
 }
 
     await onSubmit(fd);
@@ -945,8 +964,11 @@ function handleUploadMSDS() {
 
     if (!ok) return;
 
-    setPdfFile(null);
-    setMsdsError("");
+  setPdfFile(null);
+
+setRemoveMsdsFlag(true);
+
+setMsdsError("");
 
   }}
   className="pf-remove-img"
