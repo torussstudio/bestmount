@@ -11,16 +11,18 @@
 // gsap.registerPlugin(SplitText);
 
 // const ContactBackground = ({ children }) => (
-//   <div className="relative">
-//     <div
-//       className="
-//           absolute inset-0
-//           bg-[url('/connect-bg.webp')]
-//           bg-cover bg-center bg-no-repeat
-//         "
-//     />
-//     {/* ivide aahn dark aaknath */}
-//     <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-black/0" />
+//   <div
+//     className="relative"
+//     style={{
+//       backgroundImage: "url('/connect-bg.webp')",
+//       backgroundSize: "cover",
+//       backgroundPosition: "center top",
+//       backgroundRepeat: "no-repeat",
+//       backgroundAttachment: "scroll",
+//     }}
+//   >
+//     {/* dark overlay */}
+//     <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-black/0 pointer-events-none" />
 //     <div className="relative z-10">{children}</div>
 //   </div>
 // );
@@ -79,150 +81,157 @@
 //   const formTitleRef    = useRef(null);
 
 //   useEffect(() => {
-//     // ─── section definitions ────────────────────────────────────────────────
-//     const sections = [
-//       {
-//         trigger: heroTitleRef,
-//         animate: ({ tl, splitText }) => {
-//           const title = splitText(heroTitleRef.current,  { type: "lines" });
-//           const p1    = splitText(heroPara1Ref.current,  { type: "lines" });
-//           const p2    = splitText(heroPara2Ref.current,  { type: "lines" });
+//     let cancelled = false;
 
-//           tl
-//             .from(title.lines, {
-//               ...LINE_FROM,
-//               duration: LINE_DURATION,
-//               stagger: LINE_STAGGER,
-//             })
-//             .from(p1.lines, {
-//               ...LINE_FROM,
-//               duration: LINE_DURATION,
-//               stagger: LINE_STAGGER,
-//             }, "-=0.6")
-//             .from(p2.lines, {
-//               ...LINE_FROM,
-//               duration: LINE_DURATION,
-//               stagger: LINE_STAGGER,
-//             }, "-=0.6")
-//             .fromTo(
-//               heroBtnRef.current,
-//               { opacity: 0, y: 10, filter: "blur(4px)" },
-//               { opacity: 1, y: 0,  filter: "blur(0px)", duration: 0.6 },
-//               "-=0.5"
+//     document.fonts.ready.then(() => {
+//       if (cancelled) return;
+
+//       // ─── section definitions ──────────────────────────────────────────────
+//       const sections = [
+//         {
+//           trigger: heroTitleRef,
+//           animate: ({ tl, splitText }) => {
+//             const title = splitText(heroTitleRef.current,  { type: "lines" });
+//             const p1    = splitText(heroPara1Ref.current,  { type: "lines" });
+//             const p2    = splitText(heroPara2Ref.current,  { type: "lines" });
+
+//             tl
+//               .from(title.lines, {
+//                 ...LINE_FROM,
+//                 duration: LINE_DURATION,
+//                 stagger: LINE_STAGGER,
+//               })
+//               .from(p1.lines, {
+//                 ...LINE_FROM,
+//                 duration: LINE_DURATION,
+//                 stagger: LINE_STAGGER,
+//               }, "-=0.6")
+//               .from(p2.lines, {
+//                 ...LINE_FROM,
+//                 duration: LINE_DURATION,
+//                 stagger: LINE_STAGGER,
+//               }, "-=0.6")
+//               .fromTo(
+//                 heroBtnRef.current,
+//                 { opacity: 0, y: 10, filter: "blur(4px)" },
+//                 { opacity: 1, y: 0,  filter: "blur(0px)", duration: 0.6 },
+//                 "-=0.5"
+//               );
+//           },
+//         },
+
+//         {
+//           trigger: connectTitleRef,
+//           animate: ({ tl, splitText }) => {
+//             const title = splitText(connectTitleRef.current, { type: "lines" });
+//             const p1    = splitText(connectPara1Ref.current, { type: "lines" });
+//             const p2    = splitText(connectPara2Ref.current, { type: "lines" });
+//             const big   = splitText(connectBigRef.current,   { type: "lines" });
+
+//             tl
+//               .from(connectLabelRef.current, {
+//                 opacity: 0,
+//                 y: 8,
+//                 filter: "blur(4px)",
+//                 duration: 0.9,
+//               })
+//               .from(title.lines, {
+//                 ...LINE_FROM,
+//                 duration: LINE_DURATION,
+//                 stagger: LINE_STAGGER,
+//               }, "-=0.3")
+//               .from(p1.lines, {
+//                 ...LINE_FROM,
+//                 duration: LINE_DURATION,
+//                 stagger: LINE_STAGGER,
+//               }, "-=0.6")
+//               .from(p2.lines, {
+//                 ...LINE_FROM,
+//                 duration: LINE_DURATION,
+//                 stagger: LINE_STAGGER,
+//               }, "-=0.6")
+//               .from(big.lines, {
+//                 ...LINE_FROM,
+//                 y: 22,
+//                 duration: LINE_DURATION * 1.05,
+//                 stagger: 0.12,
+//               }, "+=0.1");
+//           },
+//         },
+
+//         {
+//           trigger: contactTitleRef,
+//           animate: ({ tl, splitText }) => {
+//             const title     = splitText(contactTitleRef.current, { type: "lines" });
+//             const formTitle = splitText(formTitleRef.current,    { type: "lines" });
+
+//             tl
+//               .from(contactLabelRef.current, {
+//                 opacity: 0,
+//                 y: 8,
+//                 filter: "blur(4px)",
+//                 duration: 0.9,
+//               })
+//               .from(title.lines, {
+//                 ...LINE_FROM,
+//                 duration: LINE_DURATION,
+//                 stagger: LINE_STAGGER,
+//               }, "-=0.3")
+//               .from(formTitle.lines, {
+//                 ...LINE_FROM,
+//                 duration: LINE_DURATION,
+//                 stagger: LINE_STAGGER,
+//               }, "-=0.3");
+//           },
+//         },
+//       ];
+
+//       // ─── hero fires immediately ───────────────────────────────────────────
+//       const heroCleanup = animateSection(sections[0].animate);
+
+//       // ─── scroll-triggered sections ────────────────────────────────────────
+//       const cleanups  = new Map();
+//       const triggered = new Set();
+
+//       const observer = new IntersectionObserver(
+//         (entries) => {
+//           entries.forEach((entry) => {
+//             if (!entry.isIntersecting) return;
+
+//             const section = sections.find(
+//               (s) => s.trigger.current === entry.target
 //             );
+//             if (!section) return;
+
+//             if (triggered.has(entry.target)) return;
+//             triggered.add(entry.target);
+
+//             cleanups.get(entry.target)?.();
+
+//             const cleanup = animateSection(section.animate);
+//             cleanups.set(entry.target, cleanup);
+
+//             observer.unobserve(entry.target);
+//           });
 //         },
-//       },
+//         { threshold: 0.15 }
+//       );
 
-//       {
-//         trigger: connectTitleRef,
-//         animate: ({ tl, splitText }) => {
-//           const title = splitText(connectTitleRef.current, { type: "lines" });
-//           const p1    = splitText(connectPara1Ref.current, { type: "lines" });
-//           const p2    = splitText(connectPara2Ref.current, { type: "lines" });
-//           const big   = splitText(connectBigRef.current,   { type: "lines" });
+//       sections.slice(1).forEach(({ trigger }) => {
+//         if (trigger.current) observer.observe(trigger.current);
+//       });
 
-//           tl
-//             .from(connectLabelRef.current, {
-//               opacity: 0,
-//               y: 8,
-//               filter: "blur(4px)",
-//               duration: 0.9,
-//             })
-//             .from(title.lines, {
-//               ...LINE_FROM,
-//               duration: LINE_DURATION,
-//               stagger: LINE_STAGGER,
-//             }, "-=0.3")
-//             .from(p1.lines, {
-//               ...LINE_FROM,
-//               duration: LINE_DURATION,
-//               stagger: LINE_STAGGER,
-//             }, "-=0.6")
-//             .from(p2.lines, {
-//               ...LINE_FROM,
-//               duration: LINE_DURATION,
-//               stagger: LINE_STAGGER,
-//             }, "-=0.6")
-//             .from(big.lines, {
-//               ...LINE_FROM,
-//               y: 22,
-//               duration: LINE_DURATION * 1.05,
-//               stagger: 0.12,
-//             }, "+=0.1");
-//         },
-//       },
-
-//       {
-//         trigger: contactTitleRef,
-//         animate: ({ tl, splitText }) => {
-//           const title     = splitText(contactTitleRef.current, { type: "lines" });
-//           const formTitle = splitText(formTitleRef.current,    { type: "lines" });
-
-//           tl
-//             .from(contactLabelRef.current, {
-//               opacity: 0,
-//               y: 8,
-//               filter: "blur(4px)",
-//               duration: 0.9,
-//             })
-//             .from(title.lines, {
-//               ...LINE_FROM,
-//               duration: LINE_DURATION,
-//               stagger: LINE_STAGGER,
-//             }, "-=0.3")
-//             .from(formTitle.lines, {
-//               ...LINE_FROM,
-//               duration: LINE_DURATION,
-//               stagger: LINE_STAGGER,
-//             }, "-=0.3");
-//         },
-//       },
-//     ];
-
-//     // ─── hero fires immediately (above the fold) ─────────────────────────────
-//     // Skip hero from IntersectionObserver — it's always visible on load.
-//     const heroCleanup = animateSection(sections[0].animate);
-
-//     // ─── scroll-triggered sections (index 1 and 2) ───────────────────────────
-//     const cleanups  = new Map();
-//     const triggered = new Set(); // guard: never fire the same section twice
-
-//     const observer = new IntersectionObserver(
-//       (entries) => {
-//         entries.forEach((entry) => {
-//           if (!entry.isIntersecting) return;
-
-//           const section = sections.find(
-//             (s) => s.trigger.current === entry.target
-//           );
-//           if (!section) return;
-
-//           // prevent double-fire if observer fires twice before unobserve
-//           if (triggered.has(entry.target)) return;
-//           triggered.add(entry.target);
-
-//           // kill any previous timeline for this element (safety)
-//           cleanups.get(entry.target)?.();
-
-//           const cleanup = animateSection(section.animate);
-//           cleanups.set(entry.target, cleanup);
-
-//           observer.unobserve(entry.target);
-//         });
-//       },
-//       { threshold: 0.15 }
-//     );
-
-//     // only observe scroll sections (skip hero at index 0)
-//     sections.slice(1).forEach(({ trigger }) => {
-//       if (trigger.current) observer.observe(trigger.current);
+//       // store cleanup refs on the cancelled flag object so return can access
+//       cancelled = () => {
+//         observer.disconnect();
+//         heroCleanup();
+//         cleanups.forEach((cleanup) => cleanup());
+//       };
 //     });
 
-//     // ─── cleanup ─────────────────────────────────────────────────────────────
 //     return () => {
-//       observer.disconnect();   // stops all observations cleanly
-//       heroCleanup();
-//       cleanups.forEach((cleanup) => cleanup());
+//       if (typeof cancelled === "function") cancelled();
+//       else cancelled = true;
 //     };
 //   }, []);
 
@@ -233,7 +242,6 @@
 //         <Section className="min-h-screen flex items-center">
 //           <Container>
 //             <div className="grid grid-cols-1 md:grid-cols-12 gap-y-10">
-//               {/* Row 1: Heading */}
 //               <div className="md:col-span-12">
 //                 <h1
 //                   ref={heroTitleRef}
@@ -272,7 +280,6 @@
 //         <Section>
 //           <Container>
 //             <div className="grid grid-cols-1 md:grid-cols-12 gap-y-6 md:gap-x-12">
-//               {/* Left label — ref now correctly attached */}
 //               <div className="md:col-span-3">
 //                 <span
 //                   ref={connectLabelRef}
@@ -282,7 +289,6 @@
 //                 </span>
 //               </div>
 
-//               {/* Right content */}
 //               <div className="md:col-span-9 md:justify-self-end max-w-[560px]">
 //                 <h2
 //                   ref={connectTitleRef}
@@ -320,7 +326,6 @@
 //         <Section>
 //           <Container>
 //             <div className="grid grid-cols-1 md:grid-cols-12 gap-y-6 md:gap-x-12">
-//               {/* Left label — ref now correctly attached */}
 //               <div className="md:col-span-3">
 //                 <span
 //                   ref={contactLabelRef}
@@ -330,7 +335,6 @@
 //                 </span>
 //               </div>
 
-//               {/* Right content */}
 //               <div className="md:col-span-9 md:justify-self-end max-w-[560px]">
 //                 <h2
 //                   ref={contactTitleRef}
@@ -433,14 +437,13 @@
 //   );
 // }
 
-
 import Header from "../components/Header";
 import Container from "../components/layout/Container";
 import PrimaryButton from "../components/layout/PrimaryButton";
 import Section from "../components/layout/Section";
 import Seperator from "../components/layout/seperator";
 import { FiArrowUpRight } from "react-icons/fi";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import SplitText from "gsap/SplitText";
 
@@ -515,6 +518,30 @@ export default function Contact() {
   const contactLabelRef = useRef(null);
   const contactTitleRef = useRef(null);
   const formTitleRef    = useRef(null);
+
+  const [form, setForm] = useState({ name: "", company: "", email: "", message: "" });
+  const [status, setStatus] = useState("idle"); // idle | sending | success | error
+
+  const handleChange = (e) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus("sending");
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/email/send`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error("Failed");
+      setStatus("success");
+      setForm({ name: "", company: "", email: "", message: "" });
+    } catch {
+      setStatus("error");
+    }
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -819,11 +846,15 @@ export default function Contact() {
                   Get in touch with us today.
                 </h2>
 
-                <form className="mt-10 space-y-6 max-w-2xl mx-auto">
+                <form onSubmit={handleSubmit} className="mt-10 space-y-6 max-w-2xl mx-auto">
                   <div className="space-y-1">
                     <input
                       type="text"
+                      name="name"
+                      value={form.name}
+                      onChange={handleChange}
                       placeholder="Name"
+                      required
                       className="w-full bg-transparent border border-white/30 text-white placeholder-white/60 px-4 py-3 focus:outline-none focus:border-[#eee8cd] transition"
                     />
                   </div>
@@ -831,6 +862,9 @@ export default function Contact() {
                   <div className="space-y-1">
                     <input
                       type="text"
+                      name="company"
+                      value={form.company}
+                      onChange={handleChange}
                       placeholder="Company / Organization"
                       className="w-full bg-transparent border border-white/30 text-white placeholder-white/60 px-4 py-3 focus:outline-none focus:border-[#eee8cd] transition"
                     />
@@ -839,7 +873,11 @@ export default function Contact() {
                   <div className="space-y-1">
                     <input
                       type="email"
+                      name="email"
+                      value={form.email}
+                      onChange={handleChange}
                       placeholder="Email"
+                      required
                       className="w-full bg-transparent border border-white/30 text-white placeholder-white/60 px-4 py-3 focus:outline-none focus:border-[#eee8cd] transition"
                     />
                   </div>
@@ -847,20 +885,38 @@ export default function Contact() {
                   <div className="space-y-1">
                     <textarea
                       rows="4"
+                      name="message"
+                      value={form.message}
+                      onChange={handleChange}
                       placeholder="Message"
+                      required
                       className="w-full bg-transparent border border-white/30 text-white placeholder-white/60 px-4 py-3 focus:outline-none focus:border-[#eee8cd] transition"
                     />
                   </div>
 
+                  {status === "success" && (
+                    <p className="text-center text-green-400 text-sm">
+                      ✓ Message sent! We'll get back to you soon.
+                    </p>
+                  )}
+                  {status === "error" && (
+                    <p className="text-center text-red-400 text-sm">
+                      Something went wrong. Please try again or email us directly.
+                    </p>
+                  )}
+
                   <div className="flex justify-center pt-4">
                     <button
                       type="submit"
-                      className="cursor-pointer group inline-flex items-center gap-3 rounded-full border border-white/0 bg-white/10 backdrop-blur-lg px-8 py-3 text-white transition hover:scale-[1.03]"
+                      disabled={status === "sending"}
+                      className="cursor-pointer group inline-flex items-center gap-3 rounded-full border border-white/0 bg-white/10 backdrop-blur-lg px-8 py-3 text-white transition hover:scale-[1.03] disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <span className="inline-flex text-white transition-transform duration-300 ease-out group-hover:rotate-45">
                         <FiArrowUpRight className="w-5 h-5 flex-shrink-0" />
                       </span>
-                      <span className="font-normal">Send Message</span>
+                      <span className="font-normal">
+                        {status === "sending" ? "Sending..." : "Send Message"}
+                      </span>
                     </button>
                   </div>
                 </form>

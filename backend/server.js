@@ -10,6 +10,7 @@ const productRoutes = require("./routes/productRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const msdsRoutes = require("./routes/msds");
 const authenticateToken = require("./middleware/auth");
+const emailRoutes = require("./routes/emailRoutes");
 
 const app = express();
 
@@ -56,6 +57,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/msds", msdsRoutes);
+app.use("/api/email", emailRoutes);
 
 app.get("/", (req, res) => {
   res.send("API is running...");
