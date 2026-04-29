@@ -938,6 +938,7 @@ import Section from "../components/layout/Section";
 import Seperator from "../components/layout/seperator";
 import { FiArrowUpRight } from "react-icons/fi";
 import { useEffect, useRef, useState } from "react";
+import emailjs from "@emailjs/browser";
 import gsap from "gsap";
 import SplitText from "gsap/SplitText";
 
@@ -954,7 +955,6 @@ const ContactBackground = ({ children }) => (
       backgroundAttachment: "scroll",
     }}
   >
-    {/* dark overlay */}
     <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-black/0 pointer-events-none" />
     <div className="relative z-10">{children}</div>
   </div>
@@ -985,10 +985,7 @@ function animateSection(buildFn) {
     return s;
   };
 
-  const tl = gsap.timeline({
-    defaults: { ease: LINE_EASE },
-  });
-
+  const tl = gsap.timeline({ defaults: { ease: LINE_EASE } });
   buildFn({ tl, splitText });
 
   return () => {
@@ -998,10 +995,10 @@ function animateSection(buildFn) {
 }
 
 export default function Contact() {
-  const heroTitleRef   = useRef(null);
-  const heroPara1Ref   = useRef(null);
-  const heroPara2Ref   = useRef(null);
-  const heroBtnRef     = useRef(null);
+  const heroTitleRef    = useRef(null);
+  const heroPara1Ref    = useRef(null);
+  const heroPara2Ref    = useRef(null);
+  const heroBtnRef      = useRef(null);
 
   const connectLabelRef = useRef(null);
   const connectTitleRef = useRef(null);
@@ -1024,12 +1021,17 @@ export default function Contact() {
     e.preventDefault();
     setStatus("sending");
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/email/send`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      if (!res.ok) throw new Error("Failed");
+      await emailjs.send(
+        "service_6we0wnn",
+        "template_7ofno2k",
+        {
+          name: form.name,
+          company: form.company,
+          email: form.email,
+          message: form.message,
+        },
+        "0NPwzq3JhrllHrIW_"
+      );
       setStatus("success");
       setForm({ name: "", company: "", email: "", message: "" });
     } catch {
@@ -1043,31 +1045,18 @@ export default function Contact() {
     document.fonts.ready.then(() => {
       if (cancelled) return;
 
-      // ─── section definitions ──────────────────────────────────────────────
       const sections = [
         {
           trigger: heroTitleRef,
           animate: ({ tl, splitText }) => {
-            const title = splitText(heroTitleRef.current,  { type: "lines" });
-            const p1    = splitText(heroPara1Ref.current,  { type: "lines" });
-            const p2    = splitText(heroPara2Ref.current,  { type: "lines" });
+            const title = splitText(heroTitleRef.current, { type: "lines" });
+            const p1    = splitText(heroPara1Ref.current, { type: "lines" });
+            const p2    = splitText(heroPara2Ref.current, { type: "lines" });
 
             tl
-              .from(title.lines, {
-                ...LINE_FROM,
-                duration: LINE_DURATION,
-                stagger: LINE_STAGGER,
-              })
-              .from(p1.lines, {
-                ...LINE_FROM,
-                duration: LINE_DURATION,
-                stagger: LINE_STAGGER,
-              }, "-=0.6")
-              .from(p2.lines, {
-                ...LINE_FROM,
-                duration: LINE_DURATION,
-                stagger: LINE_STAGGER,
-              }, "-=0.6")
+              .from(title.lines, { ...LINE_FROM, duration: LINE_DURATION, stagger: LINE_STAGGER })
+              .from(p1.lines,    { ...LINE_FROM, duration: LINE_DURATION, stagger: LINE_STAGGER }, "-=0.6")
+              .from(p2.lines,    { ...LINE_FROM, duration: LINE_DURATION, stagger: LINE_STAGGER }, "-=0.6")
               .fromTo(
                 heroBtnRef.current,
                 { opacity: 0, y: 10, filter: "blur(4px)" },
@@ -1076,7 +1065,6 @@ export default function Contact() {
               );
           },
         },
-
         {
           trigger: connectTitleRef,
           animate: ({ tl, splitText }) => {
@@ -1086,36 +1074,13 @@ export default function Contact() {
             const big   = splitText(connectBigRef.current,   { type: "lines" });
 
             tl
-              .from(connectLabelRef.current, {
-                opacity: 0,
-                y: 8,
-                filter: "blur(4px)",
-                duration: 0.9,
-              })
-              .from(title.lines, {
-                ...LINE_FROM,
-                duration: LINE_DURATION,
-                stagger: LINE_STAGGER,
-              }, "-=0.3")
-              .from(p1.lines, {
-                ...LINE_FROM,
-                duration: LINE_DURATION,
-                stagger: LINE_STAGGER,
-              }, "-=0.6")
-              .from(p2.lines, {
-                ...LINE_FROM,
-                duration: LINE_DURATION,
-                stagger: LINE_STAGGER,
-              }, "-=0.6")
-              .from(big.lines, {
-                ...LINE_FROM,
-                y: 22,
-                duration: LINE_DURATION * 1.05,
-                stagger: 0.12,
-              }, "+=0.1");
+              .from(connectLabelRef.current, { opacity: 0, y: 8, filter: "blur(4px)", duration: 0.9 })
+              .from(title.lines, { ...LINE_FROM, duration: LINE_DURATION, stagger: LINE_STAGGER }, "-=0.3")
+              .from(p1.lines,    { ...LINE_FROM, duration: LINE_DURATION, stagger: LINE_STAGGER }, "-=0.6")
+              .from(p2.lines,    { ...LINE_FROM, duration: LINE_DURATION, stagger: LINE_STAGGER }, "-=0.6")
+              .from(big.lines,   { ...LINE_FROM, y: 22, duration: LINE_DURATION * 1.05, stagger: 0.12 }, "+=0.1");
           },
         },
-
         {
           trigger: contactTitleRef,
           animate: ({ tl, splitText }) => {
@@ -1123,30 +1088,15 @@ export default function Contact() {
             const formTitle = splitText(formTitleRef.current,    { type: "lines" });
 
             tl
-              .from(contactLabelRef.current, {
-                opacity: 0,
-                y: 8,
-                filter: "blur(4px)",
-                duration: 0.9,
-              })
-              .from(title.lines, {
-                ...LINE_FROM,
-                duration: LINE_DURATION,
-                stagger: LINE_STAGGER,
-              }, "-=0.3")
-              .from(formTitle.lines, {
-                ...LINE_FROM,
-                duration: LINE_DURATION,
-                stagger: LINE_STAGGER,
-              }, "-=0.3");
+              .from(contactLabelRef.current, { opacity: 0, y: 8, filter: "blur(4px)", duration: 0.9 })
+              .from(title.lines,     { ...LINE_FROM, duration: LINE_DURATION, stagger: LINE_STAGGER }, "-=0.3")
+              .from(formTitle.lines, { ...LINE_FROM, duration: LINE_DURATION, stagger: LINE_STAGGER }, "-=0.3");
           },
         },
       ];
 
-      // ─── hero fires immediately ───────────────────────────────────────────
       const heroCleanup = animateSection(sections[0].animate);
 
-      // ─── scroll-triggered sections ────────────────────────────────────────
       const cleanups  = new Map();
       const triggered = new Set();
 
@@ -1154,20 +1104,11 @@ export default function Contact() {
         (entries) => {
           entries.forEach((entry) => {
             if (!entry.isIntersecting) return;
-
-            const section = sections.find(
-              (s) => s.trigger.current === entry.target
-            );
-            if (!section) return;
-
-            if (triggered.has(entry.target)) return;
+            const section = sections.find((s) => s.trigger.current === entry.target);
+            if (!section || triggered.has(entry.target)) return;
             triggered.add(entry.target);
-
             cleanups.get(entry.target)?.();
-
-            const cleanup = animateSection(section.animate);
-            cleanups.set(entry.target, cleanup);
-
+            cleanups.set(entry.target, animateSection(section.animate));
             observer.unobserve(entry.target);
           });
         },
@@ -1178,7 +1119,6 @@ export default function Contact() {
         if (trigger.current) observer.observe(trigger.current);
       });
 
-      // store cleanup refs on the cancelled flag object so return can access
       cancelled = () => {
         observer.disconnect();
         heroCleanup();
@@ -1302,14 +1242,14 @@ export default function Contact() {
                 <div className="mt-15">
                   <p className="uppercase font-3xl">email</p>
                   <a href="mailto:materials@bm-materials.com">
-                    <p className="font-2xl hover:text-yellow-400 transition font-">
+                    <p className="font-2xl hover:text-yellow-400 transition">
                       materials@bm-materials.com
                     </p>
                   </a>
                   <div className="mt-8"></div>
                   <p className="uppercase font-3xl">call</p>
                   <a href="tel:+85228367022">
-                    <p className="hover:text-yellow-400 transition font-2xl font-">
+                    <p className="hover:text-yellow-400 transition font-2xl">
                       +852 2836 7022
                     </p>
                   </a>
@@ -1320,7 +1260,7 @@ export default function Contact() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <p className="hover:text-yellow-400 transition font-2xl capitalize font-">
+                    <p className="hover:text-yellow-400 transition font-2xl capitalize">
                       Unit C, 5F, Kee Shing Centre, No 74-76 Kimberley Road Tsim
                       Sha Tsui, Kowloon, Hong Kong S.A.R.
                     </p>
