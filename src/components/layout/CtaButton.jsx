@@ -1,101 +1,70 @@
-import { FiArrowUpRight } from "react-icons/fi";
+import downloadPng from "../../assets/images/download.png"
 
-export default function CtaButton({ children, className = "" }) {
+export default function DownButton({ children, className = "" }) {
   return (
     <button
       type="button"
-      className={`
-        cursor-pointer 
+      className="
         group relative inline-flex items-center
         rounded-full
-        text-black
-        transition-transform duration-300 ease-out
-        hover:scale-[1.03]
-        ${className}
-      `}
+        cursor-pointer
+        transition duration-300
+        hover:scale-[1.04]
+      "
     >
-      {/* Shadow - spreads on hover */}
+
+      {/* soft glow */}
       <span
         className="
-          pointer-events-none
-          absolute inset-0 top-auto
-          h-4
+          absolute inset-0
           rounded-full
-          bg-black/50
+
+          bg-black/35
           blur-xl
-          transition-all duration-300 ease-out
+          opacity-70
+
+          transition-all duration-300
           group-hover:blur-2xl
-          group-hover:bg-black/70
-          group-hover:h-6
-          group-hover:-translate-y-1
+          group-hover:opacity-90
         "
       />
 
-      {/* Hover glow bloom (interaction feedback) */}
+      {/* glass */}
       <span
         className="
-          pointer-events-none
-          absolute inset-0
-          rounded-full
-          bg-white/30
-          blur-2xl
-          opacity-0
-          transition-opacity duration-300 ease-out
-          group-hover:opacity-40
-        "
-      />
+          relative z-10
+          flex items-center gap-3
 
-      {/* Static edge glow (rim light) */}
-      <span
-        className="
-          pointer-events-none
-          absolute inset-0
           rounded-full
-          ring-5 ring-white/80
-          blur-[1.5px]
-          opacity-80
-        "
-      />
 
-      {/* Inner highlight (glass sheen) */}
-      <span
-        className="
-          pointer-events-none
-          absolute inset-[4px]
-          rounded-full
-          bg-gradient-to-br
-          from-white/25
-          via-white/5
-          to-transparent
-        "
-      />
+          px-7 py-4
 
-      {/* Button body */}
-      <span
-        className="
-          relative z-10 flex items-center gap-2 sm:gap-3
-          rounded-full
-          bg-white/10 backdrop-blur-md
-          border border-white/10
-          px-5 sm:px-8 py-3 sm:py-4
+          bg-white/[0.18]
+          backdrop-blur-xl
+
+          border border-white/[0.35]
+
+          text-[#e6decc]
         "
       >
-        {/* Arrow */}
-        <span
-          className="
-            inline-flex items-center text-black
-            transition-transform duration-300 ease-out
-            group-hover:rotate-45
-          "
-        >
-          <FiArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
-        </span>
 
-        {/* Text */}
-        <span className="font-normal whitespace-nowrap text-sm sm:text-base">
+        <img
+          src={downloadPng}
+          alt=""
+          className="
+            w-5 h-5
+
+            transition-transform duration-300
+            group-hover:translate-y-[2px]
+          "
+        />
+
+        <span className="text-base whitespace-nowrap">
           {children}
         </span>
+
       </span>
+
     </button>
   )
 }

@@ -78,7 +78,7 @@ const s = StyleSheet.create({
   logo: { width: 90 },
 
   catBadge: {
-    fontSize: 6,
+    fontSize: 10,
     fontWeight: 700,
     letterSpacing: 1.5,
     borderWidth: 0.5,
@@ -110,12 +110,12 @@ const s = StyleSheet.create({
   },
 
   heroName: {
-    fontSize: 30,
+    fontSize: 36,
     fontWeight: 900,
   },
 
   heroSub: {
-    fontSize: 6,
+    fontSize: 10,
     marginTop: 5,
     color: C.text65,
     letterSpacing: 2,
@@ -134,7 +134,7 @@ const s = StyleSheet.create({
   statColWide: { flex: 1.4 },
 
   statLabel: {
-    fontSize: 5.5,
+    fontSize: 9,
     color: C.amber,
     marginBottom: 4,
     letterSpacing: 1,
@@ -171,7 +171,7 @@ const s = StyleSheet.create({
   bodyRight: { flex: 1 },
 
   sectionLabel: {
-    fontSize: 6,
+    fontSize: 8,
     color: C.amber,
     marginBottom: 6,
     letterSpacing: 1,
@@ -189,11 +189,11 @@ const s = StyleSheet.create({
     flexDirection: "row",
     borderBottomWidth: 0.5,
     borderBottomColor: C.border05,
-    paddingVertical: 3.5,
+    paddingVertical: 5,
   },
 
-  tableCell0: { fontSize: 5.5, flex: 1.6, color: C.text90 },
-  tableCell: { fontSize: 5.5, flex: 1, color: C.text65 },
+  tableCell0: { fontSize: 10, flex: 1.6, color: C.text90 },
+  tableCell: { fontSize: 9, flex: 1, color: C.text65 },
 
   rightSection: { marginBottom: 10 },
 
@@ -204,8 +204,8 @@ const s = StyleSheet.create({
   },
 
   bodyText: {
-    fontSize: 6,
-    lineHeight: 1.6,
+    fontSize: 10,
+    lineHeight: 1.8,
     color: C.text75,
   },
 
@@ -219,12 +219,12 @@ const s = StyleSheet.create({
   },
 
   footerText1: {
-    fontSize: 5.5,
+    fontSize: 9,
     color: C.text50,
   },
 
   footerText2: {
-    fontSize: 4.5,
+    fontSize: 8,
     color: C.text20,
     marginTop: 3,
   },
@@ -239,7 +239,7 @@ export default function ProductPDF({ product }) {
 
   return (
     <Document>
-      <Page size={{ width: 595, height: 780 }} style={s.page}>
+      <Page size={{ width: 595, height: 842 }} style={s.page}>
         <View style={s.contentWrapper}>
           <View style={s.header}>
             <Image src={logoSrc} style={s.logo} />

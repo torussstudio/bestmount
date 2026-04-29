@@ -685,15 +685,46 @@ export default function Materials() {
               )}
 
               {/* Panel footer */}
-              <div className="px-4 md:px-6 pt-6 pb-12 flex items-end justify-center mt-2 relative z-10">
-                <a
-                  href="/BM-SRM-Chart-2026.pdf"
-                  target="_blank"
-                  download
-                  className="ml-50 max-md:ml-0"
-                >
-                  <DownButton>Download Full SRM Chart</DownButton>
-                </a>
+              <div className="px-4 md:px-6 pt-6 pb-12 flex items-end justify-center md:justify-start mt-2 relative z-10">
+ <a
+  href="/BM-SRM-Chart-2026.pdf"
+  target="_blank"
+  download
+  className="relative inline-flex items-center gap-3 px-7 py-4 rounded-full text-[16px] font-medium transition-all duration-300"
+  style={{
+   background: "rgba(255,255,255,0.04)",
+    border: "1px solid rgba(255,255,255,0.18)",
+    backdropFilter: "blur(16px)",
+    WebkitBackdropFilter: "blur(16px)",
+    boxShadow:
+      "inset 0 1px 0 rgba(255,255,255,0.25), 0 10px 30px rgba(0,0,0,0.45)",
+  }}
+>
+  <span
+  className="absolute inset-0 rounded-full pointer-events-none"
+  style={{
+    background:
+      "linear-gradient(to bottom, rgba(255,255,255,0.25), rgba(255,255,255,0.05) 40%, transparent 70%)",
+  }}
+/>
+  <svg
+    className="w-5 h-5 shrink-0"
+    viewBox="0 0 24 24"
+    fill="none"
+  >
+    <path
+      d="M12 5v10m0 0l-4-4m4 4l4-4M4 19h16"
+      stroke="#facc15"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+
+  <span style={{ letterSpacing: "0.01em" }}>
+    Download Full SRM Chart
+  </span>
+</a>
               </div>
             </div>
           </Container>

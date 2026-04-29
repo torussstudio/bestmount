@@ -29,9 +29,10 @@ const LINE_FROM = {
 };
 
 const AboutBackground = ({ children }) => (
-  <div className="relative">
-    <div className="absolute inset-0 bg-[url('/about-bg.webp')] bg-cover bg-center bg-no-repeat" />
-    <div className="absolute inset-0 bg-black/0" />
+  <div
+    className="relative bg-cover bg-center bg-no-repeat"
+    style={{ backgroundImage: "url('/about-bg.webp')" }}
+  >
     <div className="relative z-10">{children}</div>
   </div>
 );
@@ -116,6 +117,13 @@ export default function About() {
   useEffect(() => {
 
     const cleanups = [];
+
+    // Wait for fonts to load before running SplitText animations
+    if (typeof document === "undefined") return;
+    let cancelled = false;
+
+    document.fonts.ready.then(() => {
+      if (cancelled) return;
 
     /* 1 ── HERO: plays immediately on mount, no scroll trigger */
     (() => {
@@ -203,7 +211,12 @@ export default function About() {
       })
     );
 
-    return () => cleanups.forEach((fn) => fn());
+    }); // end document.fonts.ready
+
+    return () => {
+      cancelled = true;
+      cleanups.forEach((fn) => fn());
+    };
 
   }, []);
 

@@ -4,7 +4,10 @@ import { motion } from "framer-motion";
 import logoSrc from "../assets/images/bm-logo-tm-w.png";
 import { useEffect, useState, forwardRef } from "react";
 import { API_BASE_URL } from "../api.js";
-import { productImageSrc, PRODUCT_PLACEHOLDER_SRC } from "../utils/productImage.js";
+import {
+  productImageSrc,
+  PRODUCT_PLACEHOLDER_SRC,
+} from "../utils/productImage.js";
 
 const MotionDiv = motion.div;
 
@@ -103,14 +106,9 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
       alert("PDF generation failed");
     }
   };
-const handleMSDSDownload = () => {
-
-  window.open(
-    `${API_BASE_URL}/products/msds/${product._id}`,
-    "_blank"
-  );
-
-};
+  const handleMSDSDownload = () => {
+    window.open(`${API_BASE_URL}/products/msds/${product._id}`, "_blank");
+  };
   return ReactDOM.createPortal(
     <MotionDiv
       ref={ref}
@@ -344,6 +342,31 @@ const handleMSDSDownload = () => {
                     padding: "20px",
                   }}
                 >
+                  {/* Close Button */}
+                  <button
+                    onClick={() => setPreviewOpen(false)}
+                    style={{
+                      position: "absolute",
+                      top: "20px",
+                      right: "20px",
+                      width: "36px",
+                      height: "36px",
+                      borderRadius: "50%",
+                      background: "rgba(255,255,255,0.1)",
+                      border: "1px solid rgba(255,255,255,0.2)",
+                      color: "#fff",
+                      fontSize: "20px",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backdropFilter: "blur(6px)",
+                    }}
+                  >
+                    ×
+                  </button>
+
+                  {/* Image */}
                   <img
                     src={heroImgSrc}
                     alt="preview"
@@ -358,7 +381,6 @@ const handleMSDSDownload = () => {
                   />
                 </div>
               )}
-
               <div>
                 <h1
                   style={{
@@ -482,7 +504,7 @@ const handleMSDSDownload = () => {
                           >
                             {tone.name}
                           </span>
-                          {tone.color && (
+                          {/* {tone.color && (
                             <span
                               style={{
                                 fontSize: "clamp(0.6rem,1.2vw,0.75rem)",
@@ -494,7 +516,7 @@ const handleMSDSDownload = () => {
                             >
                               {tone.color.toUpperCase()}
                             </span>
-                          )}
+                          )} */}
                         </div>
                       ))}
                     </div>
@@ -531,7 +553,7 @@ const handleMSDSDownload = () => {
                 >
                   <h2
                     style={{
-                     fontSize: "clamp(0.8rem,1.4vw,0.72rem)",
+                      fontSize: "clamp(0.8rem,1.4vw,0.72rem)",
                       fontWeight: 700,
                       textTransform: "uppercase",
                       letterSpacing: "0.08em",
