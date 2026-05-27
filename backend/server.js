@@ -18,14 +18,13 @@ connectDB();
 // Trust reverse proxy (Render) to allow secure cross-domain HTTPS cookies
 app.set("trust proxy", 1);
 
-// ✅ Gzip compress all responses
+//  Gzip compress all responses
 app.use(compression());
 
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
-  "https://bestmount-kappa.vercel.app",
-  "https://bestmount-kappa.vercel.app/"
+  "https://bestmoutain.vercel.app",
 ];
 
 app.use(cors({
