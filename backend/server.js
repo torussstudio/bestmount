@@ -24,7 +24,8 @@ app.use(compression());
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
-  "https://bestmoutain.vercel.app",
+  "https://bestmount-kappa.vercel.app",
+  "https://bestmount-kappa.vercel.app/"
 ];
 
 app.use(cors({
