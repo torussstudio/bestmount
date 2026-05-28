@@ -258,7 +258,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
           {/* ── Datasheet card ── */}
           <div
             style={{
-              background: "#1a1b1e",
+              background: "#FFFFFF",
               borderRadius: "14px",
               overflow: "hidden",
               fontFamily: "'SKODA Next', system-ui, sans-serif",
