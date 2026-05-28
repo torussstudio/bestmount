@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom";
 import { pdf } from "@react-pdf/renderer";
 import { motion } from "framer-motion";
-import logoSrc from "../assets/images/bm-logo-tm-w.png";
+import logoSrc from "../assets/images/bm-logo-tm-b.webp";
 import { useEffect, useState, forwardRef } from "react";
 import { API_BASE_URL } from "../api.js";
 import {
