@@ -317,7 +317,7 @@ export default function Contact() {
                   <p className="uppercase font-3xl">call</p>
                   <a href="tel:+85228367022">
                     <p className="hover:text-yellow-400 transition font-2xl">
-                      +852 2836 7022
+                       +852 5476 7524
                     </p>
                   </a>
                   <div className="mt-8"></div>
@@ -328,8 +328,7 @@ export default function Contact() {
                     rel="noopener noreferrer"
                   >
                     <p className="hover:text-yellow-400 transition font-2xl capitalize">
-                      Unit C, 5F, Kee Shing Centre, No 74-76 Kimberley Road Tsim
-                      Sha Tsui, Kowloon, Hong Kong S.A.R.
+                      Room 1746, 17F, Radio City, Hennessy road 505, Causeway Bay, Hong Kong 
                     </p>
                   </a>
                 </div>
