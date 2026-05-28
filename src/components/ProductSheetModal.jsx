@@ -18,7 +18,7 @@ const Label = ({ children }) => (
       fontWeight: 700,
       textTransform: "uppercase",
       letterSpacing: "0.12em",
-      color: "#fbbf24",
+      color: "#E5A100",
       margin: 0,
     }}
   >
@@ -29,7 +29,7 @@ const Label = ({ children }) => (
 const Divider = () => (
   <div
     style={{
-      borderTop: "1px solid rgba(255,255,255,0.08)",
+      borderTop: "1px solid #E5E5E5",
       margin: "5px 0 8px",
     }}
   />
@@ -72,7 +72,6 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
     try {
       if (!product) {
         console.error("Product missing");
-
         return;
       }
 
@@ -81,34 +80,27 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
 
       if (!blob) {
         console.error("PDF blob empty");
-
         return;
       }
 
       const url = URL.createObjectURL(blob);
-
       const link = document.createElement("a");
-
       link.href = url;
-
       link.download = `${product.shortName || product.name || "datasheet"}-TDS.pdf`;
-
       document.body.appendChild(link);
-
       link.click();
-
       document.body.removeChild(link);
-
       URL.revokeObjectURL(url);
     } catch (err) {
       console.error("PDF generation error:", err);
-
       alert("PDF generation failed");
     }
   };
+
   const handleMSDSDownload = () => {
     window.open(`${API_BASE_URL}/products/msds/${product._id}`, "_blank");
   };
+
   return ReactDOM.createPortal(
     <MotionDiv
       ref={ref}
@@ -124,7 +116,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
         style={{
           position: "absolute",
           inset: 0,
-          background: "rgba(8, 6, 4, 0.7)",
+          background: "rgba(0, 0, 0, 0.45)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
         }}
@@ -180,7 +172,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                   background: "none",
                   border: "none",
                   cursor: "pointer",
-                  color: "rgba(255,255,255,0.45)",
+                  color: "rgba(255,255,255,0.75)",
                   fontSize: "0.95rem",
                 }}
               >
@@ -225,11 +217,11 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                   display: "flex",
                   alignItems: "center",
                   gap: "6px",
-                  padding: "6px 12px",
+                  padding: "6px 16px",
                   borderRadius: "999px",
-                  background: "rgba(255,193,7,0.15)",
-                  border: "1px solid rgba(255,193,7,0.35)",
-                  color: "#fbbf24",
+                  background: "#1A1A1A",
+                  border: "1px solid #1A1A1A",
+                  color: "#FFFFFF",
                   fontSize: "0.90rem",
                   fontWeight: 700,
                   cursor: "pointer",
@@ -241,13 +233,17 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
               <button
                 onClick={onClose}
                 style={{
-                  background: "rgba(255,255,255,0.08)",
-                  border: "1px solid rgba(255,255,255,0.14)",
+                  background: "rgba(255,255,255,0.15)",
+                  border: "1px solid rgba(255,255,255,0.25)",
                   borderRadius: "50%",
                   width: "28px",
                   height: "28px",
-                  color: "rgba(255,255,255,0.6)",
+                  color: "rgba(255,255,255,0.8)",
                   cursor: "pointer",
+                  fontSize: "16px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
                 ×
@@ -262,9 +258,9 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
               borderRadius: "14px",
               overflow: "hidden",
               fontFamily: "'SKODA Next', system-ui, sans-serif",
-              color: "#eee8cd",
-              border: "1px solid rgba(255,255,255,0.1)",
-              boxShadow: "0 24px 72px rgba(0,0,0,0.75)",
+              color: "#1A1A1A",
+              border: "1px solid #E5E5E5",
+              boxShadow: "0 24px 72px rgba(0,0,0,0.18)",
             }}
           >
             {/* Header */}
@@ -274,7 +270,8 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                 alignItems: "center",
                 justifyContent: "space-between",
                 padding: "clamp(12px,3vw,20px) clamp(14px,4vw,28px)",
-                borderBottom: "1px solid rgba(255,255,255,0.07)",
+                borderBottom: "1px solid #E5E5E5",
+                background: "#FFFFFF",
               }}
             >
               <img
@@ -291,9 +288,9 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                     letterSpacing: "0.1em",
                     padding: "4px 10px",
                     borderRadius: "999px",
-                    background: "rgba(255,255,255,0.07)",
-                    border: "1px solid rgba(255,255,255,0.13)",
-                    color: "rgba(238,232,205,0.8)",
+                    background: "#F3F3F3",
+                    border: "1px solid #DADADA",
+                    color: "#6B6B6B",
                   }}
                 >
                   {categoryName}
@@ -302,14 +299,14 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
             </div>
 
             {/* Hero */}
-
             <div
               style={{
                 padding: "clamp(14px,3vw,22px) clamp(14px,4vw,28px)",
-                borderBottom: "1px solid rgba(255,255,255,0.07)",
+                borderBottom: "1px solid #E5E5E5",
                 display: "flex",
                 alignItems: "center",
                 gap: "16px",
+                background: "#FFFFFF",
               }}
             >
               <img
@@ -322,9 +319,9 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                   height: "120px",
                   borderRadius: "10px",
                   objectFit: "contain",
-                  border: "1px solid rgba(255,255,255,0.12)",
+                  border: "1px solid #E5E5E5",
                   cursor: "zoom-in",
-                  background: "rgba(255,255,255,0.04)",
+                  background: "#F8F8F8",
                 }}
               />
 
@@ -334,7 +331,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                   style={{
                     position: "fixed",
                     inset: 0,
-                    background: "rgba(0,0,0,0.85)",
+                    background: "rgba(0,0,0,0.75)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -342,7 +339,6 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                     padding: "20px",
                   }}
                 >
-                  {/* Close Button */}
                   <button
                     onClick={() => setPreviewOpen(false)}
                     style={{
@@ -366,7 +362,6 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                     ×
                   </button>
 
-                  {/* Image */}
                   <img
                     src={heroImgSrc}
                     alt="preview"
@@ -376,17 +371,18 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                       maxHeight: "100%",
                       objectFit: "contain",
                       borderRadius: "12px",
-                      boxShadow: "0 10px 40px rgba(0,0,0,0.6)",
+                      boxShadow: "0 10px 40px rgba(0,0,0,0.4)",
                     }}
                   />
                 </div>
               )}
+
               <div>
                 <h1
                   style={{
                     fontSize: "clamp(1.6rem,6vw,2.6rem)",
                     fontWeight: 900,
-                    color: "#eee8cd",
+                    color: "#1A1A1A",
                     letterSpacing: "-0.02em",
                     lineHeight: 1,
                     margin: 0,
@@ -402,7 +398,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                     fontWeight: 600,
                     letterSpacing: "0.16em",
                     textTransform: "uppercase",
-                    color: "rgba(238,232,205,0.4)",
+                    color: "#8A8A8A",
                     lineHeight: 1,
                   }}
                 >
@@ -411,12 +407,11 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
               </div>
             </div>
 
-            {/* Stats row — 3 cols on sm+, 2 cols stacked on mobile */}
-            <div style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
-              {/* Responsive stats via two rows on tiny screens */}
+            {/* Stats row */}
+            <div style={{ borderBottom: "1px solid #E5E5E5" }}>
               <style>{`
                 .bm-stats { display: grid; grid-template-columns: 1fr 1fr; }
-                .bm-stats-c3 { border-top: 1px solid rgba(255,255,255,0.07); grid-column: 1 / -1; }
+                .bm-stats-c3 { border-top: 1px solid #E5E5E5; grid-column: 1 / -1; }
                 @media (min-width: 480px) {
                   .bm-stats { grid-template-columns: 1fr 1fr 1.4fr; }
                   .bm-stats-c3 { border-top: none; grid-column: auto; }
@@ -426,7 +421,8 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                 <div
                   style={{
                     padding: "clamp(12px,2.5vw,18px) clamp(14px,4vw,28px)",
-                    borderRight: "1px solid rgba(255,255,255,0.07)",
+                    borderRight: "1px solid #E5E5E5",
+                    background: "#FFFFFF",
                   }}
                 >
                   <Label>Fused Process</Label>
@@ -434,7 +430,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                     style={{
                       fontSize: "clamp(1rem,3vw,1.35rem)",
                       fontWeight: 700,
-                      color: "#eee8cd",
+                      color: "#1A1A1A",
                       margin: "5px 0 0",
                     }}
                   >
@@ -444,6 +440,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                 <div
                   style={{
                     padding: "clamp(12px,2.5vw,18px) clamp(10px,2.5vw,20px)",
+                    background: "#FFFFFF",
                   }}
                 >
                   <Label>Bulk Density</Label>
@@ -451,7 +448,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                     style={{
                       fontSize: "clamp(1rem,3vw,1.35rem)",
                       fontWeight: 700,
-                      color: "#eee8cd",
+                      color: "#1A1A1A",
                       margin: "5px 0 0",
                     }}
                   >
@@ -462,6 +459,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                   className="bm-stats-c3"
                   style={{
                     padding: "clamp(12px,2.5vw,18px) clamp(14px,4vw,28px)",
+                    background: "#FFFFFF",
                   }}
                 >
                   <Label>Color Tone</Label>
@@ -490,13 +488,13 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                               height: "18px",
                               borderRadius: "3px",
                               background: tone.color || "#ccc",
-                              border: "1px solid rgba(255,255,255,0.12)",
+                              border: "1px solid #DADADA",
                             }}
                           />
                           <span
                             style={{
                               fontSize: "0.42rem",
-                              color: "rgba(238,232,205,0.55)",
+                              color: "#8A8A8A",
                               textTransform: "uppercase",
                               textAlign: "center",
                               lineHeight: 1.4,
@@ -504,26 +502,13 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                           >
                             {tone.name}
                           </span>
-                          {/* {tone.color && (
-                            <span
-                              style={{
-                                fontSize: "clamp(0.6rem,1.2vw,0.75rem)",
-                                color: "rgba(238,232,205,0.3)",
-                                textAlign: "center",
-                                letterSpacing: "0.04em",
-                                fontFamily: "monospace",
-                              }}
-                            >
-                              {tone.color.toUpperCase()}
-                            </span>
-                          )} */}
                         </div>
                       ))}
                     </div>
                   ) : (
                     <span
                       style={{
-                        color: "rgba(255,255,255,0.25)",
+                        color: "#8A8A8A",
                         fontSize: "0.95rem",
                       }}
                     >
@@ -535,13 +520,13 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
             </div>
 
             {/* Body — 2 cols on sm+, 1 col stacked on mobile */}
-            <div style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+            <div style={{ borderBottom: "1px solid #E5E5E5" }}>
               <style>{`
                 .bm-body { display: grid; grid-template-columns: 1fr; }
-                .bm-body-right { border-top: 1px solid rgba(255,255,255,0.07); }
+                .bm-body-right { border-top: 1px solid #E5E5E5; }
                 @media (min-width: 480px) {
                   .bm-body { grid-template-columns: 1fr 1fr; }
-                  .bm-body-right { border-top: none; border-left: 1px solid rgba(255,255,255,0.07); }
+                  .bm-body-right { border-top: none; border-left: 1px solid #E5E5E5; }
                 }
               `}</style>
               <div className="bm-body">
@@ -549,6 +534,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                 <div
                   style={{
                     padding: "clamp(14px,3vw,20px) clamp(14px,4vw,28px)",
+                    background: "#FFFFFF",
                   }}
                 >
                   <h2
@@ -557,7 +543,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                       fontWeight: 700,
                       textTransform: "uppercase",
                       letterSpacing: "0.08em",
-                      color: "#fbbf24",
+                      color: "#E5A100",
                       lineHeight: 1.5,
                       marginBottom: "10px",
                     }}
@@ -577,12 +563,11 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                               style={{
                                 textAlign: "left",
                                 fontSize: "0.70rem",
-                                color: "rgba(238,232,205,0.35)",
+                                color: "#8A8A8A",
                                 fontWeight: 600,
                                 textTransform: "uppercase",
                                 letterSpacing: "0.06em",
-                                borderBottom:
-                                  "1px solid rgba(255,255,255,0.08)",
+                                borderBottom: "1px solid #E5E5E5",
                                 paddingRight: "8px",
                                 paddingBottom: "6px",
                               }}
@@ -597,7 +582,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                           <tr
                             key={i}
                             style={{
-                              borderBottom: "1px solid rgba(255,255,255,0.04)",
+                              borderBottom: "1px solid #F3F3F3",
                             }}
                           >
                             {[row.name, row.typical, row.min, row.max].map(
@@ -607,9 +592,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                                   style={{
                                     fontSize: "0.62rem",
                                     color:
-                                      j === 0
-                                        ? "rgba(238,232,205,0.88)"
-                                        : "rgba(238,232,205,0.55)",
+                                      j === 0 ? "#1A1A1A" : "#4A4A4A",
                                     fontWeight: j === 0 ? 800 : 600,
                                     padding: "5px 8px 5px 0",
                                   }}
@@ -626,7 +609,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                     <p
                       style={{
                         fontSize: "0.58rem",
-                        color: "rgba(238,232,205,0.3)",
+                        color: "#8A8A8A",
                       }}
                     >
                       No composition data available.
@@ -642,6 +625,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                     display: "flex",
                     flexDirection: "column",
                     gap: "14px",
+                    background: "#FFFFFF",
                   }}
                 >
                   {[
@@ -660,7 +644,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                             fontWeight: 700,
                             textTransform: "uppercase",
                             letterSpacing: "0.1em",
-                            color: "#fbbf24",
+                            color: "#E5A100",
                             margin: 0,
                           }}
                         >
@@ -670,7 +654,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                         <p
                           style={{
                             fontSize: "0.85rem",
-                            color: "rgba(238,232,205,0.72)",
+                            color: "#4A4A4A",
                             lineHeight: 1.65,
                             margin: 0,
                           }}
@@ -689,13 +673,14 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
               style={{
                 padding: "12px clamp(14px,4vw,28px)",
                 textAlign: "center",
-                background: "rgba(0,0,0,0.25)",
+                background: "#F8F8F8",
+                borderTop: "1px solid #E5E5E5",
               }}
             >
               <p
                 style={{
                   fontSize: "0.48rem",
-                  color: "rgba(238,232,205,0.35)",
+                  color: "#8A8A8A",
                   margin: 0,
                 }}
               >
@@ -705,7 +690,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
               <p
                 style={{
                   fontSize: "0.42rem",
-                  color: "rgba(238,232,205,0.2)",
+                  color: "#AAAAAA",
                   marginTop: "3px",
                 }}
               >
