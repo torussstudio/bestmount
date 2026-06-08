@@ -18,31 +18,50 @@ const ProductDataSheet = lazy(() => import("./pages/ProductDataSheet"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 function ProtectedRoute({ children }) {
-  const [authStatus, setAuthStatus] = useState({ loading: true, isLoggedIn: false });
+  const [authStatus, setAuthStatus] = useState({
+    loading: true,
+    isLoggedIn: false,
+  });
 
-  useEffect(() => {
-    checkAuthStatus().then(st => setAuthStatus({ loading: false, isLoggedIn: st.isLoggedIn }));
-  }, []);
+ useEffect(() => {
+  let mounted = true;
 
-  if (authStatus.loading) return null;
+  checkAuthStatus().then((st) => {
+    if (mounted) {
+      setAuthStatus({
+        loading: false,
+        isLoggedIn: st.isLoggedIn,
+      });
+    }
+  });
 
-  return authStatus.isLoggedIn ? children : <Navigate to="/admin/login" replace />;
+  return () => {
+    mounted = false;
+  };
+}, []);
+
+  if (authStatus.loading) {
+  return (
+    <div
+      style={{
+        background: "#0a0a0a",
+        minHeight: "100vh",
+      }}
+    />
+  );
 }
 
-function GuestRoute({ children }) {
-  const [authStatus, setAuthStatus] = useState({ loading: true, isLoggedIn: false });
-
-  useEffect(() => {
-    checkAuthStatus().then(st => setAuthStatus({ loading: false, isLoggedIn: st.isLoggedIn }));
-  }, []);
-
-  if (authStatus.loading) return null;
-
-  return authStatus.isLoggedIn ? <Navigate to="/admin" replace /> : children;
+  return authStatus.isLoggedIn ? (
+    children
+  ) : (
+    <Navigate to="/admin/login" replace />
+  );
 }
 
 // Dark fallback — matches the site background, eliminates grey/white flash
-const PageFallback = <div style={{ background: "#0a0a0a", minHeight: "100vh" }} />;
+const PageFallback = (
+  <div style={{ background: "#0a0a0a", minHeight: "100vh" }} />
+);
 
 export default function App() {
   const location = useLocation();
@@ -54,7 +73,6 @@ export default function App() {
       <Suspense fallback={PageFallback}>
         <AnimatePresence mode="wait" initial={false}>
           <Routes location={location} key={location.pathname}>
-
             {/* Public Routes */}
             <Route
               path="/"
@@ -84,14 +102,7 @@ export default function App() {
             />
 
             {/* Admin Login — logged-in users go to dashboard */}
-            <Route
-              path="/admin/login"
-              element={
-                <GuestRoute>
-                  <LoginPage />
-                </GuestRoute>
-              }
-            />
+            <Route path="/admin/login" element={<LoginPage />} />
 
             {/* Protected Admin Routes */}
             <Route
@@ -115,7 +126,6 @@ export default function App() {
 
             {/* 404 */}
             <Route path="*" element={<NotFound />} />
-
           </Routes>
         </AnimatePresence>
       </Suspense>

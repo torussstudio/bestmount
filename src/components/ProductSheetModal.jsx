@@ -188,9 +188,9 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                     gap: "6px",
                     padding: "6px 12px",
                     borderRadius: "999px",
-                    background: "rgba(34,197,94,0.15)",
-                    border: "1px solid rgba(34,197,94,0.35)",
-                    color: "#22c55e",
+                    background: "#000000",
+                    border: "1px solid #000000",
+                    color: "#ffffff",
                     fontSize: "0.90rem",
                     fontWeight: 700,
                     cursor: "pointer",
@@ -219,9 +219,9 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                   gap: "6px",
                   padding: "6px 16px",
                   borderRadius: "999px",
-                  background: "#1A1A1A",
-                  border: "1px solid #1A1A1A",
-                  color: "#FFFFFF",
+                  background: "#000000",
+                  border: "1px solid #000000",
+                  color: "#ffffff",
                   fontSize: "0.90rem",
                   fontWeight: 700,
                   cursor: "pointer",
@@ -254,13 +254,13 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
           {/* ── Datasheet card ── */}
           <div
             style={{
-              background: "#FFFFFF",
+              background: "#f3f3f1",
               borderRadius: "14px",
               overflow: "hidden",
               fontFamily: "'SKODA Next', system-ui, sans-serif",
-              color: "#1A1A1A",
-              border: "1px solid #E5E5E5",
-              boxShadow: "0 24px 72px rgba(0,0,0,0.18)",
+              color: "#161616",
+              border: "1px solid rgba(0,0,0,0.08)",
+              boxShadow: "0 10px 35px rgba(0,0,0,0.12)",
             }}
           >
             {/* Header */}
@@ -270,14 +270,17 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                 alignItems: "center",
                 justifyContent: "space-between",
                 padding: "clamp(12px,3vw,20px) clamp(14px,4vw,28px)",
-                borderBottom: "1px solid #E5E5E5",
-                background: "#FFFFFF",
+                borderBottom: "1px solid rgba(0,0,0,0.08)",
               }}
             >
               <img
                 src={logoSrc}
                 alt="Best Mountain"
-                style={{ height: "clamp(24px,5vw,36px)", width: "auto" }}
+                style={{
+                  height: "clamp(24px,5vw,36px)",
+                  width: "auto",
+                  filter: "invert(1)",
+                }}
               />
               {categoryName && (
                 <span
@@ -288,9 +291,9 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                     letterSpacing: "0.1em",
                     padding: "4px 10px",
                     borderRadius: "999px",
-                    background: "#F3F3F3",
-                    border: "1px solid #DADADA",
-                    color: "#6B6B6B",
+                    background: "rgba(0,0,0,0.04)",
+                    border: "1px solid rgba(0,0,0,0.08)",
+                    color: "rgba(0,0,0,0.65)",
                   }}
                 >
                   {categoryName}
@@ -302,7 +305,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
             <div
               style={{
                 padding: "clamp(14px,3vw,22px) clamp(14px,4vw,28px)",
-                borderBottom: "1px solid #E5E5E5",
+                borderBottom: "1px solid rgba(0,0,0,0.08)",
                 display: "flex",
                 alignItems: "center",
                 gap: "16px",
@@ -319,9 +322,9 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                   height: "120px",
                   borderRadius: "10px",
                   objectFit: "contain",
-                  border: "1px solid #E5E5E5",
+                  border: "1px solid rgba(0,0,0,0.08)",
                   cursor: "zoom-in",
-                  background: "#F8F8F8",
+                  background: "#ffffff",
                 }}
               />
 
@@ -382,7 +385,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                   style={{
                     fontSize: "clamp(1.6rem,6vw,2.6rem)",
                     fontWeight: 900,
-                    color: "#1A1A1A",
+                    color: "#111111",
                     letterSpacing: "-0.02em",
                     lineHeight: 1,
                     margin: 0,
@@ -398,7 +401,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                     fontWeight: 600,
                     letterSpacing: "0.16em",
                     textTransform: "uppercase",
-                    color: "#8A8A8A",
+                    color: "rgba(0,0,0,0.45)",
                     lineHeight: 1,
                   }}
                 >
@@ -407,11 +410,12 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
               </div>
             </div>
 
-            {/* Stats row */}
-            <div style={{ borderBottom: "1px solid #E5E5E5" }}>
+            {/* Stats row — 3 cols on sm+, 2 cols stacked on mobile */}
+            <div style={{ borderBottom: "1px solid rgba(0,0,0,0.08)" }}>
+              {/* Responsive stats via two rows on tiny screens */}
               <style>{`
                 .bm-stats { display: grid; grid-template-columns: 1fr 1fr; }
-                .bm-stats-c3 { border-top: 1px solid #E5E5E5; grid-column: 1 / -1; }
+                .bm-stats-c3 { border-top: 1px solid rgba(0,0,0,0.08); grid-column: 1 / -1; }
                 @media (min-width: 480px) {
                   .bm-stats { grid-template-columns: 1fr 1fr 1.4fr; }
                   .bm-stats-c3 { border-top: none; grid-column: auto; }
@@ -421,8 +425,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                 <div
                   style={{
                     padding: "clamp(12px,2.5vw,18px) clamp(14px,4vw,28px)",
-                    borderRight: "1px solid #E5E5E5",
-                    background: "#FFFFFF",
+                    borderRight: "1px solid rgba(0,0,0,0.08)",
                   }}
                 >
                   <Label>Fused Process</Label>
@@ -430,7 +433,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                     style={{
                       fontSize: "clamp(1rem,3vw,1.35rem)",
                       fontWeight: 700,
-                      color: "#1A1A1A",
+                      color: "#161616",
                       margin: "5px 0 0",
                     }}
                   >
@@ -448,7 +451,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                     style={{
                       fontSize: "clamp(1rem,3vw,1.35rem)",
                       fontWeight: 700,
-                      color: "#1A1A1A",
+                      color: "#000000",
                       margin: "5px 0 0",
                     }}
                   >
@@ -494,7 +497,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                           <span
                             style={{
                               fontSize: "0.42rem",
-                              color: "#8A8A8A",
+                              color: "#000000",
                               textTransform: "uppercase",
                               textAlign: "center",
                               lineHeight: 1.4,
@@ -520,13 +523,13 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
             </div>
 
             {/* Body — 2 cols on sm+, 1 col stacked on mobile */}
-            <div style={{ borderBottom: "1px solid #E5E5E5" }}>
+            <div style={{ borderBottom: "1px solid rgba(0,0,0,0.08)" }}>
               <style>{`
                 .bm-body { display: grid; grid-template-columns: 1fr; }
-                .bm-body-right { border-top: 1px solid #E5E5E5; }
+                .bm-body-right { border-top: 1px solid rgba(0,0,0,0.08); }
                 @media (min-width: 480px) {
                   .bm-body { grid-template-columns: 1fr 1fr; }
-                  .bm-body-right { border-top: none; border-left: 1px solid #E5E5E5; }
+                  .bm-body-right { border-top: none; border-left: 1px solid rgba(0,0,0,0.08); }
                 }
               `}</style>
               <div className="bm-body">
@@ -562,8 +565,8 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                               key={h}
                               style={{
                                 textAlign: "left",
-                                fontSize: "0.70rem",
-                                color: "#8A8A8A",
+                                fontSize: "0.75rem",
+                                color: "rgba(0,0,0,0.4)",
                                 fontWeight: 600,
                                 textTransform: "uppercase",
                                 letterSpacing: "0.06em",
@@ -582,7 +585,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                           <tr
                             key={i}
                             style={{
-                              borderBottom: "1px solid #F3F3F3",
+                              borderBottom: "1px solid rgba(0,0,0,0.05)",
                             }}
                           >
                             {[row.name, row.typical, row.min, row.max].map(
@@ -590,9 +593,11 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                                 <td
                                   key={j}
                                   style={{
-                                    fontSize: "0.62rem",
+                                    fontSize: "0.72rem",
                                     color:
-                                      j === 0 ? "#1A1A1A" : "#4A4A4A",
+                                      j === 0
+                                        ? "rgba(0,0,0,0.88)"
+                                        : "rgba(0,0,0,0.6)",
                                     fontWeight: j === 0 ? 800 : 600,
                                     padding: "5px 8px 5px 0",
                                   }}
@@ -654,7 +659,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                         <p
                           style={{
                             fontSize: "0.85rem",
-                            color: "#4A4A4A",
+                            color: "rgba(0,0,0,0.68)",
                             lineHeight: 1.65,
                             margin: 0,
                           }}
@@ -673,14 +678,13 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
               style={{
                 padding: "12px clamp(14px,4vw,28px)",
                 textAlign: "center",
-                background: "#F8F8F8",
-                borderTop: "1px solid #E5E5E5",
+                background: "#ebebea",
               }}
             >
               <p
                 style={{
-                  fontSize: "0.48rem",
-                  color: "#8A8A8A",
+                  fontSize: "0.60rem",
+                  color: "rgba(0,0,0,0.38)",
                   margin: 0,
                 }}
               >
@@ -689,8 +693,8 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
               </p>
               <p
                 style={{
-                  fontSize: "0.42rem",
-                  color: "#AAAAAA",
+                  fontSize: "0.58rem",
+                  color: "rgba(0,0,0,0.25)",
                   marginTop: "3px",
                 }}
               >

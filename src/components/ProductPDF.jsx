@@ -24,27 +24,27 @@ Font.register({
 });
 
 const C = {
-  bg: "#1a1b1e",
-  bgDark: "#131416",
-  cream: "#eee8cd",
+  bg: "#f3f3f1",
+  bgDark: "#ebebea",
+  cream: "#111111",
   amber: "#fbbf24",
-  border: "#313234",
+  border: "#d6d6d6",
 
-  border04: "#232427",
-  border05: "#252626",
-  border07: "#2a2b2e",
-  border08: "#2c2d30",
-  border12: "#353639",
-  border15: "#3c3d40",
-  border20: "#48494b",
+  border04: "#f7f7f7",
+  border05: "#e5e5e5",
+  border07: "#ececec",
+  border08: "#dddddd",
+  border12: "#d5d5d5",
+  border15: "#cfcfcf",
+  border20: "#c6c6c6",
 
-  text20: "#3f3e3b",
-  text35: "#64635b",
-  text45: "#79776d",
-  text50: "#848175",
-  text65: "#a4a090",
-  text75: "#b9b5a1",
-  text90: "#d9d3bb",
+  text20: "#1f1f1f",
+  text35: "#3d3d3d",
+  text45: "#555555",
+  text50: "#666666",
+  text65: "#777777",
+  text75: "#4a4a4a",
+  text90: "#111111",
 };
 
 const s = StyleSheet.create({
@@ -103,7 +103,7 @@ const s = StyleSheet.create({
     width: 95,
     height: 75,
     borderRadius: 8,
-    backgroundColor: C.border04,
+    backgroundColor: "#ffffff",
     borderWidth: 0.5,
     borderColor: C.border08,
     objectFit: "contain",
@@ -242,7 +242,16 @@ export default function ProductPDF({ product }) {
       <Page size={{ width: 595, height: 842 }} style={s.page}>
         <View style={s.contentWrapper}>
           <View style={s.header}>
-            <Image src={logoSrc} style={s.logo} />
+           <View
+  style={{
+    backgroundColor: "#111111",
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    borderRadius: 4,
+  }}
+>
+  <Image src={logoSrc} style={s.logo} />
+</View>
 
             {categoryName && <Text style={s.catBadge}>{categoryName}</Text>}
           </View>

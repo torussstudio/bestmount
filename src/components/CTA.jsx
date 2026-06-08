@@ -130,15 +130,15 @@ export default function CTA() {
             <div className="md:col-span-3 flex flex-col justify-between items-start h-full">
               <span
                 ref={labelRef}
-                className="text-sm uppercase tracking-wider text-black/80"
+                className="text-[20px] uppercase tracking-wider text-black/80"
               >
                 Get in touch
               </span>
 
               <div ref={btnDesktopRef} className="hidden lg:block">
-                <a href="/BestMountain-SRM-Chart-2026.pdf" target="_blank" download>
-                  <CtaButton>Download Full SRM Chart</CtaButton>
-                </a>
+                <div ref={btnDesktopRef} className="hidden lg:block">
+  <CtaButton>Download Full SRM Chart</CtaButton>
+</div>
               </div>
             </div>
 
@@ -163,14 +163,12 @@ export default function CTA() {
                 ref={btnMobileRef}
                 className="block lg:hidden mt-10 md:mt-8 text-left"
               >
-                <a
-                  href="/BM-SRM-Chart-2026.pdf"
-                  target="_blank"
-                  download
-                  className="inline-block"
-                >
-                  <CtaButton>Download Full SRM Chart</CtaButton>
-                </a>
+               <div
+  ref={btnMobileRef}
+  className="block lg:hidden mt-10 md:mt-8 text-left"
+>
+  <CtaButton>Download Full SRM Chart</CtaButton>
+</div>
               </div>
             </div>
           </div>

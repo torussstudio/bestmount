@@ -22,10 +22,11 @@ API.interceptors.response.use(
 
     // Reject immediately if the error is from login, logout, or refresh
     if (
-      originalRequest.url?.includes("/admin/login") ||
-      originalRequest.url?.includes("/admin/logout") ||
-      originalRequest.url?.includes("/admin/refresh")
-    ) {
+  originalRequest.url?.includes("/admin/login") ||
+  originalRequest.url?.includes("/admin/logout") ||
+  originalRequest.url?.includes("/admin/refresh") ||
+  originalRequest.url?.includes("/admin/me")
+) {
       return Promise.reject(error);
     }
 
@@ -72,12 +73,17 @@ export async function checkAuthStatus() {
       isLoggedIn: true,
       admin: response.data.admin
     };
-  } catch {
-    return {
-      isLoggedIn: false,
-      admin: null
-    };
+  } catch (error) {
+  // Silent fail for expected unauthenticated state
+  if (error.response?.status !== 401) {
+    console.error("Auth check failed:", error);
   }
+
+  return {
+    isLoggedIn: false,
+    admin: null
+  };
+}
 }
 
 /**
