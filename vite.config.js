@@ -24,8 +24,6 @@ export default defineConfig({
           'vendor-framer': ['framer-motion'],
           // GSAP — large, needed only on animated sections
           'vendor-gsap': ['gsap'],
-          // PDF renderer — very heavy (~300KB), loaded only when modal opens
-          'vendor-pdf': ['@react-pdf/renderer', 'jspdf'],
           // Icons — large icon set, split away from main bundle
           'vendor-icons': ['react-icons'],
           // Toast

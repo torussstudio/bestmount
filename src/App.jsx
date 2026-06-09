@@ -1,4 +1,4 @@
-import { AnimatePresence } from "framer-motion";
+import { LazyMotion, domAnimation, AnimatePresence } from "framer-motion";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { Suspense, lazy, useState, useEffect } from "react";
 
@@ -67,7 +67,7 @@ export default function App() {
   const location = useLocation();
 
   return (
-    <>
+    <LazyMotion features={domAnimation} strict>
       <ScrollToTop />
 
       <Suspense fallback={PageFallback}>
@@ -129,6 +129,6 @@ export default function App() {
           </Routes>
         </AnimatePresence>
       </Suspense>
-    </>
+    </LazyMotion>
   );
 }

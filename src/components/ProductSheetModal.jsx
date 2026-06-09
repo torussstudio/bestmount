@@ -1,7 +1,6 @@
 import ReactDOM from "react-dom";
-import { pdf } from "@react-pdf/renderer";
-import { motion } from "framer-motion";
-import logoSrc from "../assets/images/bm-logo-tm-b.webp";
+import { m } from "framer-motion";
+import logoSrc from "../assets/images/logo-black.webp"
 import { useEffect, useState, forwardRef } from "react";
 import { API_BASE_URL } from "../api.js";
 import {
@@ -9,7 +8,7 @@ import {
   PRODUCT_PLACEHOLDER_SRC,
 } from "../utils/productImage.js";
 
-const MotionDiv = motion.div;
+const MotionDiv = m.div;
 
 const Label = ({ children }) => (
   <p
@@ -40,6 +39,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
   ref,
 ) {
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const [heroImgSrc, setHeroImgSrc] = useState(() =>
     productImageSrc(product?.image),
   );
@@ -69,13 +69,21 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
   }, [onClose]);
 
   const handleDownload = async () => {
+    if (isDownloading) return;
+
     try {
+      setIsDownloading(true);
+
       if (!product) {
         console.error("Product missing");
         return;
       }
 
-      const { default: ProductPDF } = await import("./ProductPDF");
+      const [{ pdf }, { default: ProductPDF }] = await Promise.all([
+        import("@react-pdf/renderer"),
+        import("./ProductPDF"),
+      ]);
+
       const blob = await pdf(<ProductPDF product={product} />).toBlob();
 
       if (!blob) {
@@ -84,16 +92,21 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
       }
 
       const url = URL.createObjectURL(blob);
+
       const link = document.createElement("a");
       link.href = url;
       link.download = `${product.shortName || product.name || "datasheet"}-TDS.pdf`;
+
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+
       URL.revokeObjectURL(url);
     } catch (err) {
       console.error("PDF generation error:", err);
       alert("PDF generation failed");
+    } finally {
+      setIsDownloading(false);
     }
   };
 
@@ -213,9 +226,11 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <button
                 onClick={handleDownload}
+                disabled={isDownloading}
                 style={{
                   display: "flex",
                   alignItems: "center",
+                  justifyContent: "center",
                   gap: "6px",
                   padding: "6px 16px",
                   borderRadius: "999px",
@@ -224,10 +239,29 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                   color: "#ffffff",
                   fontSize: "0.90rem",
                   fontWeight: 700,
-                  cursor: "pointer",
+                  cursor: isDownloading ? "not-allowed" : "pointer",
+                  opacity: isDownloading ? 0.7 : 1,
+                  minWidth: "135px",
                 }}
               >
-                Download PDF
+                {isDownloading ? (
+                  <>
+                    <span
+                      style={{
+                        width: "12px",
+                        height: "12px",
+                        border: "2px solid rgba(255,255,255,0.4)",
+                        borderTop: "2px solid #fff",
+                        borderRadius: "50%",
+                        display: "inline-block",
+                        animation: "spin 0.7s linear infinite",
+                      }}
+                    />
+                    Downloading...
+                  </>
+                ) : (
+                  "Download PDF"
+                )}
               </button>
 
               <button
@@ -279,7 +313,6 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                 style={{
                   height: "clamp(24px,5vw,36px)",
                   width: "auto",
-                  filter: "invert(1)",
                 }}
               />
               {categoryName && (
@@ -414,13 +447,20 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
             <div style={{ borderBottom: "1px solid rgba(0,0,0,0.08)" }}>
               {/* Responsive stats via two rows on tiny screens */}
               <style>{`
-                .bm-stats { display: grid; grid-template-columns: 1fr 1fr; }
-                .bm-stats-c3 { border-top: 1px solid rgba(0,0,0,0.08); grid-column: 1 / -1; }
-                @media (min-width: 480px) {
-                  .bm-stats { grid-template-columns: 1fr 1fr 1.4fr; }
-                  .bm-stats-c3 { border-top: none; grid-column: auto; }
-                }
-              `}</style>
+  .bm-stats { display: grid; grid-template-columns: 1fr 1fr; }
+  .bm-stats-c3 { border-top: 1px solid rgba(0,0,0,0.08); grid-column: 1 / -1; }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (min-width: 480px) {
+    .bm-stats { grid-template-columns: 1fr 1fr 1.4fr; }
+    .bm-stats-c3 { border-top: none; grid-column: auto; }
+  }
+`}</style>
               <div className="bm-stats">
                 <div
                   style={{
@@ -688,8 +728,8 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                   margin: 0,
                 }}
               >
-                © Room 1112, 11/F Hollywood Plaza, Nathan road 610 Mongkok, Hong
-                Kong
+                © Room 1746, 17F, Radio City, Hennessy road 505, Causeway Bay,
+                Hong Kong
               </p>
               <p
                 style={{

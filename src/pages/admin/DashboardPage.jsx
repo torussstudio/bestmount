@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, lazy, Suspense } from "react";
 
 import { toast } from "react-hot-toast";
 
@@ -6,9 +6,8 @@ import { FiAlertCircle } from "react-icons/fi";
 
 import AdminLayout from "../../components/admin/AdminLayout";
 
-import ProductSection from "../../components/admin/ProductSection";
-
-import CategorySection from "../../components/admin/CategorySection";
+const ProductSection = lazy(() => import("../../components/admin/ProductSection"));
+const CategorySection = lazy(() => import("../../components/admin/CategorySection"));
 
 import API from "../../api";
 
@@ -211,23 +210,29 @@ export default function DashboardPage() {
 
   return (
     <AdminLayout section={section} onSection={setSection}>
-      {section === "products" ? (
-        <ProductSection
-          products={products}
-          categories={categories}
-          onAdd={addProduct}
-          onUpdate={updateProduct}
-          onDelete={deleteProduct}
-          onToggleActive={toggleProductActive}
-        />
-      ) : (
-        <CategorySection
-          categories={categories}
-          onAdd={addCategory}
-          onUpdate={updateCategory}
-          onDelete={deleteCategory}
-        />
-      )}
+      <Suspense fallback={
+        <div className="flex items-center justify-center p-12 bg-slate-900/50 rounded-2xl border border-slate-800">
+          <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+        </div>
+      }>
+        {section === "products" ? (
+          <ProductSection
+            products={products}
+            categories={categories}
+            onAdd={addProduct}
+            onUpdate={updateProduct}
+            onDelete={deleteProduct}
+            onToggleActive={toggleProductActive}
+          />
+        ) : (
+          <CategorySection
+            categories={categories}
+            onAdd={addCategory}
+            onUpdate={updateCategory}
+            onDelete={deleteCategory}
+          />
+        )}
+      </Suspense>
     </AdminLayout>
   );
 }

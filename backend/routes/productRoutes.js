@@ -61,7 +61,7 @@ router.post(
     { name: "image", maxCount: 1 },
     { name: "msds", maxCount: 1 },
   ]),
-  async (req, res) => {
+  async (req, res, next) => {
     try {
       let colorTones = [];
       let chemicalComposition = [];

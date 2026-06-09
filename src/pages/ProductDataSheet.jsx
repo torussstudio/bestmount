@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import API, { API_BASE_URL } from "../api";
-import jsPDF from "jspdf";
 import logoSrc from "../assets/images/bm-logo-tm-w.png";
 import { productImageSrc, PRODUCT_PLACEHOLDER_SRC } from "../utils/productImage";
 
@@ -34,7 +33,7 @@ const SectionDivider = () => (
 /* ──────────────────────────────────────────────────────────
    Programmatic PDF builder (avoids html2canvas oklch issue)
    ────────────────────────────────────────────────────────── */
-function buildPDF(product) {
+function buildPDF(product, jsPDF) {
   const W = 595.28;
   const MARGIN = 36;
   const COL = W - MARGIN * 2;
@@ -274,11 +273,12 @@ export default function ProductDataSheet() {
     };
   }, [id]);
 
-  const handleDownloadPDF = useCallback(() => {
+  const handleDownloadPDF = useCallback(async () => {
     if (!product) return;
     setDownloading(true);
     try {
-      const pdf = buildPDF(product);
+      const { default: jsPDF } = await import("jspdf");
+      const pdf = buildPDF(product, jsPDF);
       const filename = `${product.shortName || product.name || "datasheet"}-TDS.pdf`;
       pdf.save(filename);
     } catch (err) {

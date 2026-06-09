@@ -6,7 +6,7 @@ const Category = require("../models/Category");
 const Product = require("../models/Product");
 
 // GET all categories
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   try {
     console.log("GET /api/categories called");
     const categories = await Category.find().lean();
@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
 });
 
 // ADD category
-router.post("/", authenticateToken, async (req, res) => {
+router.post("/", authenticateToken, async (req, res, next) => {
   try {
     const { name } = req.body;
 
@@ -31,7 +31,7 @@ router.post("/", authenticateToken, async (req, res) => {
 });
 
 // UPDATE category
-router.put("/:id", authenticateToken, async (req, res) => {
+router.put("/:id", authenticateToken, async (req, res, next) => {
   try {
     const { name } = req.body;
 
@@ -52,7 +52,7 @@ router.put("/:id", authenticateToken, async (req, res) => {
 });
 
 // DELETE category (blocked if products are linked)
-router.delete("/:id", authenticateToken, async (req, res) => {
+router.delete("/:id", authenticateToken, async (req, res, next) => {
   try {
     // Check if any products reference this category
     const linkedCount = await Product.countDocuments({

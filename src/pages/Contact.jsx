@@ -5,7 +5,6 @@ import Section from "../components/layout/Section";
 import Seperator from "../components/layout/seperator";
 import { FiArrowUpRight } from "react-icons/fi";
 import { useEffect, useRef, useState } from "react";
-import emailjs from "@emailjs/browser";
 import gsap from "gsap";
 import SplitText from "gsap/SplitText";
 
@@ -88,6 +87,7 @@ export default function Contact() {
     e.preventDefault();
     setStatus("sending");
     try {
+      const { default: emailjs } = await import("@emailjs/browser");
       await emailjs.send(
         "service_6we0wnn",
         "template_7ofno2k",

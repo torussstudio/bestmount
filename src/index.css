@@ -68,9 +68,7 @@
 @font-face {
     font-family: 'SKODA Next';
     src: local('SKODA Next Light Italic'), local('SKODANext-LightItalic'),
-        url('./assets/fonts/SKODANext-LightItalic.woff2') format('woff2'),
-        url('./assets/fonts/SKODANext-LightItalic.woff') format('woff'),
-        url('./assets/fonts/SKODANext-LightItalic.ttf') format('truetype');
+        url('./assets/fonts/SKODANext-LightItalic.woff2') format('woff2');
     font-weight: 300;
     font-style: italic;
     font-display: swap;
@@ -79,9 +77,7 @@
 @font-face {
     font-family: 'SKODA Next';
     src: local('SKODA Next Black'), local('SKODANext-Black'),
-        url('./assets/fonts/SKODANext-Black.woff2') format('woff2'),
-        url('./assets/fonts/SKODANext-Black.woff') format('woff'),
-        url('./assets/fonts/SKODANext-Black.ttf') format('truetype');
+        url('./assets/fonts/SKODANext-Black.woff2') format('woff2');
     font-weight: 900;
     font-style: normal;
     font-display: swap;
@@ -90,9 +86,7 @@
 @font-face {
     font-family: 'SKODA Next';
     src: local('SKODA Next Black Italic'), local('SKODANext-BlackItalic'),
-        url('./assets/fonts/SKODANext-BlackItalic.woff2') format('woff2'),
-        url('./assets/fonts/SKODANext-BlackItalic.woff') format('woff'),
-        url('./assets/fonts/SKODANext-BlackItalic.ttf') format('truetype');
+        url('./assets/fonts/SKODANext-BlackItalic.woff2') format('woff2');
     font-weight: 900;
     font-style: italic;
     font-display: swap;
@@ -101,9 +95,7 @@
 @font-face {
     font-family: 'SKODA Next';
     src: local('SKODA Next Bold'), local('SKODANext-Bold'),
-        url('./assets/fonts/SKODANext-Bold.woff2') format('woff2'),
-        url('./assets/fonts/SKODANext-Bold.woff') format('woff'),
-        url('./assets/fonts/SKODANext-Bold.ttf') format('truetype');
+        url('./assets/fonts/SKODANext-Bold.woff2') format('woff2');
     font-weight: bold;
     font-style: normal;
     font-display: swap;
@@ -112,9 +104,7 @@
 @font-face {
     font-family: 'SKODA Next Black Expanded';
     src: local('SKODA Next Black Expanded'), local('SKODANext-BlackExpanded'),
-        url('./assets/fonts/SKODANext-BlackExpanded.woff2') format('woff2'),
-        url('./assets/fonts/SKODANext-BlackExpanded.woff') format('woff'),
-        url('./assets/fonts/SKODANext-BlackExpanded.ttf') format('truetype');
+        url('./assets/fonts/SKODANext-BlackExpanded.woff2') format('woff2');
     font-weight: 900;
     font-style: normal;
     font-display: swap;
@@ -123,9 +113,7 @@
 @font-face {
     font-family: 'SKODA Next';
     src: local('SKODA Next'), local('SKODANext-Regular'),
-        url('./assets/fonts/SKODANext-Regular.woff2') format('woff2'),
-        url('./assets/fonts/SKODANext-Regular.woff') format('woff'),
-        url('./assets/fonts/SKODANext-Regular.ttf') format('truetype');
+        url('./assets/fonts/SKODANext-Regular.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -134,9 +122,7 @@
 @font-face {
     font-family: 'SKODA Next';
     src: local('SKODA Next Italic'), local('SKODANext-Italic'),
-        url('./assets/fonts/SKODANext-Italic.woff2') format('woff2'),
-        url('./assets/fonts/SKODANext-Italic.woff') format('woff'),
-        url('./assets/fonts/SKODANext-Italic.ttf') format('truetype');
+        url('./assets/fonts/SKODANext-Italic.woff2') format('woff2');
     font-weight: normal;
     font-style: italic;
     font-display: swap;
@@ -145,9 +131,7 @@
 @font-face {
     font-family: 'SKODA Next';
     src: local('SKODA Next Light'), local('SKODANext-Light'),
-        url('./assets/fonts/SKODANext-Light.woff2') format('woff2'),
-        url('./assets/fonts/SKODANext-Light.woff') format('woff'),
-        url('./assets/fonts/SKODANext-Light.ttf') format('truetype');
+        url('./assets/fonts/SKODANext-Light.woff2') format('woff2');
     font-weight: 300;
     font-style: normal;
     font-display: swap;
