@@ -45,7 +45,10 @@ function buildPDF(product, jsPDF) {
 
   // Estimate height
   const compRows     = product.chemicalComposition?.length ?? 0;
-  const rightSects   = [product.remarks, product.sizing, product.industrialApplication].filter(Boolean);
+  const rightSects   = [
+    product.binding, product.refractoriness, product.shape,
+    product.remarks, product.sizing, product.industrialApplication,
+  ].filter(Boolean);
   const rightH       = rightSects.reduce((acc, v) => acc + Math.ceil(v.length / 55) * 9 + 32, 0);
   const leftH        = compRows * 14 + 70;
   const bodyH        = Math.max(leftH, rightH, 80);
@@ -100,10 +103,10 @@ function buildPDF(product, jsPDF) {
 
   /* ── STATS ROW ── */
   y += 18;
-  const colW = COL / 3;
+  const colW = COL / 2;
 
   // Labels
-  ["FUSED PROCESS", "BULK DENSITY", "COLOR TONE"].forEach((lbl, i) => {
+  [ "BULK DENSITY", "COLOR TONE"].forEach((lbl, i) => {
     pdf.setFontSize(6.5);
     pdf.setFont("helvetica", "bold");
     pdf.setTextColor(...AMBER);
@@ -113,12 +116,12 @@ function buildPDF(product, jsPDF) {
   y += 16;
 
   // Fused process value (may be multi-line)
-  pdf.setFontSize(14);
-  pdf.setFont("helvetica", "bold");
-  pdf.setTextColor(...CREAM);
-  const fusedText = product.fusedProcess || "—";
-  const fusedLines = pdf.splitTextToSize(fusedText, colW - 8);
-  pdf.text(fusedLines, MARGIN, y);
+  // pdf.setFontSize(14);
+  // pdf.setFont("helvetica", "bold");
+  // pdf.setTextColor(...CREAM);
+  // const fusedText = product.fusedProcess || "—";
+  // const fusedLines = pdf.splitTextToSize(fusedText, colW - 8);
+  // pdf.text(fusedLines, MARGIN, y);
 
   // Bulk density value
   const densityText = product.bulkDensity != null ? String(product.bulkDensity) : "—";
@@ -126,7 +129,7 @@ function buildPDF(product, jsPDF) {
 
   // Color swatches
   if (product.colorTones?.length > 0) {
-    let sx = MARGIN + colW * 2;
+    let sx = MARGIN + colW;
     product.colorTones.slice(0, 5).forEach((tone) => {
       const hex = (tone.color || "#aaaaaa").replace("#", "");
       const r = parseInt(hex.slice(0, 2), 16) || 170;
@@ -144,8 +147,7 @@ function buildPDF(product, jsPDF) {
     });
   }
 
-  const statsLineH = fusedLines.length * 16;
-  y += Math.max(statsLineH, 28) + 10;
+y += 28 + 10;
   pdf.line(MARGIN, y, W - MARGIN, y);
 
   /* ── BODY ── */
@@ -196,8 +198,11 @@ function buildPDF(product, jsPDF) {
   }
 
   const rightData = [
-    { label: "REMARKS",               value: product.remarks },
-    { label: "SIZING",                value: product.sizing },
+    { label: "BINDING",                value: product.binding },
+    { label: "REFRACTORINESS",         value: product.refractoriness != null && product.refractoriness !== "" ? String(product.refractoriness) : "" },
+    { label: "SHAPE",                  value: product.shape },
+    { label: "REMARKS",                value: product.remarks },
+    { label: "SIZING",                 value: product.sizing },
     { label: "INDUSTRIAL APPLICATION", value: product.industrialApplication },
   ].filter((s) => s.value);
 
@@ -435,20 +440,14 @@ export default function ProductDataSheet() {
         {/* Stats row — responsive */}
         <div style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
           <style>{`
-            .ds-stats { display: grid; grid-template-columns: 1fr 1fr; padding: 16px; gap: 16px; }
+            .ds-stats { display: grid; grid-template-columns: 1fr; padding: 16px; gap: 16px; }
             .ds-stats-c3 { grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px; }
             @media (min-width: 480px) {
-              .ds-stats { grid-template-columns: 1fr 1fr 1.4fr; padding: 20px 28px; gap: 24px; }
+              .ds-stats { grid-template-columns: 1fr 1.4fr; padding: 20px 28px; gap: 24px; }
               .ds-stats-c3 { grid-column: auto; border-top: none; padding-top: 0; }
             }
           `}</style>
           <div className="ds-stats">
-            <div>
-              <Label>Fused Process</Label>
-              <p className="font-bold" style={{ fontSize: "clamp(1.1rem, 4vw, 1.5rem)", color: "#eee8cd" }}>
-                {product.fusedProcess || "—"}
-              </p>
-            </div>
             <div>
               <Label>Bulk Density</Label>
               <p className="font-bold" style={{ fontSize: "clamp(1.1rem, 4vw, 1.5rem)", color: "#eee8cd" }}>
@@ -557,6 +556,9 @@ export default function ProductDataSheet() {
             {/* Remarks / Sizing / Application */}
             <div className="ds-body-right flex flex-col gap-3">
               {[
+                { label: "Binding", value: product.binding },
+                { label: "Refractoriness", value: product.refractoriness != null && product.refractoriness !== "" ? product.refractoriness : null },
+                { label: "Shape", value: product.shape },
                 { label: "Remarks", value: product.remarks },
                 { label: "Sizing", value: product.sizing },
                 { label: "Industrial Application", value: product.industrialApplication },

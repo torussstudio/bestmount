@@ -447,7 +447,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
             <div style={{ borderBottom: "1px solid rgba(0,0,0,0.08)" }}>
               {/* Responsive stats via two rows on tiny screens */}
               <style>{`
-  .bm-stats { display: grid; grid-template-columns: 1fr 1fr; }
+ .bm-stats { display: grid; grid-template-columns: 1fr; }
   .bm-stats-c3 { border-top: 1px solid rgba(0,0,0,0.08); grid-column: 1 / -1; }
 
   @keyframes spin {
@@ -457,29 +457,11 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
   }
 
   @media (min-width: 480px) {
-    .bm-stats { grid-template-columns: 1fr 1fr 1.4fr; }
+    .bm-stats { grid-template-columns: 1fr 1.4fr; }
     .bm-stats-c3 { border-top: none; grid-column: auto; }
   }
 `}</style>
               <div className="bm-stats">
-                <div
-                  style={{
-                    padding: "clamp(12px,2.5vw,18px) clamp(14px,4vw,28px)",
-                    borderRight: "1px solid rgba(0,0,0,0.08)",
-                  }}
-                >
-                  <Label>Fused Process</Label>
-                  <p
-                    style={{
-                      fontSize: "clamp(1rem,3vw,1.35rem)",
-                      fontWeight: 700,
-                      color: "#161616",
-                      margin: "5px 0 0",
-                    }}
-                  >
-                    {product.fusedProcess || "—"}
-                  </p>
-                </div>
                 <div
                   style={{
                     padding: "clamp(12px,2.5vw,18px) clamp(10px,2.5vw,20px)",
@@ -674,6 +656,9 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                   }}
                 >
                   {[
+                    { label: "Binding", value: product.binding },
+                    { label: "Refractoriness", value: product.refractoriness != null && product.refractoriness !== "" ? product.refractoriness : null },
+                    { label: "Shape", value: product.shape },
                     { label: "Remarks", value: product.remarks },
                     { label: "Sizing", value: product.sizing },
                     {

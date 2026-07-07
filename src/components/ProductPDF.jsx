@@ -273,10 +273,6 @@ export default function ProductPDF({ product }) {
           </View>
 
           <View style={s.statsRow}>
-            <View style={s.statCol}>
-              <Text style={s.statLabel}>FUSED PROCESS</Text>
-              <Text style={s.statValue}>{product.fusedProcess || "—"}</Text>
-            </View>
 
             <View style={s.statCol}>
               <Text style={s.statLabel}>BULK DENSITY</Text>
@@ -322,6 +318,9 @@ export default function ProductPDF({ product }) {
 
             <View style={s.bodyRight}>
               {[
+                ["BINDING", product.binding],
+                ["REFRACTORINESS", product.refractoriness != null && product.refractoriness !== "" ? String(product.refractoriness) : null],
+                ["SHAPE", product.shape],
                 ["REMARKS", product.remarks],
                 ["SIZING", product.sizing],
                 ["INDUSTRIAL APPLICATION", product.industrialApplication],
