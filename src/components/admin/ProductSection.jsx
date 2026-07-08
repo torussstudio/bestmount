@@ -345,7 +345,6 @@ const closeModal = () => {
                     "Short Name",
                     "Category",
                     "Bulk Density",
-                    "Fused Process",
                     "On site",
                     "Actions",
                   ].map(function (h) {
@@ -389,9 +388,6 @@ const closeModal = () => {
                       </td>
                       <td className="px-4 py-4 text-slate-700 whitespace-nowrap">
                         {p.bulkDensity || "—"}
-                      </td>
-                      <td className="px-4 py-4 text-slate-500 max-w-[180px] truncate">
-                        {p.fusedProcess || "—"}
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap">
                         <button
@@ -487,11 +483,9 @@ const closeModal = () => {
                           {getCategoryName(p)}
                         </span>
                       </p>
-                      {(p.bulkDensity || p.fusedProcess) && (
+                      {p.bulkDensity && (
                         <p className="text-slate-400 text-xs mt-0.5">
-                          {p.bulkDensity ? "Bulk: " + p.bulkDensity : ""}
-                          {p.bulkDensity && p.fusedProcess ? " · " : ""}
-                          {p.fusedProcess || ""}
+                          Bulk: {p.bulkDensity}
                         </p>
                       )}
                       <div className="flex items-center gap-2 mt-2">

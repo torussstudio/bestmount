@@ -310,6 +310,17 @@ const DEFAULT_TONES = [
 ];
 const EMPTY_ROW = { name: "", typical: "", min: "", max: "" };
 
+const DEFAULT_COMPOSITION_NAMES = [
+  "Al2O3",
+  "SiO2",
+  "ZrO2+HfO2",
+  "Fe2O3",
+  "TiO2",
+  "Na2O",
+  "K2O",
+  "CaO",
+];
+
 // ── Helpers ─────────────────────────────────────────────────────────────
 function makeEmpty() {
   return {
@@ -324,7 +335,10 @@ function makeEmpty() {
     refractoriness: "",
     // cleanliness: "",
     shape: "",
-    chemicalComposition: [{ ...EMPTY_ROW }],
+    chemicalComposition: DEFAULT_COMPOSITION_NAMES.map((name) => ({
+      ...EMPTY_ROW,
+      name,
+    })),
     remarks: "",
     sizing: "",
     industrialApplication: "",
