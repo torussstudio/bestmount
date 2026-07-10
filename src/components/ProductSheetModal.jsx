@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom";
 import { m } from "framer-motion";
-import logoSrc from "../assets/images/logo-black.webp"
+import logoSrc from "../assets/images/logo-black.webp";
 import { useEffect, useState, forwardRef } from "react";
 import { API_BASE_URL } from "../api.js";
 import {
@@ -161,7 +161,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
             position: "relative",
             zIndex: 2,
             width: "100%",
-            maxWidth: "640px",
+            maxWidth: "900px",
             display: "flex",
             flexDirection: "column",
             gap: "8px",
@@ -657,7 +657,14 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                 >
                   {[
                     { label: "Binding", value: product.binding },
-                    { label: "Refractoriness", value: product.refractoriness != null && product.refractoriness !== "" ? product.refractoriness : null },
+                    {
+                      label: "Refractoriness",
+                      value:
+                        product.refractoriness != null &&
+                        product.refractoriness !== ""
+                          ? product.refractoriness
+                          : null,
+                    },
                     { label: "Shape", value: product.shape },
                     { label: "Remarks", value: product.remarks },
                     { label: "Sizing", value: product.sizing },

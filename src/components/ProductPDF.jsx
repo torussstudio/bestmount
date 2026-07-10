@@ -29,6 +29,7 @@ const C = {
   cream: "#111111",
   amber: "#fbbf24",
   border: "#d6d6d6",
+  maroon: "#590000",
 
   border04: "#f7f7f7",
   border05: "#e5e5e5",
@@ -87,27 +88,28 @@ const s = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 4,
     backgroundColor: C.border07,
+     color: C.maroon,
   },
 
-  hero: {
-    flexDirection: "row",
-    gap: 18,
-    paddingHorizontal: 28,
-    paddingVertical: 18,
-    borderBottomWidth: 0.5,
-    borderBottomColor: C.border,
-    alignItems: "center",
-  },
+ hero: {
+  flexDirection: "row",
+  gap: 28,
+  paddingHorizontal: 28,
+  paddingVertical: 24,
+  borderBottomWidth: 0.5,
+  borderBottomColor: C.border,
+  alignItems: "center",
+},
 
   heroImageBox: {
-    width: 95,
-    height: 75,
-    borderRadius: 8,
-    backgroundColor: "#ffffff",
-    borderWidth: 0.5,
-    borderColor: C.border08,
-    objectFit: "contain",
-  },
+  width: 220,
+  height: 170,
+  borderRadius: 8,
+  backgroundColor: "#ffffff",
+  borderWidth: 0.5,
+  borderColor: C.border08,
+  objectFit: "contain",
+},
 
   heroName: {
     fontSize: 36,
@@ -135,7 +137,7 @@ const s = StyleSheet.create({
 
   statLabel: {
     fontSize: 9,
-    color: C.amber,
+    color: C.maroon,
     marginBottom: 4,
     letterSpacing: 1,
   },
@@ -172,7 +174,7 @@ const s = StyleSheet.create({
 
   sectionLabel: {
     fontSize: 8,
-    color: C.amber,
+    color: C.maroon, 
     marginBottom: 6,
     letterSpacing: 1,
   },
@@ -233,28 +235,19 @@ const s = StyleSheet.create({
 export default function ProductPDF({ product }) {
   const categoryName = product?.category?.name ?? "";
 
-  const imageUrl = product?.image
-    ? product.image.replace("/upload/", "/upload/f_png/")
-    : null;
+ const imageUrl = product?.resolvedImage ?? null;
 
   return (
     <Document>
       <Page size={{ width: 595, height: 842 }} style={s.page}>
         <View style={s.contentWrapper}>
-          <View style={s.header}>
-           <View
-  style={{
-    backgroundColor: "#111111",
-    paddingHorizontal: 8,
-    paddingVertical: 5,
-    borderRadius: 4,
-  }}
->
-  <Image src={logoSrc} style={s.logo} />
-</View>
+         <View style={s.header}>
+  <Image src="/bm-dark-logo.png" style={s.logo} />
 
-            {categoryName && <Text style={s.catBadge}>{categoryName}</Text>}
-          </View>
+  {categoryName && (
+    <Text style={s.catBadge}>{categoryName}</Text>
+  )}
+</View>
 
           <View style={s.hero}>
             {imageUrl ? (
