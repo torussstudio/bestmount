@@ -1,16 +1,3 @@
-
-
-
-/**
- * Materials.jsx
- *
- * Optimized for performance, readability, and maintainability.
- * - Zero design/UX/animation changes.
- * - Extracted constants, hooks, and sub-components.
- * - Eliminated redundant re-renders and memory leaks.
- * - Stable GSAP refs with proper cleanup.
- */
-
 import {
   useState,
   useEffect,
