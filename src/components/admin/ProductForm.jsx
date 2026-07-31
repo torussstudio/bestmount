@@ -303,11 +303,7 @@ const GLOBAL_CSS = `
 `;
 
 // ── Constants ───────────────────────────────────────────────────────────
-const DEFAULT_TONES = [
-  { name: "", color: "#2d6a4f" },
-  { name: "", color: "#74c69d" },
-  { name: "", color: "#d8f3dc" },
-];
+const DEFAULT_TONES = [{ name: "", color: "#2d6a4f" }];
 const EMPTY_ROW = { name: "", typical: "", min: "", max: "" };
 
 const DEFAULT_COMPOSITION_NAMES = [
@@ -320,6 +316,65 @@ const DEFAULT_COMPOSITION_NAMES = [
   "K2O",
   "CaO",
 ];
+
+// ── Color name lookup ──────────────────────────────────────────────────
+const NAMED_COLORS = [
+  { name: "Black", hex: "#000000" },
+  { name: "White", hex: "#ffffff" },
+  { name: "Grey", hex: "#808080" },
+  { name: "Silver", hex: "#c0c0c0" },
+  { name: "Red", hex: "#ff0000" },
+  { name: "Maroon", hex: "#800000" },
+  { name: "Orange", hex: "#ffa500" },
+  { name: "Brown", hex: "#8b4513" },
+  { name: "Tan", hex: "#d2b48c" },
+  { name: "Beige", hex: "#f5f5dc" },
+  { name: "Cream", hex: "#fffdd0" },
+  { name: "Yellow", hex: "#ffff00" },
+  { name: "Gold", hex: "#ffd700" },
+  { name: "Olive", hex: "#808000" },
+  { name: "Lime", hex: "#00ff00" },
+  { name: "Green", hex: "#008000" },
+  { name: "Teal", hex: "#008080" },
+  { name: "Cyan", hex: "#00ffff" },
+  { name: "Sky Blue", hex: "#87ceeb" },
+  { name: "Blue", hex: "#0000ff" },
+  { name: "Navy", hex: "#000080" },
+  { name: "Indigo", hex: "#4b0082" },
+  { name: "Purple", hex: "#800080" },
+  { name: "Violet", hex: "#ee82ee" },
+  { name: "Pink", hex: "#ffc0cb" },
+  { name: "Magenta", hex: "#ff00ff" },
+  { name: "Ivory", hex: "#fffff0" },
+  { name: "Charcoal", hex: "#36454f" },
+];
+
+function hexToRgb(hex) {
+  const clean = hex.replace("#", "");
+  const bigint = parseInt(clean, 16);
+  return {
+    r: (bigint >> 16) & 255,
+    g: (bigint >> 8) & 255,
+    b: bigint & 255,
+  };
+}
+
+function getClosestColorName(hex) {
+  const { r, g, b } = hexToRgb(hex);
+  let closest = NAMED_COLORS[0];
+  let minDist = Infinity;
+
+  for (const c of NAMED_COLORS) {
+    const cr = hexToRgb(c.hex);
+    const dist =
+      (r - cr.r) ** 2 + (g - cr.g) ** 2 + (b - cr.b) ** 2;
+    if (dist < minDist) {
+      minDist = dist;
+      closest = c;
+    }
+  }
+  return closest.name;
+}
 
 // ── Helpers ─────────────────────────────────────────────────────────────
 function makeEmpty() {
@@ -444,11 +499,25 @@ export default function ProductForm({
       return { ...p, colorTones: t };
     });
   };
-  const setToneColor = (i, v) => {
+const setToneColor = (i, v) => {
     setForm((p) => {
-      const t = p.colorTones.map((x, j) => (j === i ? { ...x, color: v } : x));
+      const t = p.colorTones.map((x, j) =>
+        j === i ? { ...x, color: v, name: getClosestColorName(v) } : x,
+      );
       return { ...p, colorTones: t };
     });
+  };
+  const addTone = () => {
+    setForm((p) => ({
+      ...p,
+      colorTones: [...p.colorTones, { name: "", color: "#2d6a4f" }],
+    }));
+  };
+  const removeTone = (i) => {
+    setForm((p) => ({
+      ...p,
+      colorTones: p.colorTones.filter((_, j) => j !== i),
+    }));
   };
   const addRow = () => {
     setForm((p) => ({
@@ -681,9 +750,30 @@ export default function ProductForm({
           </div>
         </div>
 
-        {/* ── 2. Color Tones ──────────────────────────────────── */}
+      {/* ── 2. Color Tones ──────────────────────────────────── */}
         <div className="pf-card pf-section">
-          <SectionTitle>Color Tones</SectionTitle>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: "18px",
+              paddingBottom: "10px",
+              borderBottom: "1.5px solid var(--c-border)",
+            }}
+          >
+            <div
+              className="pf-sec-title"
+              style={{ margin: 0, border: 0, padding: 0 }}
+            >
+              <span className="pf-sec-dot" />
+              Color Tones
+            </div>
+            <button type="button" onClick={addTone} className="pf-btn-add">
+              <FiPlus size={13} /> Add Tone
+            </button>
+          </div>
+
           <div
             style={{ display: "flex", flexDirection: "column", gap: "10px" }}
           >
@@ -734,12 +824,22 @@ export default function ProductForm({
                 />
 
                 <span className="pf-tone-hex">{tone.color}</span>
+
+                {form.colorTones.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeTone(idx)}
+                    className="pf-btn-del"
+                    style={{ opacity: 1 }}
+                  >
+                    <FiTrash2 size={12} />
+                  </button>
+                )}
               </div>
             ))}
           </div>
         </div>
 
-        {/* ── 3. Properties ───────────────────────────────────── */}
         {/* ── 3. Properties ───────────────────────────────────── */}
         <div className="pf-card pf-section">
           <SectionTitle>Properties</SectionTitle>

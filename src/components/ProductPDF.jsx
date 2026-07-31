@@ -76,7 +76,7 @@ const s = StyleSheet.create({
     borderBottomColor: C.border,
   },
 
-  logo: { width: 90 },
+  logo: { width: 160 },
 
   catBadge: {
     fontSize: 10,
@@ -211,6 +211,27 @@ const s = StyleSheet.create({
     color: C.text75,
   },
 
+   disclaimer: {
+    paddingHorizontal: 28,
+    paddingVertical: 12,
+    borderTopWidth: 0.5,
+    borderTopColor: C.border,
+  },
+
+  disclaimerLabel: {
+    fontSize: 8,
+    fontWeight: 700,
+    color: C.maroon,
+    marginBottom: 4,
+    letterSpacing: 1,
+  },
+
+  disclaimerText: {
+    fontSize: 7,
+    lineHeight: 1.6,
+    color: C.text65,
+  },
+
   footer: {
     backgroundColor: C.bgDark,
     borderTopWidth: 0.5,
@@ -333,10 +354,24 @@ export default function ProductPDF({ product }) {
           </View>
         </View>
 
+        <View style={s.disclaimer}>
+            <Text style={s.disclaimerLabel}>DISCLAIMER</Text>
+            <Text style={s.disclaimerText}>
+              All the material data provided herein is for reference and
+              indicative purposes only. It is based on a representative
+              number of analysis conducted on specimens of subject material
+              and reflects our best knowledge at the time of publication.
+              This data does not guarantee uniformity and actual chemical
+              composition and properties in the respect of entire bulk
+              assesment, which can result in larger variations of data due
+              to misrepresentative sample drawing and inherent nature of
+              material.
+            </Text>
+          </View>
+
         <View style={s.footer}>
           <Text style={s.footerText1}>
-            © Room 1112, 11/F Hollywood Plaza, Nathan road 610 Mongkok, Hong
-            Kong
+            © Room 1746, 17F, Radio City, Hennessy road 505, Causeway Bay, Hong Kong
           </Text>
 
           <Text style={s.footerText2}>

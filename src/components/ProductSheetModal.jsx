@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom";
 import { m } from "framer-motion";
-import logoSrc from "../assets/images/logo-black.webp";
+import logoSrc from "../../public/bm-dark-logo.png";
 import { useEffect, useState, forwardRef } from "react";
 import { API_BASE_URL } from "../api.js";
 import {
@@ -84,7 +84,9 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
         import("./ProductPDF"),
       ]);
 
-      const blob = await pdf(<ProductPDF product={product} />).toBlob();
+      const blob = await pdf(
+        <ProductPDF product={{ ...product, resolvedImage: heroImgSrc }} />,
+      ).toBlob();
 
       if (!blob) {
         console.error("PDF blob empty");
@@ -311,7 +313,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                 src={logoSrc}
                 alt="Best Mountain"
                 style={{
-                  height: "clamp(24px,5vw,36px)",
+                  height: "clamp(32px,6vw,48px)",
                   width: "auto",
                 }}
               />
@@ -413,7 +415,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                 </div>
               )}
 
-              <div>
+             <div>
                 <h1
                   style={{
                     fontSize: "clamp(1.6rem,6vw,2.6rem)",
@@ -427,10 +429,25 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                   {product.shortName || product.name}
                 </h1>
 
+                {product.shortName && product.name && (
+                  <p
+                    style={{
+                      marginTop: "4px",
+                      fontSize: "clamp(0.75rem,2vw,0.95rem)",
+                      fontWeight: 500,
+                      color: "rgba(0,0,0,0.5)",
+                      lineHeight: 1.3,
+                      margin: "4px 0 0",
+                    }}
+                  >
+                    {product.name}
+                  </p>
+                )}
+
                 <p
                   style={{
-                    marginTop: "5px",
-                    fontSize: "clamp(0.5rem,1.3vw,0.58rem)",
+                    marginTop: "6px",
+                  fontSize: "clamp(0.45rem,1.1vw,0.52rem)",
                     fontWeight: 600,
                     letterSpacing: "0.16em",
                     textTransform: "uppercase",
@@ -705,6 +722,76 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
               </div>
             </div>
 
+             {/* Disclaimer */}
+            <div
+              style={{
+                padding: "clamp(14px,3vw,20px) clamp(14px,4vw,28px)",
+                background: "#FBFBFA",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "clamp(12px,2.5vw,16px)",
+                  borderRadius: "10px",
+                  background: "rgba(229,161,0,0.06)",
+                  border: "1px solid rgba(229,161,0,0.18)",
+                }}
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  style={{ flexShrink: 0, marginTop: "2px" }}
+                >
+                  <circle cx="12" cy="12" r="10" stroke="#E5A100" strokeWidth="1.8" />
+                  <path
+                    d="M12 8v5"
+                    stroke="#E5A100"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                  />
+                  <circle cx="12" cy="16" r="0.9" fill="#E5A100" />
+                </svg>
+
+                <div>
+                  <p
+                    style={{
+                      fontSize: "0.78rem",
+                      fontWeight: 700,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.1em",
+                      color: "#B27E00",
+                      margin: "0 0 5px",
+                    }}
+                  >
+                    Disclaimer
+                  </p>
+                  <p
+                    style={{
+                      fontSize: "0.72rem",
+                      color: "rgba(0,0,0,0.55)",
+                      lineHeight: 1.65,
+                      margin: 0,
+                    }}
+                  >
+                    All the material data provided herein is for reference
+                    and indicative purposes only. It is based on a
+                    representative number of analysis conducted on specimens
+                    of subject material and reflects our best knowledge at
+                    the time of publication. This data does not guarantee
+                    uniformity and actual chemical composition and
+                    properties in the respect of entire bulk assesment,
+                    which can result in larger variations of data due to
+                    misrepresentative sample drawing and inherent nature of
+                    material.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* Footer */}
             <div
               style={{
@@ -720,8 +807,7 @@ const ProductSheetModal = forwardRef(function ProductSheetModal(
                   margin: 0,
                 }}
               >
-                © Room 1746, 17F, Radio City, Hennessy road 505, Causeway Bay,
-                Hong Kong
+                © Room 1746, 17F, Radio City, Hennessy road 505, Causeway Bay, Hong Kong
               </p>
               <p
                 style={{

@@ -552,10 +552,10 @@ const CategoryList = memo(function CategoryList({
           <li key={cat._id}>
             <button
               onClick={(e) => onCategoryClick(cat._id, e)}
-              className={`whitespace-nowrap md:w-full text-left px-3 py-1.5 rounded-lg text-lg transition-all duration-150 ${
+              className={`whitespace-nowrap md:w-full  text-left px-3  py-1.5 rounded-lg text-lg transition-all duration-150 ${
                 isActive
-                  ? "bg-gradient-to-r from-yellow-400/30 to-transparent text-yellow-400 font-semibold"
-                  : "text-white/50 hover:text-white/80 hover:bg-white/5"
+                  ? "bg-gradient-to-r from-yellow-400/30 to-transparent text-yellow-400 font-semibold cursor-default"
+                  : "text-white/50 hover:text-white/80 hover:bg-white/5 cursor-pointer"
               }`}
             >
               {cat.name}
