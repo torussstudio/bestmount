@@ -34,12 +34,13 @@ const CARD_STYLES = `
   .product-card-wrap {
     position: relative;
     container-type: inline-size;
-    background-color: #000000;
-    background-image: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0) 100%);
+    background-color: #ffffff;
+    background-image: linear-gradient(135deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.01) 50%, rgba(0,0,0,0) 100%);
     transition: background-color 0.22s ease, border-color 0.22s ease;
     cursor: pointer;
     text-align: left;
-    padding: 30px 30px 24px 30px;
+    padding: 20px 30px 18px 30px;
+
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -63,33 +64,33 @@ const CARD_STYLES = `
     }
   }
 
-  .product-card-wrap:hover { background-color: #3a2d00; }
-  .product-card-wrap:hover .lc { border-color: rgba(230, 175, 0, 0.55); }
+  .product-card-wrap:hover { background-color: #f5f2e6; }
+  .product-card-wrap:hover .lc { border-color: rgba(73, 73, 73, 0.55); }
 
   .card-index {
     align-self: flex-end;
     font-size: 0.70rem;
-    color: #f5c000;
+    color: #494949;
     font-weight: 400;
     letter-spacing: 0.05em;
     margin: 0;
     opacity: .85;
   }
 
-  .card-image-wrap {
-    width: 100%;
-    height: clamp(180px, 58cqw, 300px);
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-  }
+.card-image-wrap {
+  width: 100%;
+  height: clamp(140px, 42cqw, 220px);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
 
   .card-image {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 8px 18px rgba(0,0,0,0.45));
+    filter: drop-shadow(0 8px 18px rgba(0,0,0,0.18));
     transition: transform 0.3s ease;
   }
 
@@ -101,7 +102,7 @@ const CARD_STYLES = `
     font-family: "Barlow Condensed", "SKODA Next Black Expanded", "SKODA Next", system-ui, sans-serif;
     font-weight: 800;
     font-size: clamp(1.15rem, 2.2vw, 1.55rem);
-    color: #f5c000;
+    color: #494949;
     margin: 0;
     line-height: 1.15;
     letter-spacing: 0.01em;
@@ -111,7 +112,7 @@ const CARD_STYLES = `
     font-family: "SKODA Next", system-ui, sans-serif;
     font-weight: 300;
     font-size: 0.72rem;
-    color: #f5c000;
+    color: #494949;
     margin: 0;
     opacity: .78;
     line-height: 1.15;
@@ -119,7 +120,7 @@ const CARD_STYLES = `
   }
 
   .product-card-wrap:hover .card-index   { opacity: 1; }
-  .product-card-wrap:hover .card-name    { color: #ffd633; }
+  .product-card-wrap:hover .card-name    { color: #1f1f1f; }
   .product-card-wrap:hover .card-subtitle { opacity: 1; }
 
   .lc {
@@ -129,23 +130,23 @@ const CARD_STYLES = `
     pointer-events: none;
     z-index: 2;
   }
-  .lc-tl { top: 0; left: 0;    border-top: 1.5px solid rgba(255,255,255,0.45); border-left: 1.5px solid rgba(255,255,255,0.45); }
-  .lc-tr { top: 0; right: 0;   border-top: 1.5px solid rgba(255,255,255,0.45); border-right: 1.5px solid rgba(255,255,255,0.45); }
-  .lc-bl { bottom: 0; left: 0; border-bottom: 1.5px solid rgba(255,255,255,0.45); border-left: 1.5px solid rgba(255,255,255,0.45); }
-  .lc-br { bottom: 0; right: 0; border-bottom: 1.5px solid rgba(255,255,255,0.45); border-right: 1.5px solid rgba(255,255,255,0.45); }
+.lc-tl { top: 0; left: 0;    border-top: 1.5px solid #9e9e9e; border-left: 1.5px solid #9e9e9e; }
+.lc-tr { top: 0; right: 0;   border-top: 1.5px solid #9e9e9e; border-right: 1.5px solid #9e9e9e; }
+.lc-bl { bottom: 0; left: 0; border-bottom: 1.5px solid #9e9e9e; border-left: 1.5px solid #9e9e9e; }
+.lc-br { bottom: 0; right: 0; border-bottom: 1.5px solid #9e9e9e; border-right: 1.5px solid #9e9e9e; }
 
-  .product-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0;
-    max-width: 800px;
-    margin-inline: auto;
-  }
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  max-width: 800px;
+  margin-inline: auto;
+}
 
-  .product-card-wrap {
-    border-right: 1px solid rgba(255,255,255,0.10);
-    border-bottom: 1px solid rgba(255,255,255,0.10);
-  }
+.product-card-wrap {
+  border-right: 1px solid rgba(0,0,0,0.10);
+  border-bottom: 1px solid rgba(0,0,0,0.10);
+}
 
   @media (min-width: 641px) and (max-width: 1024px) {
     .product-grid {
@@ -190,9 +191,9 @@ const CARD_STYLES = `
     background: linear-gradient(
       to bottom,
       transparent 0%,
-      rgba(245,192,0,0.06) 40%,
-      rgba(245,192,0,0.12) 50%,
-      rgba(245,192,0,0.06) 60%,
+      rgba(73,73,73,0.05) 40%,
+      rgba(73,73,73,0.10) 50%,
+      rgba(73,73,73,0.05) 60%,
       transparent 100%
     );
     animation: card-scanline 0.72s cubic-bezier(0.4,0,0.2,1) forwards;
@@ -485,7 +486,7 @@ const DownloadButton = memo(function DownloadButton() {
         hover:scale-[1.02]
       "
     >
-      <div className="flex items-center justify-center w-9 h-9 rounded-full bg-white/5 shrink-0 text-[#facc15]">
+     <div className="flex items-center justify-center w-9 h-9 rounded-full bg-white/5 shrink-0 text-[#facc15]">
         <svg
           className="w-4 h-4 transition-transform duration-300 group-hover:-translate-y-0.5"
           viewBox="0 0 24 24"
