@@ -64,8 +64,6 @@ const CARD_STYLES = `
     }
   }
 
-  .product-card-wrap:hover { background-color: #f5f2e6; }
-  .product-card-wrap:hover .lc { border-color: rgba(73, 73, 73, 0.55); }
 
   .card-index {
     align-self: flex-end;
@@ -90,7 +88,6 @@ const CARD_STYLES = `
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 8px 18px rgba(0,0,0,0.18));
     transition: transform 0.3s ease;
   }
 
