@@ -35,12 +35,10 @@ const CARD_STYLES = `
     position: relative;
     container-type: inline-size;
     background-color: #ffffff;
-    background-image: linear-gradient(135deg, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.01) 50%, rgba(0,0,0,0) 100%);
     transition: background-color 0.22s ease, border-color 0.22s ease;
     cursor: pointer;
     text-align: left;
     padding: 20px 30px 18px 30px;
-
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -443,21 +441,21 @@ function useGridAnimation(gridWrapRef, selectedCategory) {
 // ─── CategoryIcon (memoised SVG — never re-renders) ──────────────────────────
 const CategoryIcon = memo(function CategoryIcon() {
   return (
-    <svg
-      viewBox="0 0 18 18"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-[22px] h-[22px] md:w-[35px] md:h-[35px] flex-shrink-0 opacity-80 relative top-[1px]"
-    >
-      <mask id="cat-icon-mask">
-        <rect x="0" y="0" width="24" height="24" fill="white" />
-        <rect x="3.5" y="3.5" width="4.5" height="4.5" rx="0.5" fill="none" stroke="black" strokeWidth="1.25" />
-        <rect x="10"  y="3.5" width="4.5" height="4.5" rx="0.5" fill="none" stroke="black" strokeWidth="1.25" />
-        <rect x="3.5" y="10"  width="4.5" height="4.5" rx="0.5" fill="none" stroke="black" strokeWidth="1.25" />
-        <circle cx="12.25" cy="12.25" r="2.25" fill="none" stroke="black" strokeWidth="1.25" />
-      </mask>
-      <rect x="0" y="0" width="18" height="18" rx="4.5" fill="#eee8cd" mask="url(#cat-icon-mask)" />
-    </svg>
+   <svg
+  viewBox="0 0 18 18"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  className="w-[22px] h-[22px] md:w-[35px] md:h-[35px] flex-shrink-0 opacity-80 relative top-[1px] text-black md:text-[#eee8cd]"
+>
+  <mask id="cat-icon-mask">
+    <rect x="0" y="0" width="24" height="24" fill="white" />
+    <rect x="3.5" y="3.5" width="4.5" height="4.5" rx="0.5" fill="none" stroke="black" strokeWidth="1.25" />
+    <rect x="10"  y="3.5" width="4.5" height="4.5" rx="0.5" fill="none" stroke="black" strokeWidth="1.25" />
+    <rect x="3.5" y="10"  width="4.5" height="4.5" rx="0.5" fill="none" stroke="black" strokeWidth="1.25" />
+    <circle cx="12.25" cy="12.25" r="2.25" fill="none" stroke="black" strokeWidth="1.25" />
+  </mask>
+  <rect x="0" y="0" width="18" height="18" rx="4.5" fill="currentColor" mask="url(#cat-icon-mask)" />
+</svg>
   );
 });
 
@@ -602,11 +600,11 @@ const CategoryList = memo(function CategoryList({
           <li key={cat._id}>
             <button
               onClick={(e) => onCategoryClick(cat._id, e)}
-              className={`whitespace-nowrap md:w-full  text-left px-3  py-1.5 rounded-lg text-lg transition-all duration-150 ${
-                isActive
-                  ? "bg-gradient-to-r from-yellow-400/30 to-transparent text-yellow-400 font-semibold cursor-default"
-                  : "text-white/50 hover:text-white/80 hover:bg-white/5 cursor-pointer"
-              }`}
+             className={`whitespace-nowrap md:w-full  text-left px-3  py-1.5 rounded-lg text-lg transition-all duration-150 ${
+  isActive
+    ? "bg-gradient-to-r from-yellow-400/30 to-transparent text-yellow-400 font-semibold cursor-default"
+    : "text-black md:text-white/50 hover:text-black/80 md:hover:text-white/80 hover:bg-white/5 cursor-pointer"
+}`}
             >
               {cat.name}
             </button>
@@ -713,9 +711,9 @@ export default function Materials() {
                     {/* Sidebar header */}
                     <div className="flex items-center justify-center md:justify-start w-full gap-1.5 mb-3">
                       <CategoryIcon />
-                      <span className="text-[24px] md:text-[38px] font-light text-[#eee8cd] tracking-wide">
-                        Categories
-                      </span>
+                      <span className="text-[24px] md:text-[38px] font-light text-black md:text-[#eee8cd] tracking-wide">
+  Categories
+</span>
                     </div>
 
                     {/* Category list */}

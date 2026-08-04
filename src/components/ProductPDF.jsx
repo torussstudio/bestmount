@@ -116,8 +116,15 @@ const s = StyleSheet.create({
     fontWeight: 900,
   },
 
+  heroFullName: {
+  fontSize: 15,
+  fontWeight: 500,
+  marginTop: 4,
+  color: C.text50,
+},
+
   heroSub: {
-    fontSize: 10,
+    fontSize: 8,
     marginTop: 5,
     color: C.text65,
     letterSpacing: 2,
@@ -281,6 +288,10 @@ export default function ProductPDF({ product }) {
               <Text style={s.heroName}>
                 {product.shortName || product.name}
               </Text>
+
+               {product.shortName && product.name && (
+    <Text style={s.heroFullName}>{product.name}</Text>
+  )}
 
               <Text style={s.heroSub}>TECHNICAL DATA SHEET</Text>
             </View>
