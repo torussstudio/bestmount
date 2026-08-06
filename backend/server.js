@@ -22,6 +22,8 @@ app.set("trust proxy", 1);
 app.use(compression());
 
 const allowedOrigins = [
+  "https://bm-materials.com",
+  "https://www.bm-materials.com",
   "http://localhost:5173",
   "http://localhost:5174",
   "https://bestmount-kappa.vercel.app",
